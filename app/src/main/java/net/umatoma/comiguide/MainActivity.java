@@ -1,10 +1,16 @@
 package net.umatoma.comiguide;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import net.umatoma.comiguide.util.SharedPrefKeys;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -14,8 +20,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        if (!isLogin()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
 
@@ -39,5 +47,11 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isLogin() {
+        SharedPreferences prefs = getSharedPreferences(
+                SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.contains(SharedPrefKeys.User.API_TOKEN);
     }
 }

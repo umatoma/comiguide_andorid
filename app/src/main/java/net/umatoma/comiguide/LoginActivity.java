@@ -6,8 +6,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -34,6 +36,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
+import net.umatoma.comiguide.util.SharedPrefKeys;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -227,14 +231,30 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                Toast.makeText(LoginActivity.this,
-                        getString(R.string.success_login), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(LoginActivity.this,
-                        getString(R.string.error_login_fail), Toast.LENGTH_SHORT).show();
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                try {
+                    JSONObject apiTokenObject = mJsonResponse.getJSONObject("api_token");
+                    JSONObject userObject = mJsonResponse.getJSONObject("user");
+
+                    SharedPreferences prefs = getSharedPreferences(
+                            SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(SharedPrefKeys.User.API_TOKEN, apiTokenObject.getString("token"));
+                    editor.putString(SharedPrefKeys.User.USER_ID, userObject.getString("id"));
+                    editor.putString(SharedPrefKeys.User.USER_NAME, userObject.getString("username"));
+                    editor.apply();
+
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.success_login), Toast.LENGTH_SHORT).show();
+                    return;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+
+            Toast.makeText(LoginActivity.this,
+                    getString(R.string.error_login_fail), Toast.LENGTH_SHORT).show();
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
         }
 
         @Override
