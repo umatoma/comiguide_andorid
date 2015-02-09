@@ -20,10 +20,14 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!isLogin()) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        Intent intent;
+        if (isLogin()) {
+            intent = new Intent(this, HomeActivity.class);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
         }
+        startActivity(intent);
+        finish();
     }
 
 
