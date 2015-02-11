@@ -4,9 +4,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.model.User;
@@ -17,6 +21,7 @@ public class HomeActivity extends ActionBarActivity {
     private ImageView mUserIcon;
     private TextView mUserName;
     private ListView mNotificationList;
+    private ArrayAdapter<String> mNotificationAdaper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,17 @@ public class HomeActivity extends ActionBarActivity {
         mNotificationList = (ListView) findViewById(R.id.notificationList);
 
         mUserName.setText(mUser.getUserName());
+
+        mNotificationAdaper = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1);
+        mNotificationList.setAdapter(mNotificationAdaper);
+        mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String str = (String) parent.getItemAtPosition(position);
+                Toast.makeText(HomeActivity.this, str, Toast.LENGTH_SHORT);
+            }
+        });
     }
 
 
