@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
@@ -232,6 +233,10 @@ public class LoginActivity extends Activity {
 
                     Toast.makeText(LoginActivity.this,
                             getString(R.string.success_login), Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
                     return;
                 } catch (JSONException e) {
                     e.printStackTrace();
