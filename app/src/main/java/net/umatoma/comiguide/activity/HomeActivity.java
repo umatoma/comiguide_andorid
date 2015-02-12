@@ -1,5 +1,9 @@
 package net.umatoma.comiguide.activity;
 
+import android.content.res.Configuration;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,18 +25,43 @@ public class HomeActivity extends ActionBarActivity {
     private ImageView mUserIcon;
     private TextView mUserName;
     private ListView mNotificationList;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
     private ArrayAdapter<String> mNotificationAdaper;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mUser = new User(this);
-        mUserIcon = (ImageView) findViewById(R.id.userIcon);
-        mUserName = (TextView) findViewById(R.id.userName);
-        mNotificationList = (ListView) findViewById(R.id.notificationList);
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
 
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item));
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mUserIcon = (ImageView) findViewById(R.id.user_icon);
+        mUserName = (TextView) findViewById(R.id.user_name);
+        mNotificationList = (ListView) findViewById(R.id.notification_list);
+
+        mUser = new User(this);
         mUserName.setText(mUser.getUserName());
 
         mNotificationAdaper = new ArrayAdapter<>(this,
@@ -47,6 +76,18 @@ public class HomeActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,6 +105,12 @@ public class HomeActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
