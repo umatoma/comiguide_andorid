@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.HomeMenuAdapter;
 import net.umatoma.comiguide.model.User;
 
 public class HomeActivity extends ActionBarActivity {
@@ -41,7 +42,7 @@ public class HomeActivity extends ActionBarActivity {
         mActionBar.setHomeButtonEnabled(true);
 
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item));
+        mDrawerList.setAdapter(new HomeMenuAdapter(this));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
