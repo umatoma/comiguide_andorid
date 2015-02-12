@@ -27,6 +27,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.User;
 import net.umatoma.comiguide.util.SharedPrefKeys;
 
 import org.json.JSONException;
@@ -223,13 +224,11 @@ public class LoginActivity extends Activity {
                     JSONObject apiTokenObject = mJsonResponse.getJSONObject("api_token");
                     JSONObject userObject = mJsonResponse.getJSONObject("user");
 
-                    SharedPreferences prefs = getSharedPreferences(
-                            SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString(SharedPrefKeys.User.API_TOKEN, apiTokenObject.getString("token"));
-                    editor.putString(SharedPrefKeys.User.USER_ID, userObject.getString("id"));
-                    editor.putString(SharedPrefKeys.User.USER_NAME, userObject.getString("username"));
-                    editor.apply();
+                    User user = new User(LoginActivity.this);
+                    user.setApiToken(apiTokenObject.getString("token"));
+                    user.setUserId(userObject.getInt("id"));
+                    user.setUserName(userObject.getString("username"));
+                    user.save();
 
                     Toast.makeText(LoginActivity.this,
                             getString(R.string.success_login), Toast.LENGTH_SHORT).show();
