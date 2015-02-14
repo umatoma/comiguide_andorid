@@ -48,6 +48,7 @@ public class SettingsActivity extends Activity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mUser.delete();
+                    Toast.makeText(getActivity(), getString(R.string.toast_logout), Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                     return false;
                 }
