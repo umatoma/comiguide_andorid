@@ -1,17 +1,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.ComiketCircleActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/circle_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <RelativeLayout
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -23,7 +27,7 @@
             android:padding="12dp"
             android:layout_height="48dp"
             android:layout_width="48dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginRight="12dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp" />
     </RelativeLayout>
 </FrameLayout>
