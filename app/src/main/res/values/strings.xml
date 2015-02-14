@@ -6,4 +6,5 @@
     <string name="title_activity_settings">設定</string>
 
     <string name="toast_logout">ログアウトしました</string>
+    <string name="title_activity_comiket_circle">コミケ - サークル</string>
 </resources>
