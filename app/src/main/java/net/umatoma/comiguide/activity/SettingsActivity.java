@@ -1,24 +1,29 @@
 package net.umatoma.comiguide.activity;
 
-import android.app.Activity;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import net.umatoma.comiguide.R;
 
-public class SettingsActivity extends Activity {
+import java.util.List;
+
+public class SettingsActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new AccountSettingFragment())
-                .commit();
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        loadHeadersFromResource(R.xml.preference_headers, target);
+    }
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        // TODO: FragmentA.class.getName().equals(fragmentName)
+        return true;
     }
 
     public static class AccountSettingFragment extends PreferenceFragment {
