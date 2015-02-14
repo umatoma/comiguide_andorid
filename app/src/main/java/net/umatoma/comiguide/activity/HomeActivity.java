@@ -1,5 +1,6 @@
 package net.umatoma.comiguide.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -29,6 +30,7 @@ public class HomeActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private HomeMenuAdapter mMenuAdapter;
     private ArrayAdapter<String> mNotificationAdaper;
     private ActionBar mActionBar;
 
@@ -41,8 +43,10 @@ public class HomeActivity extends ActionBarActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
+        mMenuAdapter = new HomeMenuAdapter(this);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(new HomeMenuAdapter(this));
+        mDrawerList.setAdapter(mMenuAdapter);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -116,5 +120,18 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            HomeMenuAdapter.MenuEnum menuEnum = mMenuAdapter.getItem(position);
+            Intent intent;
+            switch (menuEnum) {
+                case SETTING:
+                    intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+            }
+        }
     }
 }
