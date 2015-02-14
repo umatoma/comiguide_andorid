@@ -138,9 +138,14 @@ public class HomeActivity extends ActionBarActivity {
             HomeMenuAdapter.MenuEnum menuEnum = mMenuAdapter.getItem(position);
             Intent intent;
             switch (menuEnum) {
+                case COMIKET_CIRCLE:
+                    intent = new Intent(HomeActivity.this, ComiketCircleActivity.class);
+                    startActivity(intent);
+                    return;
                 case SETTING:
                     intent = new Intent(HomeActivity.this, SettingsActivity.class);
                     startActivity(intent);
+                    return;
             }
         }
     }
