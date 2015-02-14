@@ -2,9 +2,12 @@ package net.umatoma.comiguide.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.User;
 
 public class SettingsActivity extends Activity {
 
@@ -29,11 +32,26 @@ public class SettingsActivity extends Activity {
     }
 
     public static class AccountPreferenceFragment extends PreferenceFragment {
+
+        private User mUser;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             addPreferencesFromResource(R.xml.account_preferences);
+
+            mUser = new User(getActivity());
+
+            Preference logoutPref = findPreference(getString(R.string.prefs_key_account_logout));
+            logoutPref.setSummary(mUser.getUserName());
+            logoutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mUser.delete();
+                    getActivity().finish();
+                    return false;
+                }
+            });
         }
     }
 }

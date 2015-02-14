@@ -13,20 +13,27 @@ public class User {
     private int mUserId;
     private String mUserName;
 
-    public static boolean isLoggedIn(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(
                 SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static boolean isLoggedIn(Context context) {
+        SharedPreferences prefs = User.getSharedPreferences(context);
         return prefs.contains(SharedPrefKeys.User.API_TOKEN)
                 && prefs.getString(SharedPrefKeys.User.API_TOKEN, null) != null;
     }
 
     public User(Context context) {
         mContext = context;
-        SharedPreferences prefs = mContext.getSharedPreferences(
-                SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences();
         mApiToken = prefs.getString(SharedPrefKeys.User.API_TOKEN, null);
         mUserId = prefs.getInt(SharedPrefKeys.User.USER_ID, -1);
         mUserName = prefs.getString(SharedPrefKeys.User.USER_NAME, null);
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return User.getSharedPreferences(mContext);
     }
 
     public String getApiToken() {
@@ -54,12 +61,20 @@ public class User {
     }
 
     public void save() {
-        SharedPreferences prefs = mContext.getSharedPreferences(
-                SharedPrefKeys.User.PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(SharedPrefKeys.User.API_TOKEN, mApiToken);
-        editor.putInt(SharedPrefKeys.User.USER_ID, mUserId);
-        editor.putString(SharedPrefKeys.User.USER_NAME, mUserName);
-        editor.apply();
+        SharedPreferences prefs = getSharedPreferences();
+        prefs.edit()
+                .putString(SharedPrefKeys.User.API_TOKEN, mApiToken)
+                .putInt(SharedPrefKeys.User.USER_ID, mUserId)
+                .putString(SharedPrefKeys.User.USER_NAME, mUserName)
+                .apply();
+    }
+
+    public void delete() {
+        SharedPreferences prefs = getSharedPreferences();
+        prefs.edit()
+                .remove(SharedPrefKeys.User.API_TOKEN)
+                .remove(SharedPrefKeys.User.USER_ID)
+                .remove(SharedPrefKeys.User.USER_NAME)
+                .apply();
     }
 }

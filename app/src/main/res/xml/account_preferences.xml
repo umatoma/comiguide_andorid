@@ -3,10 +3,8 @@
     <PreferenceCategory
         android:title="@string/prefs_category_account">
 
-        <CheckBoxPreference
-            android:key="checkbox"
-            android:title="CheckBox"
-            android:summary="Summary"
-            android:defaultValue="true" />
+        <Preference
+            android:key="@string/prefs_key_account_logout"
+            android:title="@string/prefs_title_account_logout" />
     </PreferenceCategory>
 </PreferenceScreen>
