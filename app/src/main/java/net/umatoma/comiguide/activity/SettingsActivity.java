@@ -1,15 +1,15 @@
 package net.umatoma.comiguide.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.model.User;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
