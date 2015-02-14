@@ -3,6 +3,6 @@
     <string name="prefs_category_application">アプリ設定</string>
     <string name="prefs_category_account">アカウント設定</string>
 
-    <string name="prefs_key_account_logout">account</string>
+    <string name="prefs_key_account_logout">account_logout</string>
     <string name="prefs_title_account_logout">ログアウト</string>
 </resources>
