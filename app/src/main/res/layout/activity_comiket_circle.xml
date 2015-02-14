@@ -1,33 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ComiketCircleActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/circle_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
-    <RelativeLayout
-        android:layout_gravity="end|bottom"
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/functions_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/ic_menu_vertical"
+        fab:fab_addButtonSize="mini"
+        fab:fab_colorNormal="#ff00bcd4"
+        fab:fab_colorPressed="#ff007e91"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"/>
 
-        <ImageButton
-            android:id="@+id/button_functions"
-            android:background="@drawable/shape_button_right_bottom"
-            android:src="@drawable/ic_menu_vertical"
-            android:scaleType="centerInside"
-            android:padding="12dp"
-            android:layout_height="48dp"
-            android:layout_width="48dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp" />
-    </RelativeLayout>
-</FrameLayout>
+    <ImageView
+        android:id="@+id/circle_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>
