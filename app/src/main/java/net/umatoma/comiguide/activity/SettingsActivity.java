@@ -1,32 +1,34 @@
 package net.umatoma.comiguide.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 import net.umatoma.comiguide.R;
 
-import java.util.List;
-
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_prefs_account, new AccountPreferenceFragment())
+                .replace(R.id.content_prefs_application, new ApplicationPreferenceFragment())
+                .commit();
     }
 
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.preference_headers, target);
+    public static class ApplicationPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.application_preferences);
+        }
     }
 
-    @Override
-    protected boolean isValidFragment(String fragmentName) {
-        // TODO: FragmentA.class.getName().equals(fragmentName)
-        return true;
-    }
-
-    public static class AccountSettingFragment extends PreferenceFragment {
+    public static class AccountPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
