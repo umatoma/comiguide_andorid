@@ -14,6 +14,8 @@ public class MapImageView extends ImageView {
 
     private static final String TAG = "MapImageView";
     private float mScaleFactor = 1.0f;
+    private float mPositionX = 0.0f;
+    private float mPositionY = 0.0f;
     private GestureDetector mGestureDetector;
     private GestureDetector.SimpleOnGestureListener mGestureListener;
     private ScaleGestureDetector mScaleGestureDetector;
@@ -41,6 +43,10 @@ public class MapImageView extends ImageView {
             @Override
             public boolean onScroll (MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 Log.d(TAG, "onScroll");
+                Matrix matrix = getImageMatrix();
+                matrix.postTranslate(-distanceX, -distanceY);
+                setImageMatrix(matrix);
+                invalidate();
                 return true;
             }
         };
@@ -48,14 +54,15 @@ public class MapImageView extends ImageView {
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
                 Log.d(TAG, "onScaleBegin : "+ detector.getScaleFactor());
-                invalidate();
                 return super.onScaleBegin(detector);
             }
 
             @Override
             public void onScaleEnd(ScaleGestureDetector detector) {
                 Log.d(TAG, "onScaleEnd : "+ detector.getScaleFactor());
-                mScaleFactor *= detector.getScaleFactor();
+                Matrix matrix = getImageMatrix();
+                matrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
+                setImageMatrix(matrix);
                 invalidate();
                 super.onScaleEnd(detector);
             }
@@ -63,7 +70,9 @@ public class MapImageView extends ImageView {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
                 Log.d(TAG, "onScale : "+ detector.getScaleFactor());
-                mScaleFactor *= detector.getScaleFactor();
+                Matrix matrix = getImageMatrix();
+                matrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
+                setImageMatrix(matrix);
                 invalidate();
                 return true;
             };
@@ -86,11 +95,6 @@ public class MapImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         Log.d(TAG, "onDraw");
-
-        Matrix matrix = getImageMatrix();
-        matrix.setScale(mScaleFactor, mScaleFactor);
-        setImageMatrix(matrix);
-
         super.onDraw(canvas);
     }
 }

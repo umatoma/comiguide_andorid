@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".activity.ComiketCircleActivity">
 
+    <net.umatoma.comiguide.view.MapImageView
+        android:id="@+id/circle_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/functions_button"
         android:layout_width="wrap_content"
@@ -17,9 +22,4 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"/>
-
-    <net.umatoma.comiguide.view.MapImageView
-        android:id="@+id/circle_map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </RelativeLayout>
