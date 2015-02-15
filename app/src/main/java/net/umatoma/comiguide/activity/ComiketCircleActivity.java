@@ -10,10 +10,12 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleActivity extends ActionBarActivity {
 
     private FloatingActionButton mFunctionsButton;
+    private MapImageView mMapImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +23,15 @@ public class ComiketCircleActivity extends ActionBarActivity {
         setContentView(R.layout.activity_comiket_circle);
 
         mFunctionsButton = (FloatingActionButton) findViewById(R.id.functions_button);
+        mMapImage = (MapImageView) findViewById(R.id.circle_map);
+
         mFunctionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ComiketCircleActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
         });
+        mMapImage.setImageResource(R.drawable.sample);
     }
 
 

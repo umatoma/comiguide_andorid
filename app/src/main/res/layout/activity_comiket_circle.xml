@@ -18,7 +18,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"/>
 
-    <ImageView
+    <net.umatoma.comiguide.view.MapImageView
         android:id="@+id/circle_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
