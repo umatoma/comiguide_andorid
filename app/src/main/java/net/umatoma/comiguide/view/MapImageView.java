@@ -2,7 +2,10 @@ package net.umatoma.comiguide.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -43,10 +46,7 @@ public class MapImageView extends ImageView {
             @Override
             public boolean onScroll (MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 Log.d(TAG, "onScroll");
-                Matrix matrix = getImageMatrix();
-                matrix.postTranslate(-distanceX, -distanceY);
-                setImageMatrix(matrix);
-                invalidate();
+                postImageTranslate(distanceX, distanceY);
                 return true;
             }
         };
@@ -60,20 +60,14 @@ public class MapImageView extends ImageView {
             @Override
             public void onScaleEnd(ScaleGestureDetector detector) {
                 Log.d(TAG, "onScaleEnd : "+ detector.getScaleFactor());
-                Matrix matrix = getImageMatrix();
-                matrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
-                setImageMatrix(matrix);
-                invalidate();
+                postImageScale(detector.getScaleFactor());
                 super.onScaleEnd(detector);
             }
 
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                Log.d(TAG, "onScale : "+ detector.getScaleFactor());
-                Matrix matrix = getImageMatrix();
-                matrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
-                setImageMatrix(matrix);
-                invalidate();
+                Log.d(TAG, "onScale : " + detector.getScaleFactor());
+                postImageScale(detector.getScaleFactor());
                 return true;
             };
         };
@@ -96,5 +90,30 @@ public class MapImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         Log.d(TAG, "onDraw");
         super.onDraw(canvas);
+
+        float cx = (float)getWidth() / 2.0f;
+        float cy = (float)getHeight() / 2.0f;
+        Paint paint = new Paint();
+        paint.setColor(Color.GREEN);
+        canvas.drawCircle(cx, cy, 10.0f, paint);
+    }
+
+    private void postImageTranslate(float distanceX, float distanceY) {
+        Matrix matrix = getImageMatrix();
+        matrix.postTranslate(-distanceX, -distanceY);
+        setImageMatrix(matrix);
+        mPositionX -= distanceX;
+        mPositionY -= distanceY;
+        invalidate();
+    }
+
+    private void postImageScale(float scale) {
+        float px = (float)getWidth() / 2.0f;
+        float py = (float)getHeight() / 2.0f;
+        Matrix matrix = getImageMatrix();
+        matrix.postScale(scale, scale, px, py);
+        setImageMatrix(matrix);
+        mScaleFactor *= scale;
+        invalidate();
     }
 }
