@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
@@ -13,7 +14,9 @@ public class MapImageView extends ImageView {
 
     private static final String TAG = "MapImageView";
     private float mScaleFactor = 1.0f;
-    private ScaleGestureDetector mGestureDetector;
+    private GestureDetector mGestureDetector;
+    private GestureDetector.SimpleOnGestureListener mGestureListener;
+    private ScaleGestureDetector mScaleGestureDetector;
     private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener;
 
     public MapImageView(Context context) {
@@ -28,6 +31,19 @@ public class MapImageView extends ImageView {
 
     private void initialize(Context context) {
         setScaleType(ScaleType.MATRIX);
+        mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap (MotionEvent e) {
+                Log.d(TAG, "onDoubleTap");
+                return true;
+            }
+
+            @Override
+            public boolean onScroll (MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                Log.d(TAG, "onScroll");
+                return true;
+            }
+        };
         mScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
@@ -52,13 +68,18 @@ public class MapImageView extends ImageView {
                 return true;
             };
         };
-        mGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
+        mGestureDetector = new GestureDetector(context, mGestureListener);
+        mScaleGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         Log.d(TAG, "onTouchEvent");
-        mGestureDetector.onTouchEvent(ev);
+        if (ev.getPointerCount() > 1) {
+            mScaleGestureDetector.onTouchEvent(ev);
+        } else {
+            mGestureDetector.onTouchEvent(ev);
+        }
         return true;
     }
 
