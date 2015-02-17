@@ -19,6 +19,7 @@ public class MapImageView extends ImageView {
     private float mScaleFactor = 1.0f;
     private float mPositionX = 0.0f;
     private float mPositionY = 0.0f;
+    private long mScrollEndAt = 0;
     private GestureDetector mGestureDetector;
     private GestureDetector.SimpleOnGestureListener mGestureListener;
     private ScaleGestureDetector mScaleGestureDetector;
@@ -61,6 +62,7 @@ public class MapImageView extends ImageView {
             public void onScaleEnd(ScaleGestureDetector detector) {
                 Log.d(TAG, "onScaleEnd : "+ detector.getScaleFactor());
                 postImageScale(detector.getScaleFactor());
+                mScrollEndAt = System.currentTimeMillis();
                 super.onScaleEnd(detector);
             }
 
@@ -80,7 +82,7 @@ public class MapImageView extends ImageView {
         Log.d(TAG, "onTouchEvent");
         if (ev.getPointerCount() > 1) {
             mScaleGestureDetector.onTouchEvent(ev);
-        } else {
+        } else if (System.currentTimeMillis() - mScrollEndAt > 100) {
             mGestureDetector.onTouchEvent(ev);
         }
         return true;
