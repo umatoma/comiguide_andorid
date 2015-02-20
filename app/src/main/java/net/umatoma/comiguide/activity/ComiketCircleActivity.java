@@ -1,5 +1,9 @@
 package net.umatoma.comiguide.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -31,6 +35,7 @@ public class ComiketCircleActivity extends ActionBarActivity {
                 Toast.makeText(ComiketCircleActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
         });
+
         mMapImage.setImageResource(R.drawable.sample);
     }
 
