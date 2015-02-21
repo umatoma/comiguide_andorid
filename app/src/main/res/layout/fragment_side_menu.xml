@@ -5,8 +5,11 @@
     android:background="#fff"
     tools:context="net.umatoma.comiguide.fragment.SideMenuFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+    <ListView android:id="@+id/menu_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#fff"/>
 </FrameLayout>

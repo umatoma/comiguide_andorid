@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
 
-import java.util.ArrayList;
-
-public class HomeMenuAdapter extends ArrayAdapter<HomeMenuAdapter.MenuEnum> {
+public class SideMenuAdapter extends ArrayAdapter<SideMenuAdapter.MenuEnum> {
 
     static class ViewHolder {
         ImageView menuIcon;
@@ -27,7 +25,7 @@ public class HomeMenuAdapter extends ArrayAdapter<HomeMenuAdapter.MenuEnum> {
         SETTING
     }
 
-    private static final HomeMenuAdapter.MenuEnum[] mMenuArray = {
+    private static final SideMenuAdapter.MenuEnum[] mMenuArray = {
             MenuEnum.COMIKET_CIRCLE,
             MenuEnum.COMIKET_KIGYO,
             MenuEnum.COMIC1,
@@ -37,7 +35,7 @@ public class HomeMenuAdapter extends ArrayAdapter<HomeMenuAdapter.MenuEnum> {
 
     private LayoutInflater mInflater;
 
-    public HomeMenuAdapter(Context context) {
+    public SideMenuAdapter(Context context) {
         super(context, R.layout.adapter_home_menu);
     }
 

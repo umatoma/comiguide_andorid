@@ -3,13 +3,13 @@ package net.umatoma.comiguide.activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,20 +22,17 @@ import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
-import net.umatoma.comiguide.adapter.HomeMenuAdapter;
 import net.umatoma.comiguide.model.User;
 
-public class HomeActivity extends ActionBarActivity implements SideMenuFragment.OnFragmentInteractionListener {
+public class HomeActivity extends ActionBarActivity
+        implements SideMenuFragment.OnFragmentInteractionListener {
 
     private User mUser;
     private ImageView mUserIcon;
     private TextView mUserName;
     private ListView mNotificationList;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private SideMenuFragment sideMenuFragment;
     private ActionBarDrawerToggle mDrawerToggle;
-    private HomeMenuAdapter mMenuAdapter;
     private ArrayAdapter<String> mNotificationAdaper;
     private ActionBar mActionBar;
 
@@ -47,11 +44,6 @@ public class HomeActivity extends ActionBarActivity implements SideMenuFragment.
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-
-        mMenuAdapter = new HomeMenuAdapter(this);
-//        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//        mDrawerList.setAdapter(mMenuAdapter);
-//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
@@ -74,8 +66,7 @@ public class HomeActivity extends ActionBarActivity implements SideMenuFragment.
         mUser = new User(this);
         mUserName.setText(mUser.getUserName());
 
-        mNotificationAdaper = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1);
+        mNotificationAdaper = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mNotificationList.setAdapter(mNotificationAdaper);
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,7 +78,7 @@ public class HomeActivity extends ActionBarActivity implements SideMenuFragment.
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.left_drawer, SideMenuFragment.newInstance("hoge", "fuga"));
+        transaction.add(R.id.left_drawer, SideMenuFragment.newInstance());
         transaction.commit();
     }
 
@@ -147,21 +138,4 @@ public class HomeActivity extends ActionBarActivity implements SideMenuFragment.
 
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            HomeMenuAdapter.MenuEnum menuEnum = mMenuAdapter.getItem(position);
-            Intent intent;
-            switch (menuEnum) {
-                case COMIKET_CIRCLE:
-                    intent = new Intent(HomeActivity.this, ComiketCircleActivity.class);
-                    startActivity(intent);
-                    return;
-                case SETTING:
-                    intent = new Intent(HomeActivity.this, SettingsActivity.class);
-                    startActivity(intent);
-                    return;
-            }
-        }
-    }
 }
