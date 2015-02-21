@@ -1,15 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
-    <TextView
-        android:id="@+id/circle_name"
-        android:text="circle_name"
+    <RelativeLayout
+        android:id="@+id/color"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="#000"/>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItem"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"/>
+        android:layout_height="match_parent"
+        android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/space_info"
+            android:text="space_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        <TextView
+            android:id="@+id/circle_name"
+            android:text="circle_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+    </LinearLayout>
 
 </LinearLayout>

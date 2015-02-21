@@ -27,6 +27,7 @@ import net.umatoma.comiguide.model.User;
 public class HomeActivity extends ActionBarActivity
         implements SideMenuFragment.OnFragmentInteractionListener {
 
+    private static final String TAG = "HomeActivity";
     private User mUser;
     private ImageView mUserIcon;
     private TextView mUserName;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
@@ -26,19 +27,22 @@ public class ComiketCircleArrayAdapter
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.adapter_comiket_circle, null);
             viewHolder = new ViewHolder();
+            viewHolder.mColorLayout = (RelativeLayout) convertView.findViewById(R.id.color);
             viewHolder.mCircleNamaView = (TextView) convertView.findViewById(R.id.circle_name);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ComiketCircle comiketCircle = getItem(position);
-        viewHolder.mCircleNamaView.setText(comiketCircle.getCircleName());
+        ComiketCircle circle = getItem(position);
+        viewHolder.mColorLayout.setBackgroundColor(circle.getColor());
+        viewHolder.mCircleNamaView.setText(circle.getCircleName());
 
         return convertView;
     }
 
     private static class ViewHolder {
+        public RelativeLayout mColorLayout;
         public TextView mCircleNamaView;
     }
 }
