@@ -19,6 +19,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
+import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.User;
 
 import org.json.JSONArray;
@@ -32,7 +34,7 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     private OnFragmentInteractionListener mListener;
     private LoadComiketCirclesTask mLoadComiketCirclesTask;
     private AbsListView mListView;
-    private ArrayAdapter mAdapter;
+    private ComiketCircleArrayAdapter mAdapter;
 
     public ComiketCircleListFragment() {}
 
@@ -40,8 +42,7 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1);
+        mAdapter = new ComiketCircleArrayAdapter(getActivity());
     }
 
     @Override
@@ -138,7 +139,7 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
                     int length = comiketCircles.length();
                     for (int i = 0; i < length; i++) {
                         JSONObject comiketCircle = comiketCircles.getJSONObject(i);
-                        mAdapter.add(comiketCircle.getString("circle_name"));
+                        mAdapter.add(new ComiketCircle(comiketCircle));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
