@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
 
 public class ComiketCircleActivity extends ActionBarActivity
@@ -31,6 +32,7 @@ public class ComiketCircleActivity extends ActionBarActivity
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.content_frame, new ComiketCircleMapFragment());
+        transaction.add(R.id.left_drawer, new ComiketCircleListFragment());
         transaction.commit();
     }
 
