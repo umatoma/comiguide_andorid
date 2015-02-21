@@ -17,6 +17,10 @@ import android.widget.ImageView;
 public class MapImageView extends ImageView {
 
     private static final String TAG = "MapImageView";
+    private static final float MAX_SCALE_FACTOR = 5.0f;
+    private static final float MIN_SCALE_FACTOR = 0.5f;
+    private float mMaxScale = 2.0f;
+    private float mMinScale = 0.5f;
     private long mScrollEndAt = 0;
     private int mImageWidth = 0;
     private int mImageHeight = 0;
@@ -126,14 +130,21 @@ public class MapImageView extends ImageView {
                 float distX = ((float)w - (float)mImageWidth * scale_y) / 2.0f;
                 matrix.preScale(scale_y, scale_y);
                 matrix.postTranslate(distX, 0);
+                setMaxAndMinScale(scale_y);
             } else {
                 float distY = ((float)h - (float)mImageHeight * scale_x) / 2.0f;
                 matrix.preScale(scale_x, scale_x);
                 matrix.postTranslate(0, distY);
+                setMaxAndMinScale(scale_x);
             }
             setImageMatrix(matrix);
             invalidate();
         }
+    }
+
+    private void setMaxAndMinScale(float scale) {
+        mMaxScale = scale * MAX_SCALE_FACTOR;
+        mMinScale = scale * MIN_SCALE_FACTOR;
     }
 
     private void postImageTranslate(float distanceX, float distanceY) {
@@ -149,9 +160,21 @@ public class MapImageView extends ImageView {
     private void postImageScale(float scale_x, float scale_y) {
         float px = (float)getWidth() / 2.0f;
         float py = (float)getHeight() / 2.0f;
+        float[] values = new float[9];
 
         Matrix matrix = getImageMatrix();
-        matrix.postScale(scale_x, scale_y, px, py);
-        setImageMatrix(matrix);
+        matrix.getValues(values);
+
+        float target_scale_x = values[Matrix.MSCALE_X] * scale_x;
+        float target_scale_y = values[Matrix.MSCALE_Y] * scale_y;
+        if (isValidScale(target_scale_x) && isValidScale(target_scale_y)) {
+            matrix.postScale(scale_x, scale_y, px, py);
+            setImageMatrix(matrix);
+        }
+    }
+
+    private boolean isValidScale(float scale) {
+        Log.v(TAG, String.format("scale : %f", scale));
+        return (mMinScale < scale) && (scale < mMaxScale);
     }
 }

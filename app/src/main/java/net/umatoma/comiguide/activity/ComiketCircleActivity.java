@@ -36,7 +36,7 @@ public class ComiketCircleActivity extends ActionBarActivity {
             }
         });
 
-        mMapImage.setImageResource(R.drawable.sample);
+        mMapImage.setImageResource(R.drawable.ccircle_map_d1_e123);
     }
 
 
