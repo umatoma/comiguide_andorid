@@ -1,0 +1,17 @@
+<resources>
+    <string name="title_activity_login">ログイン</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">メールアドレス</string>
+    <string name="prompt_password">パスワード</string>
+    <string name="action_sign_in">ログイン</string>
+    <string name="action_sign_in_short">ログイン</string>
+
+    <string name="success_login">ログインしました</string>
+
+    <string name="error_invalid_email">不正なメールアドレスです</string>
+    <string name="error_invalid_password">パスワードが短すぎます</string>
+    <string name="error_incorrect_password">不正なパスワードです</string>
+    <string name="error_field_required">値を入力してください</string>
+    <string name="error_login_fail">ログインに失敗しました</string>
+</resources>
