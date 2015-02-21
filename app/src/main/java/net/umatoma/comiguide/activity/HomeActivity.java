@@ -2,6 +2,9 @@ package net.umatoma.comiguide.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
@@ -18,10 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.fragment.SideMenuFragment;
 import net.umatoma.comiguide.adapter.HomeMenuAdapter;
 import net.umatoma.comiguide.model.User;
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends ActionBarActivity implements SideMenuFragment.OnFragmentInteractionListener {
 
     private User mUser;
     private ImageView mUserIcon;
@@ -29,6 +33,7 @@ public class HomeActivity extends ActionBarActivity {
     private ListView mNotificationList;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private SideMenuFragment sideMenuFragment;
     private ActionBarDrawerToggle mDrawerToggle;
     private HomeMenuAdapter mMenuAdapter;
     private ArrayAdapter<String> mNotificationAdaper;
@@ -44,9 +49,9 @@ public class HomeActivity extends ActionBarActivity {
         mActionBar.setHomeButtonEnabled(true);
 
         mMenuAdapter = new HomeMenuAdapter(this);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(mMenuAdapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//        mDrawerList.setAdapter(mMenuAdapter);
+//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
@@ -79,6 +84,11 @@ public class HomeActivity extends ActionBarActivity {
                 Toast.makeText(HomeActivity.this, str, Toast.LENGTH_SHORT);
             }
         });
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.left_drawer, SideMenuFragment.newInstance("hoge", "fuga"));
+        transaction.commit();
     }
 
     @Override
@@ -130,6 +140,11 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
