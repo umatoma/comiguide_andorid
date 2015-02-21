@@ -1,5 +1,8 @@
 package net.umatoma.comiguide.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +12,25 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class ComiketCircleListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
+    private LoadComiketCirclesTask mLoadComiketCirclesTask;
     private AbsListView mListView;
     private ArrayAdapter mAdapter;
 
@@ -26,8 +42,6 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
 
         mAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1);
-        mAdapter.add("hoge");
-        mAdapter.add("fuga");
     }
 
     @Override
@@ -44,9 +58,18 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        mLoadComiketCirclesTask = new LoadComiketCirclesTask(getActivity());
+        mLoadComiketCirclesTask.execute();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mLoadComiketCirclesTask = null;
     }
 
 
@@ -75,6 +98,60 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
+    }
+
+    private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
+
+        private User mUser;
+
+        public LoadComiketCirclesTask(Context context) {
+            mUser = new User(context);
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://comiguide.net/api/v1/comikets/87/ccircle_checklists.json")
+                    .addHeader("X-Comiguide-Api-Token", mUser.getApiToken())
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    return new JSONObject(response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            if (result != null) {
+                try {
+                    JSONArray comiketCircles = result.getJSONArray("ccircle_checklists");
+                    int length = comiketCircles.length();
+                    for (int i = 0; i < length; i++) {
+                        JSONObject comiketCircle = comiketCircles.getJSONObject(i);
+                        mAdapter.add(comiketCircle.getString("circle_name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mLoadComiketCirclesTask = null;
+        }
     }
 
 }
