@@ -1,9 +1,5 @@
 package net.umatoma.comiguide.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +15,9 @@ import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleActivity extends ActionBarActivity {
 
-    private FloatingActionButton mFunctionsButton;
+    private FloatingActionButton mCreateCircleButton;
+    private FloatingActionButton mCircleListButton;
+    private FloatingActionButton mChangeMapButton;
     private MapImageView mMapImage;
 
     @Override
@@ -30,17 +28,31 @@ public class ComiketCircleActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mFunctionsButton = (FloatingActionButton) findViewById(R.id.functions_button);
         mMapImage = (MapImageView) findViewById(R.id.circle_map);
+        mMapImage.setImageResource(R.drawable.ccircle_map_d1_e123);
 
-        mFunctionsButton.setOnClickListener(new View.OnClickListener() {
+        mCreateCircleButton = (FloatingActionButton) findViewById(R.id.button_create_circle);
+        mCircleListButton   = (FloatingActionButton) findViewById(R.id.button_circle_list);
+        mChangeMapButton   = (FloatingActionButton) findViewById(R.id.button_change_map);
+
+        mCreateCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ComiketCircleActivity.this, "click", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ComiketCircleActivity.this, "button_create_circle", Toast.LENGTH_SHORT).show();
             }
         });
-
-        mMapImage.setImageResource(R.drawable.ccircle_map_d1_e123);
+        mCircleListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ComiketCircleActivity.this, "button_circle_list", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mChangeMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ComiketCircleActivity.this, "button_change_map", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
