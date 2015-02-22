@@ -28,6 +28,7 @@ public class ComiketCircleArrayAdapter
             convertView = inflater.inflate(R.layout.adapter_comiket_circle, null);
             viewHolder = new ViewHolder();
             viewHolder.mColorLayout = (RelativeLayout) convertView.findViewById(R.id.color);
+            viewHolder.mSpaceInfoView = (TextView) convertView.findViewById(R.id.space_info);
             viewHolder.mCircleNamaView = (TextView) convertView.findViewById(R.id.circle_name);
             convertView.setTag(viewHolder);
         } else {
@@ -36,6 +37,7 @@ public class ComiketCircleArrayAdapter
 
         ComiketCircle circle = getItem(position);
         viewHolder.mColorLayout.setBackgroundColor(circle.getColor());
+        viewHolder.mSpaceInfoView.setText(circle.getSpaceInfo());
         viewHolder.mCircleNamaView.setText(circle.getCircleName());
 
         return convertView;
@@ -43,6 +45,7 @@ public class ComiketCircleArrayAdapter
 
     private static class ViewHolder {
         public RelativeLayout mColorLayout;
+        public TextView mSpaceInfoView;
         public TextView mCircleNamaView;
     }
 }

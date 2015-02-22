@@ -68,6 +68,20 @@ public class ComiketCircle {
         }
     }
 
+    public String getSpaceInfo() {
+        ComiketLayout layout = mComiketLayout;
+        ComiketBlock block = layout.getComiketBlock();
+        ComiketArea area = block.getComiketArea();
+
+        return new StringBuilder()
+                .append(area.getName())
+                .append(block.getName())
+                .append(" - ")
+                .append(layout.getSpaceNo())
+                .append(mSpaceNoSub)
+                .toString();
+    }
+
     public ComiketLayout getComiketLayout() {
         return mComiketLayout;
     }
