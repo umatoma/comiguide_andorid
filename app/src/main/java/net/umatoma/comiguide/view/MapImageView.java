@@ -13,13 +13,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MapImageView extends ImageView {
 
     private static final String TAG = "MapImageView";
-    private static final float MAX_SCALE_FACTOR = 5.0f;
-    private static final float MIN_SCALE_FACTOR = 0.5f;
+    private static final float MAX_SCALE_FACTOR = 8.0f;
+    private static final float MIN_SCALE_FACTOR = 0.8f;
     private float mDefaultScale = 1.0f;
     private float mMaxScale = 2.0f;
     private float mMinScale = 0.5f;
