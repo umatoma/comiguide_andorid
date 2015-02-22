@@ -13,9 +13,13 @@ import android.view.MenuItem;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
+import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.model.ComiketLayout;
+import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleActivity extends ActionBarActivity
-        implements ComiketCircleMapFragment.OnFragmentInteractionListener {
+        implements ComiketCircleMapFragment.OnFragmentInteractionListener,
+            ComiketCircleListFragment.OnFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -60,6 +64,18 @@ public class ComiketCircleActivity extends ActionBarActivity
             case R.id.button_circle_list:
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 return;
+        }
+    }
+
+    @Override
+    public void onComiketCircleSelected(ComiketCircle circle) {
+        MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
+        if (mapImageView != null) {
+            ComiketLayout layout = circle.getComiketLayout();
+            float dx = (float) layout.getPosX();
+            float dy = (float) layout.getPosY();
+            mapImageView.setCurrentPosition(dx, dy);
+            mDrawerLayout.closeDrawers();
         }
     }
 }

@@ -25,6 +25,14 @@ public class ComiketLayout {
         return mSpaceNo;
     }
 
+    public int getPosX() {
+        return mPosX;
+    }
+
+    public int getPosY() {
+        return mPosY;
+    }
+
     public ComiketBlock getComiketBlock() {
         return mComiketBlock;
     }

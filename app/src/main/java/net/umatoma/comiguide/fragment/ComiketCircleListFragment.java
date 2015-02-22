@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +28,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class ComiketCircleListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ComiketCircleListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private LoadComiketCirclesTask mLoadComiketCirclesTask;
@@ -53,7 +52,12 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
 
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListener.onComiketCircleSelected(mAdapter.getItem(position));
+            }
+        });
 
         return view;
     }
@@ -61,6 +65,12 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
 
         mLoadComiketCirclesTask = new LoadComiketCirclesTask(getActivity());
         mLoadComiketCirclesTask.execute();
@@ -71,16 +81,6 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
         super.onDetach();
         mListener = null;
         mLoadComiketCirclesTask = null;
-    }
-
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            // mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
     }
 
     /**
@@ -97,8 +97,7 @@ public class ComiketCircleListFragment extends Fragment implements AbsListView.O
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onComiketCircleSelected(ComiketCircle circle);
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
