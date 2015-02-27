@@ -32,17 +32,18 @@ import java.io.IOException;
 public class ComiketCircleListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private LoadComiketCirclesTask mLoadComiketCirclesTask;
     private AbsListView mListView;
     private ComiketCircleArrayAdapter mAdapter;
 
     public ComiketCircleListFragment() {}
 
+    public ComiketCircleListFragment(ComiketCircleArrayAdapter adapter) {
+        mAdapter = adapter;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAdapter = new ComiketCircleArrayAdapter(getActivity());
     }
 
     @Override
@@ -72,16 +73,12 @@ public class ComiketCircleListFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-        mLoadComiketCirclesTask = new LoadComiketCirclesTask(getActivity());
-        mLoadComiketCirclesTask.execute();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mLoadComiketCirclesTask = null;
     }
 
     /**
@@ -99,69 +96,6 @@ public class ComiketCircleListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         public void onComiketCircleSelected(ComiketCircle circle);
-    }
-
-    private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
-
-        private User mUser;
-
-        public LoadComiketCirclesTask(Context context) {
-            mUser = new User(context);
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            OkHttpClient client = new OkHttpClient();
-            int comiketId = 87;
-            int cMapId = 1;
-            String apiToken = mUser.getApiToken();
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority("comiguide.net")
-                    .path(String.format("api/v1/comikets/%d/ccircle_checklists.json", comiketId))
-                    .appendQueryParameter("cmap_id", String.valueOf(cMapId))
-                    .build();
-            Request request = new Request.Builder()
-                    .url(uri.toString())
-                    .addHeader("X-Comiguide-Api-Token", apiToken)
-                    .build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (result != null) {
-                try {
-                    JSONArray comiketCircles = result.getJSONArray("ccircle_checklists");
-                    int length = comiketCircles.length();
-                    for (int i = 0; i < length; i++) {
-                        JSONObject comiketCircle = comiketCircles.getJSONObject(i);
-                        mAdapter.add(new ComiketCircle(comiketCircle));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mLoadComiketCirclesTask = null;
-        }
     }
 
 }
