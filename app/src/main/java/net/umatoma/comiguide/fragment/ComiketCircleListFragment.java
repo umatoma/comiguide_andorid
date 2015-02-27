@@ -2,6 +2,7 @@ package net.umatoma.comiguide.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -111,9 +112,18 @@ public class ComiketCircleListFragment extends Fragment {
         @Override
         protected JSONObject doInBackground(Void... params) {
             OkHttpClient client = new OkHttpClient();
+            int comiketId = 87;
+            int cMapId = 1;
+            String apiToken = mUser.getApiToken();
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .authority("comiguide.net")
+                    .path(String.format("api/v1/comikets/%d/ccircle_checklists.json", comiketId))
+                    .appendQueryParameter("cmap_id", String.valueOf(cMapId))
+                    .build();
             Request request = new Request.Builder()
-                    .url("https://comiguide.net/api/v1/comikets/87/ccircle_checklists.json")
-                    .addHeader("X-Comiguide-Api-Token", mUser.getApiToken())
+                    .url(uri.toString())
+                    .addHeader("X-Comiguide-Api-Token", apiToken)
                     .build();
 
             try {
