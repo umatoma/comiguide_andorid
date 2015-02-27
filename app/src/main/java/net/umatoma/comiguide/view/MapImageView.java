@@ -104,11 +104,11 @@ public class MapImageView extends ImageView {
         Log.d(TAG, "onDraw");
         super.onDraw(canvas);
 
-        float cx = (float)getWidth() / 2.0f;
-        float cy = (float)getHeight() / 2.0f;
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        canvas.drawCircle(cx, cy, 10.0f, paint);
+//        float cx = (float)getWidth() / 2.0f;
+//        float cy = (float)getHeight() / 2.0f;
+//        Paint paint = new Paint();
+//        paint.setColor(Color.GREEN);
+//        canvas.drawCircle(cx, cy, 10.0f, paint);
     }
 
     @Override
