@@ -78,7 +78,7 @@ public class HomeActivity extends ActionBarActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.left_drawer, SideMenuFragment.newInstance());
+        transaction.replace(R.id.left_drawer, SideMenuFragment.newInstance());
         transaction.commit();
     }
 

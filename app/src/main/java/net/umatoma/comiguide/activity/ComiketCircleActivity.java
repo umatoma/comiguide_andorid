@@ -39,8 +39,8 @@ public class ComiketCircleActivity extends ActionBarActivity
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.content_frame, new ComiketCircleMapFragment());
-        transaction.add(R.id.left_drawer, new ComiketCircleListFragment());
+        transaction.replace(R.id.content_frame, new ComiketCircleMapFragment());
+        transaction.replace(R.id.left_drawer, new ComiketCircleListFragment());
         transaction.commit();
     }
 
