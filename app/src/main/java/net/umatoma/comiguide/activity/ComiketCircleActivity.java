@@ -110,6 +110,12 @@ public class ComiketCircleActivity extends ActionBarActivity
             mapImageView.setCurrentPosition(dx, dy);
             mDrawerLayout.closeDrawers();
         }
+
+        FragmentManager manager = getSupportFragmentManager();
+        ComiketCircleMapFooterFragment fragment
+                = (ComiketCircleMapFooterFragment) manager.findFragmentById(R.id.footer_coontent);
+        fragment.setComiketCircle(circle);
+        fragment.showView();
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
