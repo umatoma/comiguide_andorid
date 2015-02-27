@@ -18,7 +18,7 @@
         fab:fab_size="mini"
         fab:fab_colorNormal="#ff00bcd4"
         fab:fab_colorPressed="#ff007e91"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/footer_coontent"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"/>
@@ -44,4 +44,10 @@
         fab:fab_size="mini"
         fab:fab_colorNormal="#ff00bcd4"
         fab:fab_colorPressed="#ff007e91"/>
+
+    <FrameLayout
+        android:id="@+id/footer_coontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

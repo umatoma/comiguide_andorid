@@ -21,6 +21,7 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
+import net.umatoma.comiguide.fragment.ComiketCircleMapFooterFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
 import net.umatoma.comiguide.model.ComiketCircle;
@@ -62,6 +63,7 @@ public class ComiketCircleActivity extends ActionBarActivity
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.content_frame, new ComiketCircleMapFragment());
         transaction.replace(R.id.left_drawer, new ComiketCircleListFragment(mCircleArrayAdapter));
+        transaction.replace(R.id.footer_coontent, new ComiketCircleMapFooterFragment());
         transaction.commit();
     }
 

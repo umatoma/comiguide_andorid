@@ -1,0 +1,92 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#a000"
+    android:clickable="true"
+    tools:context="net.umatoma.comiguide.fragment.ComiketCircleMapFooterFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/color"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:background="#000"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_marginLeft="4dp">
+
+            <TextView
+                android:id="@+id/space_info"
+                android:text="Space Info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"/>
+
+            <TextView
+                android:id="@+id/circle_name"
+                android:text="Circle Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#fff"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/ic_wallet_w"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="top"
+            android:padding="2dp"
+            android:layout_marginRight="4dp"/>
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:text="Cost"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/ic_comments_w"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="top"
+            android:padding="2dp"
+            android:layout_marginRight="4dp"/>
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:text="Comment"/>
+    </LinearLayout>
+
+</LinearLayout>
