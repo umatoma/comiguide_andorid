@@ -147,7 +147,7 @@ public class ComiketCircleActivity extends ActionBarActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .add(R.id.content_frame, new ComiketCircleFormFragment(), ComiketCircleFormFragment.TAG)
+                .add(R.id.content_frame, new ComiketCircleFormFragment(circle), ComiketCircleFormFragment.TAG)
                 .commit();
     }
 

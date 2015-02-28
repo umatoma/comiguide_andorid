@@ -9,13 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.ComiketCircle;
 
 public class ComiketCircleFormFragment extends Fragment {
 
     public static final String TAG = "ComiketCircleFormFragment";
+    private ComiketCircle mComiketCircle;
 
     public ComiketCircleFormFragment() {
         // Required empty public constructor
+    }
+
+    public ComiketCircleFormFragment(ComiketCircle circle) {
+        mComiketCircle = circle;
     }
 
     @Override

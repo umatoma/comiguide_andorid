@@ -8,6 +8,16 @@
     <string name="toast_logout">ログアウトしました</string>
     <string name="title_activity_comiket_circle">コミケ - サークル</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="form_comiket_block">ブロック</string>
+    <string name="form_comiket_layout">レイアウト</string>
+    <string name="form_comiket_area">エリア</string>
+    <string name="form_comiket_circle_name">サークル名</string>
+    <string name="form_comiket_circle_url">URL</string>
+    <string name="form_comiket_circle_comment">コメント</string>
+    <string name="form_comiket_circle_cost">費用</string>
+    <string name="form_comiket_circle_color">カラー</string>
+    <string name="form_comiket_circle_update">リスト更新</string>
+    <string name="form_comiket_circle_create">リスト作成</string>
 </resources>
