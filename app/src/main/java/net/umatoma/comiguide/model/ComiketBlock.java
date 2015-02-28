@@ -22,6 +22,10 @@ public class ComiketBlock {
         mComiketArea = new ComiketArea(block.getJSONObject("carea"));
     }
 
+    public int getId() {
+        return mId;
+    }
+
     public String getName() {
         return mName;
     }

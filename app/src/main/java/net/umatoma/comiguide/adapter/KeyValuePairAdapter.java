@@ -34,4 +34,26 @@ public class KeyValuePairAdapter extends ArrayAdapter<Pair<String, String>> {
         textView.setText(getItem(pos).second);
         return textView;
     }
+
+    public int getPositionFromKey(String key) {
+        int count = getCount();
+        for (int i = 0; i < count; i++) {
+            Pair<String, String> pair = getItem(i);
+            if (pair.first.equals(key)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getPositionFromValue(String value) {
+        int count = getCount();
+        for (int i = 0; i < count; i++) {
+            Pair<String, String> pair = getItem(i);
+            if (pair.second.equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

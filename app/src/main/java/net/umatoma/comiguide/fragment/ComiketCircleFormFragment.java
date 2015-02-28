@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -39,7 +40,7 @@ public class ComiketCircleFormFragment extends Fragment {
     private ComiketCircle mComiketCircle;
     private KeyValuePairAdapter mComiketBlockAdapter;
     private KeyValuePairAdapter mComiketLayoutAdapter;
-    private KeyValuePairAdapter mSpaceNoSubAdapter;
+    private ArrayAdapter<String> mSpaceNoSubAdapter;
     private Spinner mFormComiketBlock;
     private Spinner mFormComiketLayout;
     private Spinner mFormSpaceNoSub;
@@ -48,7 +49,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private EditText mFormComment;
     private EditText mFormCost;
     private Button mButtonSubmit;
-    private LoadComiketBlocksTask mLoadComiketCirclesTask;
+    private LoadComiketBlocksTask mLoadComiketBlocksTask;
+    private LoadComiketLayoutsTask mLoadComiketLayoutsTask;
 
     public ComiketCircleFormFragment() {
         // Required empty public constructor
@@ -65,11 +67,14 @@ public class ComiketCircleFormFragment extends Fragment {
         int resId = android.R.layout.simple_spinner_dropdown_item;
         mComiketBlockAdapter = new KeyValuePairAdapter(getActivity(), resId);
         mComiketLayoutAdapter = new KeyValuePairAdapter(getActivity(), resId);
-        mSpaceNoSubAdapter = new KeyValuePairAdapter(getActivity(), resId);
+        mSpaceNoSubAdapter = new ArrayAdapter<>(getActivity(), resId, new String[]{ "a", "b" });
 
         if (mComiketCircle != null) {
-            mLoadComiketCirclesTask = new LoadComiketBlocksTask(getActivity());
-            mLoadComiketCirclesTask.execute();
+            int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
+            mLoadComiketBlocksTask = new LoadComiketBlocksTask(getActivity());
+            mLoadComiketLayoutsTask = new LoadComiketLayoutsTask(getActivity(), comiket_block_id);
+            mLoadComiketBlocksTask.execute();
+            mLoadComiketLayoutsTask.execute();
         }
     }
 
@@ -98,6 +103,7 @@ public class ComiketCircleFormFragment extends Fragment {
             mFormComment.setText(mComiketCircle.getComment());
             mFormCost.setText(mComiketCircle.getCost());
 
+            mButtonSubmit.setText(getString(R.string.form_comiket_circle_update));
             mButtonSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,7 +117,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        mLoadComiketCirclesTask = null;
+        mLoadComiketBlocksTask = null;
         super.onDetach();
     }
 
@@ -152,7 +158,7 @@ public class ComiketCircleFormFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "load success careas");
+                    Log.d(TAG, "Success doInBackground");
                     return new JSONObject(response.body().string());
                 }
             } catch (IOException e) {
@@ -161,7 +167,7 @@ public class ComiketCircleFormFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Log.d(TAG, "load fail careas");
+            Log.d(TAG, "Fail doInBackground");
             return null;
         }
 
@@ -193,11 +199,81 @@ public class ComiketCircleFormFragment extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
             }
+            mLoadComiketBlocksTask = null;
         }
 
         @Override
         protected void onCancelled() {
-            mLoadComiketCirclesTask = null;
+            mLoadComiketBlocksTask = null;
+        }
+    }
+
+    private class LoadComiketLayoutsTask extends AsyncTask<Void, Void, JSONObject> {
+
+        private static final String TAG = "LoadComiketLayoutsTask";
+        private User mUser;
+        private int mComiketBlockId;
+
+        public LoadComiketLayoutsTask(Context context, int comiket_block_id) {
+            mUser = new User(context);
+            mComiketBlockId = comiket_block_id;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            OkHttpClient client = new OkHttpClient();
+            String apiToken = mUser.getApiToken();
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .authority("comiguide.net")
+                    .path(String.format("api/v1/cblocks/%d/clayouts.json", mComiketBlockId))
+                    .build();
+            Request request = new Request.Builder()
+                    .url(uri.toString())
+                    .addHeader("X-Comiguide-Api-Token", apiToken)
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Success doInBackground");
+                    return new JSONObject(response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "Fail doInBackground");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            if (result != null) {
+                try {
+                    JSONObject block = result.getJSONObject("cblock");
+                    JSONArray layouts = block.getJSONArray("clayouts");
+                    int length = layouts.length();
+                    for (int i = 0; i < length; i++) {
+                        JSONObject layout = layouts.getJSONObject(i);
+                        Pair<String, String> pair
+                                = new Pair<>(layout.getString("id"), layout.getString("space_no"));
+                        mComiketLayoutAdapter.add(pair);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
+            }
+            mLoadComiketLayoutsTask = null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            mLoadComiketLayoutsTask = null;
         }
     }
 
