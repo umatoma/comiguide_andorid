@@ -30,6 +30,7 @@
                     android:text="@string/form_comiket_block" />
 
                 <Spinner
+                    android:id="@+id/form_comiket_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -47,6 +48,7 @@
                     android:text="@string/form_comiket_layout" />
 
                 <Spinner
+                    android:id="@+id/form_comiket_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -61,9 +63,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/form_comiket_area" />
+                    android:text="@string/form_comiket_circle_space_no_sub" />
 
                 <Spinner
+                    android:id="@+id/form_comiket_circle_space_no_sub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -78,6 +81,7 @@
             android:text="@string/form_comiket_circle_name" />
 
         <EditText
+            android:id="@+id/form_comiket_circle_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -91,6 +95,7 @@
             android:text="@string/form_comiket_circle_url" />
 
         <EditText
+            android:id="@+id/form_comiket_circle_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -104,6 +109,7 @@
             android:text="@string/form_comiket_circle_comment" />
 
         <EditText
+            android:id="@+id/form_comiket_circle_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -117,11 +123,14 @@
             android:text="@string/form_comiket_circle_cost" />
 
         <EditText
+            android:id="@+id/form_comiket_circle_cost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true" />
 
         <Button
+            style="@style/AppTheme.Button"
+            android:id="@+id/form_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

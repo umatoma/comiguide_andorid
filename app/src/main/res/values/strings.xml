@@ -12,7 +12,7 @@
 
     <string name="form_comiket_block">ブロック</string>
     <string name="form_comiket_layout">レイアウト</string>
-    <string name="form_comiket_area">エリア</string>
+    <string name="form_comiket_circle_space_no_sub">a/b</string>
     <string name="form_comiket_circle_name">サークル名</string>
     <string name="form_comiket_circle_url">URL</string>
     <string name="form_comiket_circle_comment">コメント</string>
