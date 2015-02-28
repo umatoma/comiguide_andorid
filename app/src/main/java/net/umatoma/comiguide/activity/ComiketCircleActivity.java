@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
+import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFooterFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
@@ -37,7 +40,8 @@ import java.io.IOException;
 
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
-            ComiketCircleListFragment.OnFragmentInteractionListener {
+            ComiketCircleListFragment.OnFragmentInteractionListener,
+            ComiketCircleMapFooterFragment.OnFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
@@ -61,9 +65,12 @@ public class ComiketCircleActivity extends ActionBarActivity
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.content_frame, new ComiketCircleMapFragment());
-        transaction.replace(R.id.left_drawer, new ComiketCircleListFragment(mCircleArrayAdapter));
-        transaction.replace(R.id.footer_coontent, new ComiketCircleMapFooterFragment());
+        transaction.replace(R.id.content_frame,
+                new ComiketCircleMapFragment(), "ComiketCircleMap");
+        transaction.replace(R.id.left_drawer,
+                new ComiketCircleListFragment(mCircleArrayAdapter), "ComiketCircleList");
+        transaction.replace(R.id.footer_coontent,
+                new ComiketCircleMapFooterFragment(), "ComiketCircleMapFooter");
         transaction.commit();
     }
 
@@ -83,6 +90,22 @@ public class ComiketCircleActivity extends ActionBarActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            FragmentManager manager = getSupportFragmentManager();
+            if (manager.findFragmentByTag("ComiketCircleForm") != null) {
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, new ComiketCircleMapFragment(), "ComiketCircleMap")
+                        .replace(R.id.footer_coontent, new ComiketCircleMapFooterFragment(), "ComiketCircleMapFooter")
+                        .commit();
+                return false;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -108,14 +131,25 @@ public class ComiketCircleActivity extends ActionBarActivity
             float dx = (float) layout.getPosX();
             float dy = (float) layout.getPosY();
             mapImageView.setCurrentPosition(dx, dy);
-            mDrawerLayout.closeDrawers();
+
+            FragmentManager manager = getSupportFragmentManager();
+            ComiketCircleMapFooterFragment fragment
+                    = (ComiketCircleMapFooterFragment) manager.findFragmentByTag("ComiketCircleMapFooter");
+            fragment.setComiketCircle(circle);
+            fragment.showView();
+        } else {
+            // On edit or create circle mode.
         }
 
-        FragmentManager manager = getSupportFragmentManager();
-        ComiketCircleMapFooterFragment fragment
-                = (ComiketCircleMapFooterFragment) manager.findFragmentById(R.id.footer_coontent);
-        fragment.setComiketCircle(circle);
-        fragment.showView();
+        mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    public void onFooterViewClick(ComiketCircle circle) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, new ComiketCircleFormFragment(), "ComiketCircleForm")
+                .commit();
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {

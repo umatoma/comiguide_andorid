@@ -1,6 +1,7 @@
 package net.umatoma.comiguide.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import net.umatoma.comiguide.model.ComiketCircle;
 public class ComiketCircleMapFooterFragment extends Fragment implements View.OnClickListener {
 
     private ComiketCircle mComiketCircle;
+    private OnFragmentInteractionListener mListener;
 
     public ComiketCircleMapFooterFragment() {}
 
@@ -37,6 +39,17 @@ public class ComiketCircleMapFooterFragment extends Fragment implements View.OnC
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -48,7 +61,7 @@ public class ComiketCircleMapFooterFragment extends Fragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        hideView();
+        mListener.onFooterViewClick(mComiketCircle);
     }
 
     public void hideView() {
@@ -57,5 +70,9 @@ public class ComiketCircleMapFooterFragment extends Fragment implements View.OnC
 
     public void showView() {
         getView().setVisibility(View.VISIBLE);
+    }
+
+    public interface OnFragmentInteractionListener {
+        public void onFooterViewClick(ComiketCircle circle);
     }
 }
