@@ -24,7 +24,6 @@ import com.squareup.okhttp.Response;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
-import net.umatoma.comiguide.fragment.ComiketCircleMapFooterFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
 import net.umatoma.comiguide.model.ComiketCircle;
@@ -40,8 +39,7 @@ import java.io.IOException;
 
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
-            ComiketCircleListFragment.OnFragmentInteractionListener,
-            ComiketCircleMapFooterFragment.OnFragmentInteractionListener {
+            ComiketCircleListFragment.OnFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
@@ -69,8 +67,6 @@ public class ComiketCircleActivity extends ActionBarActivity
                 new ComiketCircleMapFragment(), "ComiketCircleMap");
         transaction.replace(R.id.left_drawer,
                 new ComiketCircleListFragment(mCircleArrayAdapter), "ComiketCircleList");
-        transaction.replace(R.id.footer_coontent,
-                new ComiketCircleMapFooterFragment(), "ComiketCircleMapFooter");
         transaction.commit();
     }
 
@@ -99,7 +95,6 @@ public class ComiketCircleActivity extends ActionBarActivity
             if (manager.findFragmentByTag("ComiketCircleForm") != null) {
                 manager.beginTransaction()
                         .replace(R.id.content_frame, new ComiketCircleMapFragment(), "ComiketCircleMap")
-                        .replace(R.id.footer_coontent, new ComiketCircleMapFooterFragment(), "ComiketCircleMapFooter")
                         .commit();
                 return false;
             }
@@ -125,18 +120,19 @@ public class ComiketCircleActivity extends ActionBarActivity
 
     @Override
     public void onComiketCircleSelected(ComiketCircle circle) {
-        MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
-        if (mapImageView != null) {
+        FragmentManager manager = getSupportFragmentManager();
+        ComiketCircleMapFragment fragment
+                = (ComiketCircleMapFragment) manager.findFragmentByTag("ComiketCircleMap");
+
+        if (fragment != null) {
+            MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
             ComiketLayout layout = circle.getComiketLayout();
             float dx = (float) layout.getPosX();
             float dy = (float) layout.getPosY();
             mapImageView.setCurrentPosition(dx, dy);
 
-            FragmentManager manager = getSupportFragmentManager();
-            ComiketCircleMapFooterFragment fragment
-                    = (ComiketCircleMapFooterFragment) manager.findFragmentByTag("ComiketCircleMapFooter");
             fragment.setComiketCircle(circle);
-            fragment.showView();
+            fragment.showFooterView();
         } else {
             // On edit or create circle mode.
         }

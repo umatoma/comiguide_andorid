@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleMapFragment extends Fragment {
@@ -19,6 +21,7 @@ public class ComiketCircleMapFragment extends Fragment {
     private FloatingActionButton mCircleListButton;
     private FloatingActionButton mChangeMapButton;
     private MapImageView mMapImage;
+    private ComiketCircle mComiketCircle;
 
     public ComiketCircleMapFragment() {}
 
@@ -38,6 +41,15 @@ public class ComiketCircleMapFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_comiket_circle_map, container, false);
+        View footerView = view.findViewById(R.id.footer_content_inner);
+        footerView.setVisibility(View.GONE);
+        footerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFooterViewClick(mComiketCircle);
+            }
+        });
+
         mMapImage = (MapImageView)view.findViewById(R.id.circle_map);
         mMapImage.setImageResource(R.drawable.ccircle_map_d1_e123);
 
@@ -72,8 +84,24 @@ public class ComiketCircleMapFragment extends Fragment {
         mListener = null;
     }
 
+    public void setComiketCircle(ComiketCircle circle) {
+        mComiketCircle = circle;
+
+        View view = getView().findViewById(R.id.footer_content_inner);
+        view.findViewById(R.id.color).setBackgroundColor(circle.getColor());
+        ((TextView) view.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
+        ((TextView) view.findViewById(R.id.circle_name)).setText(circle.getCircleName());
+        ((TextView) view.findViewById(R.id.cost)).setText(circle.getCost());
+        ((TextView) view.findViewById(R.id.comment)).setText(circle.getComment());
+    }
+
+    public void showFooterView() {
+        getView().findViewById(R.id.footer_content_inner).setVisibility(View.VISIBLE);
+    }
+
     public interface OnFragmentInteractionListener {
         public void onFunctionsButtonClicke(int id);
+        public void onFooterViewClick(ComiketCircle circle);
     }
 
 }
