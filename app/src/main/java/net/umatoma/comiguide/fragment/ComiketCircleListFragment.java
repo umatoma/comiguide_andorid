@@ -31,6 +31,7 @@ import java.io.IOException;
 
 public class ComiketCircleListFragment extends Fragment {
 
+    public static final String TAG = "ComiketCircleListFragment";
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
     private ComiketCircleArrayAdapter mAdapter;

@@ -64,9 +64,9 @@ public class ComiketCircleActivity extends ActionBarActivity
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.content_frame,
-                new ComiketCircleMapFragment(), "ComiketCircleMap");
+                new ComiketCircleMapFragment(), ComiketCircleMapFragment.TAG);
         transaction.replace(R.id.left_drawer,
-                new ComiketCircleListFragment(mCircleArrayAdapter), "ComiketCircleList");
+                new ComiketCircleListFragment(mCircleArrayAdapter), ComiketCircleListFragment.TAG);
         transaction.commit();
     }
 
@@ -92,9 +92,11 @@ public class ComiketCircleActivity extends ActionBarActivity
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
             FragmentManager manager = getSupportFragmentManager();
-            if (manager.findFragmentByTag("ComiketCircleForm") != null) {
+            Fragment fragment = manager.findFragmentByTag(ComiketCircleFormFragment.TAG);
+            if (fragment != null) {
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, new ComiketCircleMapFragment(), "ComiketCircleMap")
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .remove(fragment)
                         .commit();
                 return false;
             }
@@ -122,7 +124,7 @@ public class ComiketCircleActivity extends ActionBarActivity
     public void onComiketCircleSelected(ComiketCircle circle) {
         FragmentManager manager = getSupportFragmentManager();
         ComiketCircleMapFragment fragment
-                = (ComiketCircleMapFragment) manager.findFragmentByTag("ComiketCircleMap");
+                = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
 
         if (fragment != null) {
             MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
@@ -144,7 +146,8 @@ public class ComiketCircleActivity extends ActionBarActivity
     public void onFooterViewClick(ComiketCircle circle) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_frame, new ComiketCircleFormFragment(), "ComiketCircleForm")
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, new ComiketCircleFormFragment(), ComiketCircleFormFragment.TAG)
                 .commit();
     }
 

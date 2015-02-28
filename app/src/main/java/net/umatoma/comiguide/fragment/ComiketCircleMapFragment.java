@@ -16,6 +16,7 @@ import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleMapFragment extends Fragment {
 
+    public static final String TAG = "ComiketCircleMapFragment";
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton mCreateCircleButton;
     private FloatingActionButton mCircleListButton;
