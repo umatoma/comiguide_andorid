@@ -26,6 +26,7 @@ import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
+import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
 import net.umatoma.comiguide.model.User;
@@ -40,7 +41,7 @@ import java.io.IOException;
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
             ComiketCircleListFragment.OnFragmentInteractionListener,
-            ComiketCircleFormFragment.OnFragmentInteractionListener {
+            OnComiketCircleUpdateListener {
 
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
@@ -145,15 +146,18 @@ public class ComiketCircleActivity extends ActionBarActivity
 
     @Override
     public void onFooterViewClick(ComiketCircle circle) {
+        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(circle)
+                .setOnComiketCircleUpdateListener(this);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .add(R.id.content_frame, new ComiketCircleFormFragment(circle), ComiketCircleFormFragment.TAG)
+                .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
                 .commit();
     }
 
     @Override
-    public void onComiketCircleUpdated(ComiketCircle circle) {
+    public void onComiketCircleUpdate(ComiketCircle circle) {
         mCircleArrayAdapter.updateItem(circle);
 
         FragmentManager manager = getSupportFragmentManager();

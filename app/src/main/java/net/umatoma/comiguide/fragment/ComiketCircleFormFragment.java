@@ -33,7 +33,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
     public static final String TAG = "ComiketCircleFormFragment";
 
-    private OnFragmentInteractionListener mListener;
+    private OnComiketCircleUpdateListener mOnUpdateListener;
     private ComiketCircle mComiketCircle;
     private KeyValuePairAdapter mComiketBlockAdapter;
     private KeyValuePairAdapter mComiketLayoutAdapter;
@@ -61,13 +61,6 @@ public class ComiketCircleFormFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
 
         int resId = android.R.layout.simple_spinner_dropdown_item;
         mComiketBlockAdapter = new KeyValuePairAdapter(getActivity(), resId);
@@ -133,7 +126,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        mListener = null;
+        mOnUpdateListener = null;
         mLoadComiketBlocksTask = null;
         mLoadComiketLayoutsTask = null;
         super.onDetach();
@@ -298,8 +291,8 @@ public class ComiketCircleFormFragment extends Fragment {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            if (mListener != null) {
-                                mListener.onComiketCircleUpdated(circle);
+                            if (mOnUpdateListener != null) {
+                                mOnUpdateListener.onComiketCircleUpdate(circle);
                             }
 
                             removeSelf();
@@ -335,15 +328,16 @@ public class ComiketCircleFormFragment extends Fragment {
                 .commit();
     }
 
+    public ComiketCircleFormFragment setOnComiketCircleUpdateListener(OnComiketCircleUpdateListener listener) {
+        mOnUpdateListener = listener;
+        return this;
+    }
+
     private class OnCnacelListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return true;
         }
-    }
-
-    public interface OnFragmentInteractionListener {
-        public void onComiketCircleUpdated(ComiketCircle circle);
     }
 
 }
