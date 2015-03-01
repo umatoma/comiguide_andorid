@@ -40,9 +40,9 @@ public class ComiketCircleActivity extends ActionBarActivity
             ComiketCircleListFragment.OnFragmentInteractionListener,
             OnComiketCircleUpdateListener, OnComiketCircleCreateListener {
 
-    private int mComiketId = 87;
-    private int mCmapId = 1;
-    private int mDay = 1;
+    private int mComiketId;
+    private int mCmapId;
+    private int mDay;
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
     private ComiGuideApiClient.HttpClientTask mLoadComiketCirclesTask;
@@ -52,7 +52,24 @@ public class ComiketCircleActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comiket_circle);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         mCircleArrayAdapter = new ComiketCircleArrayAdapter(this);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        int comiket_id = 87;
+        int cmap_id = 1;
+        int day = 1;
+        initialize(comiket_id, cmap_id, day);
+    }
+
+    private void initialize(int comiket_id, int cmap_id, int day) {
+        mComiketId = comiket_id;
+        mCmapId = cmap_id;
+        mDay = day;
 
         String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
         List<NameValuePair> params = new ArrayList<>();
@@ -62,30 +79,23 @@ public class ComiketCircleActivity extends ActionBarActivity
         mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
                 new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
 
-            @Override
-            public void onSuccess(JSONObject result) {
-                mLoadComiketCirclesTask = null;
-                parseComiketCircles(result);
-            }
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        mLoadComiketCirclesTask = null;
+                        parseComiketCircles(result);
+                    }
 
-            @Override
-            public void onFail() {
-                mLoadComiketCirclesTask = null;
-                Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
-            }
-        }).execute();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+                    @Override
+                    public void onFail() {
+                        mLoadComiketCirclesTask = null;
+                        Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
+                    }
+                }).execute();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.content_frame,
-                new ComiketCircleMapFragment(), ComiketCircleMapFragment.TAG);
+                new ComiketCircleMapFragment(mComiketId, mCmapId, mDay), ComiketCircleMapFragment.TAG);
         transaction.replace(R.id.left_drawer,
                 new ComiketCircleListFragment(mCircleArrayAdapter), ComiketCircleListFragment.TAG);
         transaction.commit();
