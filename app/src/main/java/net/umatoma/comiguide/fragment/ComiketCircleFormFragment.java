@@ -25,6 +25,7 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
+import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.User;
 
@@ -49,8 +50,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private EditText mFormComment;
     private EditText mFormCost;
     private Button mButtonSubmit;
-    private LoadComiketBlocksTask mLoadComiketBlocksTask;
-    private LoadComiketLayoutsTask mLoadComiketLayoutsTask;
+    private ComiGuideApiClient.HttpClientTask mLoadComiketBlocksTask;
+    private ComiGuideApiClient.HttpClientTask mLoadComiketLayoutsTask;
 
     public ComiketCircleFormFragment() {
         // Required empty public constructor
@@ -106,13 +107,40 @@ public class ComiketCircleFormFragment extends Fragment {
             mFormSpaceNoSub.setSelection(
                     mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
 
-            int comiket_layout_id = mComiketCircle.getComiketLayout().getId();
-            int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
-            mLoadComiketBlocksTask = new LoadComiketBlocksTask(getActivity(), comiket_block_id);
-            mLoadComiketLayoutsTask = new LoadComiketLayoutsTask(
-                    getActivity(), comiket_block_id, comiket_layout_id);
-            mLoadComiketLayoutsTask.execute();
-            mLoadComiketBlocksTask.execute();
+            final int comiket_layout_id = mComiketCircle.getComiketLayout().getId();
+            final int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
+            mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
+                    .callGetTask("api/v1/careas.json");
+            mLoadComiketLayoutsTask = new ComiGuideApiClient(getActivity())
+                    .callGetTask(String.format("api/v1/cblocks/%d/clayouts.json", comiket_block_id));
+            mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
+                    new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            mLoadComiketBlocksTask = null;
+                            setComiketBlockAdapterValues(result, comiket_block_id);
+                        }
+
+                        @Override
+                        public void onFail() {
+                            mLoadComiketBlocksTask = null;
+                        }
+                    }).execute();
+            mLoadComiketLayoutsTask.setOnHttpClientPostExecuteListener(
+                    new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            mLoadComiketLayoutsTask = null;
+                            setComiketLayoutAdapterValues(result, comiket_layout_id);
+                        }
+
+                        @Override
+                        public void onFail() {
+                            mLoadComiketLayoutsTask = null;
+                        }
+                    }).execute();
         }
 
         return view;
@@ -121,7 +149,63 @@ public class ComiketCircleFormFragment extends Fragment {
     @Override
     public void onDetach() {
         mLoadComiketBlocksTask = null;
+        mLoadComiketLayoutsTask = null;
         super.onDetach();
+    }
+
+    private void setComiketBlockAdapterValues(JSONObject result, int comiket_block_id) {
+        if (result != null) {
+            try {
+                JSONArray areas = result.getJSONArray("careas");
+                int cmap_id = 1;
+                int length = areas.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject area = areas.getJSONObject(i);
+                    if (area.getInt("cmap_id") != cmap_id) {
+                        break;
+                    }
+
+                    JSONArray blocks = area.getJSONArray("cblocks");
+                    int blocks_length = blocks.length();
+                    for (int j = 0; j < blocks_length; j++) {
+                        JSONObject block = blocks.getJSONObject(j);
+                        Pair<String, String> pair
+                                = new Pair<>(block.getString("id"), block.getString("name"));
+                        mComiketBlockAdapter.add(pair);
+                    }
+                    int position = mComiketBlockAdapter
+                            .getPositionFromKey(String.valueOf(comiket_block_id));
+                    mFormComiketBlock.setSelection(position);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setComiketLayoutAdapterValues(JSONObject result, int comiket_layout_id) {
+        if (result != null) {
+            try {
+                JSONObject block = result.getJSONObject("cblock");
+                JSONArray layouts = block.getJSONArray("clayouts");
+                int length = layouts.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject layout = layouts.getJSONObject(i);
+                    Pair<String, String> pair
+                            = new Pair<>(layout.getString("id"), layout.getString("space_no"));
+                    mComiketLayoutAdapter.add(pair);
+                }
+                int position = mComiketLayoutAdapter
+                        .getPositionFromKey(String.valueOf(comiket_layout_id));
+                mFormComiketLayout.setSelection(position);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void attemptSubmit() {
@@ -132,161 +216,6 @@ public class ComiketCircleFormFragment extends Fragment {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return true;
-        }
-    }
-
-    private class LoadComiketBlocksTask extends AsyncTask<Void, Void, JSONObject> {
-
-        private static final String TAG = "LoadComiketBlocksTask";
-        private User mUser;
-        private int mComiketBlockId;
-
-        public LoadComiketBlocksTask(Context context, int comiket_block_id) {
-            mUser = new User(context);
-            mComiketBlockId = comiket_block_id;
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            OkHttpClient client = new OkHttpClient();
-            String apiToken = mUser.getApiToken();
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority("comiguide.net")
-                    .path("api/v1/careas.json")
-                    .build();
-            Request request = new Request.Builder()
-                    .url(uri.toString())
-                    .addHeader("X-Comiguide-Api-Token", apiToken)
-                    .build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "Success doInBackground");
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "Fail doInBackground");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (result != null) {
-                try {
-                    JSONArray areas = result.getJSONArray("careas");
-                    int cmap_id = 1;
-                    int length = areas.length();
-                    for (int i = 0; i < length; i++) {
-                        JSONObject area = areas.getJSONObject(i);
-                        if (area.getInt("cmap_id") != cmap_id) {
-                            break;
-                        }
-
-                        JSONArray blocks = area.getJSONArray("cblocks");
-                        int blocks_length = blocks.length();
-                        for (int j = 0; j < blocks_length; j++) {
-                            JSONObject block = blocks.getJSONObject(j);
-                            Pair<String, String> pair
-                                    = new Pair<>(block.getString("id"), block.getString("name"));
-                            mComiketBlockAdapter.add(pair);
-                        }
-                        int position = mComiketBlockAdapter
-                                .getPositionFromKey(String.valueOf(mComiketBlockId));
-                        mFormComiketBlock.setSelection(position);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
-            }
-            mLoadComiketBlocksTask = null;
-        }
-
-        @Override
-        protected void onCancelled() {
-            mLoadComiketBlocksTask = null;
-        }
-    }
-
-    private class LoadComiketLayoutsTask extends AsyncTask<Void, Void, JSONObject> {
-
-        private static final String TAG = "LoadComiketLayoutsTask";
-        private User mUser;
-        private int mComiketBlockId;
-        private int mComiketLayoutId;
-
-        public LoadComiketLayoutsTask(Context context, int comiket_block_id, int comiket_layout_id) {
-            mUser = new User(context);
-            mComiketBlockId = comiket_block_id;
-            mComiketLayoutId = comiket_layout_id;
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            OkHttpClient client = new OkHttpClient();
-            String apiToken = mUser.getApiToken();
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority("comiguide.net")
-                    .path(String.format("api/v1/cblocks/%d/clayouts.json", mComiketBlockId))
-                    .build();
-            Request request = new Request.Builder()
-                    .url(uri.toString())
-                    .addHeader("X-Comiguide-Api-Token", apiToken)
-                    .build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "Success doInBackground");
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "Fail doInBackground");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (result != null) {
-                try {
-                    JSONObject block = result.getJSONObject("cblock");
-                    JSONArray layouts = block.getJSONArray("clayouts");
-                    int length = layouts.length();
-                    for (int i = 0; i < length; i++) {
-                        JSONObject layout = layouts.getJSONObject(i);
-                        Pair<String, String> pair
-                                = new Pair<>(layout.getString("id"), layout.getString("space_no"));
-                        mComiketLayoutAdapter.add(pair);
-                    }
-                    int position = mComiketLayoutAdapter
-                            .getPositionFromKey(String.valueOf(mComiketLayoutId));
-                    mFormComiketLayout.setSelection(position);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
-            }
-            mLoadComiketLayoutsTask = null;
-        }
-
-        @Override
-        protected void onCancelled() {
-            mLoadComiketLayoutsTask = null;
         }
     }
 
