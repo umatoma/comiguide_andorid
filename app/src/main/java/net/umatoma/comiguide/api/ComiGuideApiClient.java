@@ -1,5 +1,6 @@
 package net.umatoma.comiguide.api;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -52,9 +53,71 @@ public class ComiGuideApiClient {
         private OnHttpClientPostExecuteListener mListener;
         private Request mRequest;
         private User mUser;
+        private ProgressDialog mProgressDialog;
 
         public HttpClientTask(User user) {
             mUser = user;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if (mProgressDialog != null) {
+                mProgressDialog.setMessage("Now processing...");
+                mProgressDialog.show();
+            }
+        }
+
+        @Override
+        protected JSONObject doInBackground(Request... params) {
+            try {
+                OkHttpClient client = new OkHttpClient();
+                Response response = client.newCall(mRequest).execute();
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Success doInBackground");
+                    return new JSONObject(response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "Fail doInBackground");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+
+            if (mListener != null) {
+                if (result != null) {
+                    mListener.onSuccess(result);
+                } else {
+                    mListener.onFail();
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+        }
+
+        public HttpClientTask setProgressDialog(Context context) {
+            mProgressDialog = new ProgressDialog(context);
+            return this;
+        }
+
+        public HttpClientTask setOnHttpClientPostExecuteListener(OnHttpClientPostExecuteListener listener) {
+            mListener = listener;
+            return this;
         }
 
         // Get request
@@ -110,46 +173,6 @@ public class ComiGuideApiClient {
                     .put(formBody)
                     .build();
 
-            return this;
-        }
-
-        @Override
-        protected JSONObject doInBackground(Request... params) {
-            try {
-                OkHttpClient client = new OkHttpClient();
-                Response response = client.newCall(mRequest).execute();
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "Success doInBackground");
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "Fail doInBackground");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (mListener != null) {
-                if (result != null) {
-                    mListener.onSuccess(result);
-                } else {
-                    mListener.onFail();
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-
-        }
-
-        public HttpClientTask setOnHttpClientPostExecuteListener(OnHttpClientPostExecuteListener listener) {
-            mListener = listener;
             return this;
         }
     }

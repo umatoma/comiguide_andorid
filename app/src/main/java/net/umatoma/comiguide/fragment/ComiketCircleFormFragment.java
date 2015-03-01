@@ -274,15 +274,25 @@ public class ComiketCircleFormFragment extends Fragment {
                     @Override
                     public void onSuccess(JSONObject result) {
                         mUpdateComiketCircleTask = null;
-                        Toast.makeText(getActivity(), "Update success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                getActivity(),
+                                getString(R.string.message_success_comiket_circle_update),
+                                Toast.LENGTH_SHORT
+                        ).show();
                     }
 
                     @Override
                     public void onFail() {
                         mUpdateComiketCircleTask = null;
-                        Toast.makeText(getActivity(), "Update fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                getActivity(),
+                                getString(R.string.message_fail_comiket_circle_update),
+                                Toast.LENGTH_SHORT
+                        ).show();
                     }
-                }).execute();
+                })
+                .setProgressDialog(getActivity())
+                .execute();
     }
 
     private class OnCnacelListener implements View.OnTouchListener {
