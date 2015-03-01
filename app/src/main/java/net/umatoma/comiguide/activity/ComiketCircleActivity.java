@@ -71,6 +71,8 @@ public class ComiketCircleActivity extends ActionBarActivity
         mCmapId = cmap_id;
         mDay = day;
 
+        mCircleArrayAdapter.clear();
+
         String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("day", String.valueOf(mDay)));
@@ -90,7 +92,9 @@ public class ComiketCircleActivity extends ActionBarActivity
                         mLoadComiketCirclesTask = null;
                         Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
                     }
-                }).execute();
+                })
+                .setProgressDialog(this)
+                .execute();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -148,6 +152,9 @@ public class ComiketCircleActivity extends ActionBarActivity
     @Override
     public void onFunctionsButtonClicke(int id) {
         switch (id) {
+            case R.id.button_change_map:
+                initialize(mComiketId, 1, 3);
+                return;
             case R.id.button_circle_list:
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 return;
