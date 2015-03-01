@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -52,6 +53,7 @@ public class ComiGuideApiClient {
 
         private OnHttpClientPostExecuteListener mListener;
         private Request mRequest;
+        private Call mCall;
         private User mUser;
         private ProgressDialog mProgressDialog;
 
@@ -70,8 +72,8 @@ public class ComiGuideApiClient {
         @Override
         protected JSONObject doInBackground(Request... params) {
             try {
-                OkHttpClient client = new OkHttpClient();
-                Response response = client.newCall(mRequest).execute();
+                mCall = new OkHttpClient().newCall(mRequest);
+                Response response = mCall.execute();
                 if (response.isSuccessful()) {
                     Log.d(TAG, "Success doInBackground");
                     return new JSONObject(response.body().string());
@@ -104,6 +106,10 @@ public class ComiGuideApiClient {
         @Override
         protected void onCancelled() {
             super.onCancelled();
+
+            if (mCall != null && !mCall.isCanceled()) {
+                mCall.cancel();
+            }
 
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
