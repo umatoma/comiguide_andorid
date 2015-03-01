@@ -5,9 +5,10 @@ import org.json.JSONObject;
 
 public class ComiketLayout {
 
-    private int mId;
+    private int mId = -1;
+    private int mCblockId = -1;
     private int mSpaceNo;
-    private int mLayout;
+    private int mLayout = 1;
     private int mPosX;
     private int mPosY;
     private ComiketBlock mComiketBlock;
@@ -23,6 +24,10 @@ public class ComiketLayout {
 
     public int getId() {
         return mId;
+    }
+
+    public int getCblockId() {
+        return mCblockId;
     }
 
     public int getSpaceNo() {

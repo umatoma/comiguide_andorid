@@ -89,7 +89,7 @@ public class ComiketCircleMapFragment extends Fragment {
         mComiketCircle = circle;
 
         View view = getView().findViewById(R.id.footer_content_inner);
-        view.findViewById(R.id.color).setBackgroundColor(circle.getColor());
+        view.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
         ((TextView) view.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
         ((TextView) view.findViewById(R.id.circle_name)).setText(circle.getCircleName());
         ((TextView) view.findViewById(R.id.cost)).setText(circle.getCost());

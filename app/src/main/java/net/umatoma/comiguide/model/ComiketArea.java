@@ -17,6 +17,10 @@ public class ComiketArea {
         mSimpleName = area.getString("simple_name");
     }
 
+    public int getCmapId() {
+        return mCmapId;
+    }
+
     public String getName() {
         return mName;
     }

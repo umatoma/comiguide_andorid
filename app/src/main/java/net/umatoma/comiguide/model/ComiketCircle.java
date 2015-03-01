@@ -18,16 +18,16 @@ public class ComiketCircle {
         { put("orange", Color.parseColor("#ff5722")); }
     };
 
-    private int mId;
-    private int mComiketId;
-    private int mClayoutId;
-    private int mDay;
-    private String mSpaceNoSub;
+    private int mId = -1;
+    private int mComiketId = -1;
+    private int mClayoutId = -1;
+    private int mDay = -1;
+    private String mSpaceNoSub = "a";
     private String mCircleName;
     private String mCircleUrl;
     private String mComment;
     private String mCost;
-    private String mColor;
+    private String mColor = "black";
     private ComiketLayout mComiketLayout;
 
     public ComiketCircle(JSONObject circle) throws JSONException {
@@ -44,8 +44,25 @@ public class ComiketCircle {
         mComiketLayout = new ComiketLayout(circle.getJSONObject("clayout"));
     }
 
+    public ComiketCircle(int comiket_id, int day) {
+        mComiketId = comiket_id;
+        mDay = day;
+    }
+
     public int getId() {
         return mId;
+    }
+
+    public int getComiketId() {
+        return mComiketId;
+    }
+
+    public int getClayoutId() {
+        return mClayoutId;
+    }
+
+    public int getDay() {
+        return mDay;
     }
 
     public String getSpaceNoSub() {
@@ -68,7 +85,11 @@ public class ComiketCircle {
         return mCost;
     }
 
-    public int getColor() {
+    public String getColor() {
+        return mColor;
+    }
+
+    public int getColorCode() {
         if (COLOR_MAP.containsKey(mColor)) {
             return COLOR_MAP.get(mColor).intValue();
         } else {
@@ -92,5 +113,9 @@ public class ComiketCircle {
 
     public ComiketLayout getComiketLayout() {
         return mComiketLayout;
+    }
+
+    public boolean isCreated() {
+        return mId > 0;
     }
 }

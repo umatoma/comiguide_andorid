@@ -44,6 +44,9 @@ public class ComiketCircleActivity extends ActionBarActivity
             ComiketCircleListFragment.OnFragmentInteractionListener,
             OnComiketCircleUpdateListener, OnComiketCircleCreateListener {
 
+    private int mComiketId = 87;
+    private int mCmapId = 1;
+    private int mDay = 1;
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
     private LoadComiketCirclesTask mLoadComiketCirclesTask;
@@ -179,7 +182,7 @@ public class ComiketCircleActivity extends ActionBarActivity
     }
 
     private void showComiketCircleCreateForm() {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment();
+        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(mComiketId, mDay, mCmapId);
         fragment.setOnComiketCircleCreateListener(this);
 
         getSupportFragmentManager()

@@ -36,7 +36,7 @@ public class ComiketCircleArrayAdapter
         }
 
         ComiketCircle circle = getItem(position);
-        viewHolder.mColorLayout.setBackgroundColor(circle.getColor());
+        viewHolder.mColorLayout.setBackgroundColor(circle.getColorCode());
         viewHolder.mSpaceInfoView.setText(circle.getSpaceInfo());
         viewHolder.mCircleNamaView.setText(circle.getCircleName());
 

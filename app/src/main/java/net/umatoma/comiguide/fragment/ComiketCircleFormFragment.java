@@ -33,14 +33,9 @@ public class ComiketCircleFormFragment extends Fragment {
 
     public static final String TAG = "ComiketCircleFormFragment";
 
-    public static enum FORM_MODE { CREATE, EDIT };
-
     private OnComiketCircleUpdateListener mOnUpdateListener;
     private OnComiketCircleCreateListener mOnCreateListener;
-    private FORM_MODE mFormMode;
-    private int mComiketId = 87;
-    private int mDay = 1;
-    private int mCmapId = 1;
+    private int mCmapId;
     private ComiketCircle mComiketCircle;
     private KeyValuePairAdapter mComiketBlockAdapter;
     private KeyValuePairAdapter mComiketLayoutAdapter;
@@ -58,13 +53,16 @@ public class ComiketCircleFormFragment extends Fragment {
     private ComiGuideApiClient.HttpClientTask mUpdateComiketCircleTask;
     private ComiGuideApiClient.HttpClientTask mCreateComiketCircleTask;
 
-    public ComiketCircleFormFragment() {
-        mFormMode = FORM_MODE.CREATE;
+    public ComiketCircleFormFragment() {}
+
+    public ComiketCircleFormFragment(int comiket_id, int day, int cmap_id) {
+        mComiketCircle = new ComiketCircle(comiket_id, day);
+        mCmapId = cmap_id;
     }
 
     public ComiketCircleFormFragment(ComiketCircle circle) {
-        mFormMode = FORM_MODE.EDIT;
         mComiketCircle = circle;
+        mCmapId = circle.getComiketLayout().getComiketBlock().getComiketArea().getCmapId();
     }
 
     @Override
@@ -115,24 +113,21 @@ public class ComiketCircleFormFragment extends Fragment {
 
             }
         });
+        mFormSpaceNoSub.setSelection(
+                mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
 
-        if (mFormMode == FORM_MODE.EDIT) {
+        mFormCircleName.setText(mComiketCircle.getCircleName());
+        mFormCircleUrl.setText(mComiketCircle.getCircleUrl());
+        mFormComment.setText(mComiketCircle.getComment());
+        mFormCost.setText(mComiketCircle.getCost());
+
+        if (mComiketCircle.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_comiket_circle_update));
-            mFormCircleName.setText(mComiketCircle.getCircleName());
-            mFormCircleUrl.setText(mComiketCircle.getCircleUrl());
-            mFormComment.setText(mComiketCircle.getComment());
-            mFormCost.setText(mComiketCircle.getCost());
-
-            mFormSpaceNoSub.setSelection(
-                    mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
-
-            int block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
-            loadComiketBlockOptions(block_id);
         } else {
             mButtonSubmit.setText(getString(R.string.form_comiket_circle_create));
-            mFormSpaceNoSub.setSelection(mSpaceNoSubAdapter.getPosition("a"));
-            loadComiketBlockOptions(-1);
         }
+
+        loadComiketBlockOptions();
 
         return view;
     }
@@ -146,7 +141,7 @@ public class ComiketCircleFormFragment extends Fragment {
         super.onDetach();
     }
 
-    private void loadComiketBlockOptions(final int block_id) {
+    private void loadComiketBlockOptions() {
         mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
                 .callGetTask("api/v1/careas.json");
         mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
@@ -155,7 +150,7 @@ public class ComiketCircleFormFragment extends Fragment {
                     @Override
                     public void onSuccess(JSONObject result) {
                         mLoadComiketBlocksTask = null;
-                        setComiketBlockAdapterValues(result, block_id);
+                        setComiketBlockAdapterValues(result);
                     }
 
                     @Override
@@ -184,7 +179,7 @@ public class ComiketCircleFormFragment extends Fragment {
                 }).execute();
     }
 
-    private void setComiketBlockAdapterValues(JSONObject result, int block_id) {
+    private void setComiketBlockAdapterValues(JSONObject result) {
         if (result != null) {
             try {
                 JSONArray areas = result.getJSONArray("careas");
@@ -205,8 +200,13 @@ public class ComiketCircleFormFragment extends Fragment {
                                 = new Pair<>(block.getString("id"), block.getString("name"));
                         mComiketBlockAdapter.add(pair);
                     }
-                    int position = mComiketBlockAdapter
-                            .getPositionFromKey(String.valueOf(block_id), 0);
+
+                    int position = 0;
+                    if (mComiketCircle.isCreated()) {
+                        int block_id = mComiketCircle.getComiketLayout().getCblockId();
+                        position = mComiketBlockAdapter
+                                .getPositionFromKey(String.valueOf(block_id), 0);
+                    }
                     mFormComiketBlock.setSelection(position);
                 }
             } catch (JSONException e) {
@@ -223,10 +223,6 @@ public class ComiketCircleFormFragment extends Fragment {
                 JSONObject block = result.getJSONObject("cblock");
                 JSONArray layouts = block.getJSONArray("clayouts");
                 int length = layouts.length();
-                int layout_id = -1;
-                if (mFormMode == FORM_MODE.EDIT && mComiketLayoutAdapter.getCount() == 0) {
-                    layout_id = mComiketCircle.getComiketLayout().getId();
-                }
 
                 mComiketLayoutAdapter.clear();
                 for (int i = 0; i < length; i++) {
@@ -235,8 +231,12 @@ public class ComiketCircleFormFragment extends Fragment {
                             = new Pair<>(layout.getString("id"), layout.getString("space_no"));
                     mComiketLayoutAdapter.add(pair);
                 }
-                int position = mComiketLayoutAdapter
-                        .getPositionFromKey(String.valueOf(layout_id), 0);
+
+                int position = 0;
+                if (mComiketCircle.isCreated() && mComiketLayoutAdapter.getCount() == 0) {
+                    position = mComiketLayoutAdapter
+                            .getPositionFromKey(String.valueOf(mComiketCircle.getClayoutId()), 0);
+                }
                 mFormComiketLayout.setSelection(position);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -244,11 +244,6 @@ public class ComiketCircleFormFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "Fail to load...", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private int getSelectedBlockId() {
-        int position = mFormComiketBlock.getSelectedItemPosition();
-        return Integer.parseInt(mComiketBlockAdapter.getItem(position).first);
     }
 
     private int getSelectedLayoutId() {
@@ -268,23 +263,10 @@ public class ComiketCircleFormFragment extends Fragment {
         String circle_url = mFormCircleUrl.getText().toString();
         String comment = mFormComment.getText().toString();
         String cost = mFormCost.getText().toString();
+        String color = mComiketCircle.getColor();
 
         if (new EmptyValidator(circle_name).isValid()) {
-            if (mFormMode == FORM_MODE.CREATE) {
-                RequestBody formBody = new FormEncodingBuilder()
-                        .add("ccircle_checklist[comiket_id]", String.valueOf(mComiketId))
-                        .add("ccircle_checklist[day]", String.valueOf(mDay))
-                        .add("ccircle_checklist[clayout_id]", String.valueOf(layout_id))
-                        .add("ccircle_checklist[space_no_sub]", space_no_sub)
-                        .add("ccircle_checklist[circle_name]", circle_name)
-                        .add("ccircle_checklist[circle_url]", circle_url)
-                        .add("ccircle_checklist[comment]", comment)
-                        .add("ccircle_checklist[cost]", cost)
-                        .add("ccircle_checklist[color]", "black")
-                        .build();
-
-                createComiketCircle(formBody);
-            } else {
+            if (mComiketCircle.isCreated()) {
                 RequestBody formBody = new FormEncodingBuilder()
                         .add("ccircle_checklist[clayout_id]", String.valueOf(layout_id))
                         .add("ccircle_checklist[space_no_sub]", space_no_sub)
@@ -292,9 +274,26 @@ public class ComiketCircleFormFragment extends Fragment {
                         .add("ccircle_checklist[circle_url]", circle_url)
                         .add("ccircle_checklist[comment]", comment)
                         .add("ccircle_checklist[cost]", cost)
+                        .add("ccircle_checklist[color]", color)
                         .build();
 
                 updateComiketCircle(formBody);
+            } else {
+                int comiket_id = mComiketCircle.getComiketId();
+                int day = mComiketCircle.getDay();
+                RequestBody formBody = new FormEncodingBuilder()
+                        .add("ccircle_checklist[comiket_id]", String.valueOf(comiket_id))
+                        .add("ccircle_checklist[day]", String.valueOf(day))
+                        .add("ccircle_checklist[clayout_id]", String.valueOf(layout_id))
+                        .add("ccircle_checklist[space_no_sub]", space_no_sub)
+                        .add("ccircle_checklist[circle_name]", circle_name)
+                        .add("ccircle_checklist[circle_url]", circle_url)
+                        .add("ccircle_checklist[comment]", comment)
+                        .add("ccircle_checklist[cost]", cost)
+                        .add("ccircle_checklist[color]", color)
+                        .build();
+
+                createComiketCircle(formBody);
             }
         } else {
             mFormCircleName.setError(getString(R.string.form_error_empty));
