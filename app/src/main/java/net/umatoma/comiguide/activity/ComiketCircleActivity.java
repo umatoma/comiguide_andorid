@@ -119,6 +119,9 @@ public class ComiketCircleActivity extends ActionBarActivity
                         .remove(fragment)
                         .commit();
                 return false;
+            } else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
             }
         }
 
