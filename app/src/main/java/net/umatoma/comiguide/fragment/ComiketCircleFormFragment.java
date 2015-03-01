@@ -2,38 +2,28 @@ package net.umatoma.comiguide.fragment;
 
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.model.ComiketCircle;
-import net.umatoma.comiguide.model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class ComiketCircleFormFragment extends Fragment {
 
@@ -106,41 +96,22 @@ public class ComiketCircleFormFragment extends Fragment {
 
             mFormSpaceNoSub.setSelection(
                     mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
+            mFormComiketBlock.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Pair<String, String> pair = mComiketBlockAdapter.getItem(position);
+                    int block_id = Integer.parseInt(pair.first);
+                    loadComiketLayoutOptions(block_id);
+                }
 
-            final int comiket_layout_id = mComiketCircle.getComiketLayout().getId();
-            final int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
-            mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
-                    .callGetTask("api/v1/careas.json");
-            mLoadComiketLayoutsTask = new ComiGuideApiClient(getActivity())
-                    .callGetTask(String.format("api/v1/cblocks/%d/clayouts.json", comiket_block_id));
-            mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
-                    new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            mLoadComiketBlocksTask = null;
-                            setComiketBlockAdapterValues(result, comiket_block_id);
-                        }
+                }
+            });
 
-                        @Override
-                        public void onFail() {
-                            mLoadComiketBlocksTask = null;
-                        }
-                    }).execute();
-            mLoadComiketLayoutsTask.setOnHttpClientPostExecuteListener(
-                    new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
-
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            mLoadComiketLayoutsTask = null;
-                            setComiketLayoutAdapterValues(result, comiket_layout_id);
-                        }
-
-                        @Override
-                        public void onFail() {
-                            mLoadComiketLayoutsTask = null;
-                        }
-                    }).execute();
+            int block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
+            loadComiketBlockOptions(block_id);
         }
 
         return view;
@@ -153,12 +124,53 @@ public class ComiketCircleFormFragment extends Fragment {
         super.onDetach();
     }
 
+    private void loadComiketBlockOptions(final int block_id) {
+        mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
+                .callGetTask("api/v1/careas.json");
+        mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
+                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        mLoadComiketBlocksTask = null;
+                        setComiketBlockAdapterValues(result, block_id);
+                    }
+
+                    @Override
+                    public void onFail() {
+                        mLoadComiketBlocksTask = null;
+                    }
+                }).execute();
+    }
+
+    private void loadComiketLayoutOptions(int block_id) {
+        final int layout_id = mComiketCircle.getComiketLayout().getId();
+        mLoadComiketLayoutsTask = new ComiGuideApiClient(getActivity())
+                .callGetTask(String.format("api/v1/cblocks/%d/clayouts.json", block_id));
+        mLoadComiketLayoutsTask.setOnHttpClientPostExecuteListener(
+                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        mLoadComiketLayoutsTask = null;
+                        setComiketLayoutAdapterValues(result);
+                    }
+
+                    @Override
+                    public void onFail() {
+                        mLoadComiketLayoutsTask = null;
+                    }
+                }).execute();
+    }
+
     private void setComiketBlockAdapterValues(JSONObject result, int comiket_block_id) {
         if (result != null) {
             try {
                 JSONArray areas = result.getJSONArray("careas");
                 int cmap_id = 1;
                 int length = areas.length();
+
+                mComiketBlockAdapter.clear();
                 for (int i = 0; i < length; i++) {
                     JSONObject area = areas.getJSONObject(i);
                     if (area.getInt("cmap_id") != cmap_id) {
@@ -185,12 +197,18 @@ public class ComiketCircleFormFragment extends Fragment {
         }
     }
 
-    private void setComiketLayoutAdapterValues(JSONObject result, int comiket_layout_id) {
+    private void setComiketLayoutAdapterValues(JSONObject result) {
         if (result != null) {
             try {
                 JSONObject block = result.getJSONObject("cblock");
                 JSONArray layouts = block.getJSONArray("clayouts");
                 int length = layouts.length();
+                int layout_id = -1;
+                if (mComiketLayoutAdapter.getCount() == 0) {
+                    layout_id = mComiketCircle.getComiketLayout().getId();
+                }
+
+                mComiketLayoutAdapter.clear();
                 for (int i = 0; i < length; i++) {
                     JSONObject layout = layouts.getJSONObject(i);
                     Pair<String, String> pair
@@ -198,7 +216,7 @@ public class ComiketCircleFormFragment extends Fragment {
                     mComiketLayoutAdapter.add(pair);
                 }
                 int position = mComiketLayoutAdapter
-                        .getPositionFromKey(String.valueOf(comiket_layout_id));
+                        .getPositionFromKey(String.valueOf(layout_id), 0);
                 mFormComiketLayout.setSelection(position);
             } catch (JSONException e) {
                 e.printStackTrace();

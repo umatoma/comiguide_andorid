@@ -36,6 +36,10 @@ public class KeyValuePairAdapter extends ArrayAdapter<Pair<String, String>> {
     }
 
     public int getPositionFromKey(String key) {
+        return getPositionFromKey(key, -1);
+    }
+
+    public int getPositionFromKey(String key, int default_value) {
         int count = getCount();
         for (int i = 0; i < count; i++) {
             Pair<String, String> pair = getItem(i);
@@ -43,17 +47,6 @@ public class KeyValuePairAdapter extends ArrayAdapter<Pair<String, String>> {
                 return i;
             }
         }
-        return -1;
-    }
-
-    public int getPositionFromValue(String value) {
-        int count = getCount();
-        for (int i = 0; i < count; i++) {
-            Pair<String, String> pair = getItem(i);
-            if (pair.second.equals(value)) {
-                return i;
-            }
-        }
-        return -1;
+        return default_value;
     }
 }
