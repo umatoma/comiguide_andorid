@@ -56,6 +56,7 @@ public class ComiketCircleActivity extends ActionBarActivity
 
         String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
         List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("day", String.valueOf(mDay)));
         params.add(new BasicNameValuePair("cmap_id", String.valueOf(mCmapId)));
         mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
         mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
