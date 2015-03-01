@@ -68,14 +68,6 @@ public class ComiketCircleFormFragment extends Fragment {
         mComiketBlockAdapter = new KeyValuePairAdapter(getActivity(), resId);
         mComiketLayoutAdapter = new KeyValuePairAdapter(getActivity(), resId);
         mSpaceNoSubAdapter = new ArrayAdapter<>(getActivity(), resId, new String[]{ "a", "b" });
-
-        if (mComiketCircle != null) {
-            int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
-            mLoadComiketBlocksTask = new LoadComiketBlocksTask(getActivity());
-            mLoadComiketLayoutsTask = new LoadComiketLayoutsTask(getActivity(), comiket_block_id);
-            mLoadComiketBlocksTask.execute();
-            mLoadComiketLayoutsTask.execute();
-        }
     }
 
     @Override
@@ -110,6 +102,17 @@ public class ComiketCircleFormFragment extends Fragment {
                     attemptSubmit();
                 }
             });
+
+            mFormSpaceNoSub.setSelection(
+                    mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
+
+            int comiket_layout_id = mComiketCircle.getComiketLayout().getId();
+            int comiket_block_id = mComiketCircle.getComiketLayout().getComiketBlock().getId();
+            mLoadComiketBlocksTask = new LoadComiketBlocksTask(getActivity(), comiket_block_id);
+            mLoadComiketLayoutsTask = new LoadComiketLayoutsTask(
+                    getActivity(), comiket_block_id, comiket_layout_id);
+            mLoadComiketLayoutsTask.execute();
+            mLoadComiketBlocksTask.execute();
         }
 
         return view;
@@ -136,9 +139,11 @@ public class ComiketCircleFormFragment extends Fragment {
 
         private static final String TAG = "LoadComiketBlocksTask";
         private User mUser;
+        private int mComiketBlockId;
 
-        public LoadComiketBlocksTask(Context context) {
+        public LoadComiketBlocksTask(Context context, int comiket_block_id) {
             mUser = new User(context);
+            mComiketBlockId = comiket_block_id;
         }
 
         @Override
@@ -192,6 +197,9 @@ public class ComiketCircleFormFragment extends Fragment {
                                     = new Pair<>(block.getString("id"), block.getString("name"));
                             mComiketBlockAdapter.add(pair);
                         }
+                        int position = mComiketBlockAdapter
+                                .getPositionFromKey(String.valueOf(mComiketBlockId));
+                        mFormComiketBlock.setSelection(position);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -213,10 +221,12 @@ public class ComiketCircleFormFragment extends Fragment {
         private static final String TAG = "LoadComiketLayoutsTask";
         private User mUser;
         private int mComiketBlockId;
+        private int mComiketLayoutId;
 
-        public LoadComiketLayoutsTask(Context context, int comiket_block_id) {
+        public LoadComiketLayoutsTask(Context context, int comiket_block_id, int comiket_layout_id) {
             mUser = new User(context);
             mComiketBlockId = comiket_block_id;
+            mComiketLayoutId = comiket_layout_id;
         }
 
         @Override
@@ -262,6 +272,9 @@ public class ComiketCircleFormFragment extends Fragment {
                                 = new Pair<>(layout.getString("id"), layout.getString("space_no"));
                         mComiketLayoutAdapter.add(pair);
                     }
+                    int position = mComiketLayoutAdapter
+                            .getPositionFromKey(String.valueOf(mComiketLayoutId));
+                    mFormComiketLayout.setSelection(position);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -44,6 +44,10 @@ public class ComiketCircle {
         mComiketLayout = new ComiketLayout(circle.getJSONObject("clayout"));
     }
 
+    public String getSpaceNoSub() {
+        return mSpaceNoSub;
+    }
+
     public String getCircleName() {
         return mCircleName;
     }

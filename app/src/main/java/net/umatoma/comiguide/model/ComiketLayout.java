@@ -21,6 +21,10 @@ public class ComiketLayout {
         mComiketBlock = new ComiketBlock(layout.getJSONObject("cblock"));
     }
 
+    public int getId() {
+        return mId;
+    }
+
     public int getSpaceNo() {
         return mSpaceNo;
     }
