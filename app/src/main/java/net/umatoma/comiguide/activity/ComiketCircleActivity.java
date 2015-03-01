@@ -1,8 +1,5 @@
 package net.umatoma.comiguide.activity;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,12 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
+import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
@@ -30,14 +24,16 @@ import net.umatoma.comiguide.fragment.OnComiketCircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
-import net.umatoma.comiguide.model.User;
 import net.umatoma.comiguide.view.MapImageView;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
@@ -49,7 +45,7 @@ public class ComiketCircleActivity extends ActionBarActivity
     private int mDay = 1;
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
-    private LoadComiketCirclesTask mLoadComiketCirclesTask;
+    private ComiGuideApiClient.HttpClientTask mLoadComiketCirclesTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +53,26 @@ public class ComiketCircleActivity extends ActionBarActivity
         setContentView(R.layout.activity_comiket_circle);
 
         mCircleArrayAdapter = new ComiketCircleArrayAdapter(this);
-        mLoadComiketCirclesTask = new LoadComiketCirclesTask(this);
-        mLoadComiketCirclesTask.execute();
+
+        String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("cmap_id", String.valueOf(mCmapId)));
+        mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
+        mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
+                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+            @Override
+            public void onSuccess(JSONObject result) {
+                mLoadComiketCirclesTask = null;
+                parseComiketCircles(result);
+            }
+
+            @Override
+            public void onFail() {
+                mLoadComiketCirclesTask = null;
+                Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -181,6 +195,23 @@ public class ComiketCircleActivity extends ActionBarActivity
         mCircleArrayAdapter.add(circle);
     }
 
+    private void parseComiketCircles(JSONObject result) {
+        if (result != null) {
+            try {
+                JSONArray comiketCircles = result.getJSONArray("ccircle_checklists");
+                int length = comiketCircles.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject comiketCircle = comiketCircles.getJSONObject(i);
+                    mCircleArrayAdapter.add(new ComiketCircle(comiketCircle));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void showComiketCircleCreateForm() {
         ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(mComiketId, mDay, mCmapId);
         fragment.setOnComiketCircleCreateListener(this);
@@ -190,68 +221,5 @@ public class ComiketCircleActivity extends ActionBarActivity
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
                 .commit();
-    }
-
-    private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
-
-        private User mUser;
-
-        public LoadComiketCirclesTask(Context context) {
-            mUser = new User(context);
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            OkHttpClient client = new OkHttpClient();
-            int comiketId = 87;
-            int cMapId = 1;
-            String apiToken = mUser.getApiToken();
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority("comiguide.net")
-                    .path(String.format("api/v1/comikets/%d/ccircle_checklists.json", comiketId))
-                    .appendQueryParameter("cmap_id", String.valueOf(cMapId))
-                    .build();
-            Request request = new Request.Builder()
-                    .url(uri.toString())
-                    .addHeader("X-Comiguide-Api-Token", apiToken)
-                    .build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    return new JSONObject(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            if (result != null) {
-                try {
-                    JSONArray comiketCircles = result.getJSONArray("ccircle_checklists");
-                    int length = comiketCircles.length();
-                    for (int i = 0; i < length; i++) {
-                        JSONObject comiketCircle = comiketCircles.getJSONObject(i);
-                        mCircleArrayAdapter.add(new ComiketCircle(comiketCircle));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mLoadComiketCirclesTask = null;
-        }
     }
 }

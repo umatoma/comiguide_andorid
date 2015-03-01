@@ -14,10 +14,13 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.model.User;
 
+import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComiGuideApiClient {
 
@@ -29,6 +32,10 @@ public class ComiGuideApiClient {
 
     public HttpClientTask callGetTask(String path) {
         return new HttpClientTask(mUser).getRequest(path);
+    }
+
+    public HttpClientTask callGetTask(String path, List<NameValuePair> params) {
+        return new HttpClientTask(mUser).getRequest(path, params);
     }
 
     public HttpClientTask callPostTask(String path, RequestBody formBody) {
@@ -128,17 +135,22 @@ public class ComiGuideApiClient {
 
         // Get request
         public HttpClientTask getRequest(String path) {
-            OkHttpClient client = new OkHttpClient();
-            String apiToken = mUser.getApiToken();
+            return getRequest(path, new ArrayList<NameValuePair>());
+        }
 
-            Uri uri = new Uri.Builder()
+        public HttpClientTask getRequest(String path, List<NameValuePair> params) {
+            Uri.Builder builder = new Uri.Builder()
                     .scheme(API_SCHEME)
                     .authority(API_AUTHORITY)
-                    .path(path)
-                    .build();
+                    .path(path);
+
+            for (NameValuePair param : params) {
+                builder.appendQueryParameter(param.getName(), param.getValue());
+            }
+
             mRequest = new Request.Builder()
-                    .url(uri.toString())
-                    .addHeader(API_TOKEN_HEADER, apiToken)
+                    .url(builder.build().toString())
+                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
                     .build();
 
             return this;
@@ -146,9 +158,6 @@ public class ComiGuideApiClient {
 
         // Post request
         public HttpClientTask postRequest(String path, RequestBody formBody) {
-            OkHttpClient client = new OkHttpClient();
-            String apiToken = mUser.getApiToken();
-
             Uri uri = new Uri.Builder()
                     .scheme(API_SCHEME)
                     .authority(API_AUTHORITY)
@@ -156,7 +165,7 @@ public class ComiGuideApiClient {
                     .build();
             mRequest = new Request.Builder()
                     .url(uri.toString())
-                    .addHeader(API_TOKEN_HEADER, apiToken)
+                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
                     .post(formBody)
                     .build();
 
@@ -165,9 +174,6 @@ public class ComiGuideApiClient {
 
         // Put request
         public HttpClientTask putRequest(String path, RequestBody formBody) {
-            OkHttpClient client = new OkHttpClient();
-            String apiToken = mUser.getApiToken();
-
             Uri uri = new Uri.Builder()
                     .scheme(API_SCHEME)
                     .authority(API_AUTHORITY)
@@ -175,7 +181,7 @@ public class ComiGuideApiClient {
                     .build();
             mRequest = new Request.Builder()
                     .url(uri.toString())
-                    .addHeader(API_TOKEN_HEADER, apiToken)
+                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
                     .put(formBody)
                     .build();
 
