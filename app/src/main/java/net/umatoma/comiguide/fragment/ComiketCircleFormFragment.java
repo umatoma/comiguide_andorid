@@ -16,6 +16,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.RequestBody;
+
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
@@ -42,6 +45,7 @@ public class ComiketCircleFormFragment extends Fragment {
     private Button mButtonSubmit;
     private ComiGuideApiClient.HttpClientTask mLoadComiketBlocksTask;
     private ComiGuideApiClient.HttpClientTask mLoadComiketLayoutsTask;
+    private ComiGuideApiClient.HttpClientTask mUpdateComiketCircleTask;
 
     public ComiketCircleFormFragment() {
         // Required empty public constructor
@@ -226,8 +230,59 @@ public class ComiketCircleFormFragment extends Fragment {
         }
     }
 
+    private int getSelectedBlockId() {
+        int position = mFormComiketBlock.getSelectedItemPosition();
+        return Integer.parseInt(mComiketBlockAdapter.getItem(position).first);
+    }
+
+    private int getSelectedLayoutId() {
+        int position = mFormComiketLayout.getSelectedItemPosition();
+        return Integer.parseInt(mComiketLayoutAdapter.getItem(position).first);
+    }
+
+    private String getSelectedSpaceNoSub() {
+        int position = mFormSpaceNoSub.getSelectedItemPosition();
+        return mSpaceNoSubAdapter.getItem(position);
+    }
+
     private void attemptSubmit() {
-        Toast.makeText(getActivity(), "attemptSubmit", Toast.LENGTH_SHORT).show();
+        int layout_id = getSelectedLayoutId();
+        String space_no_sub = getSelectedSpaceNoSub();
+        String circle_name = mFormCircleName.getText().toString();
+        String circle_url = mFormCircleUrl.getText().toString();
+        String comment = mFormComment.getText().toString();
+        String cost = mFormCost.getText().toString();
+
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("ccircle_checklist[layout_id]", String.valueOf(layout_id))
+                .add("ccircle_checklist[space_no_sub]", space_no_sub)
+                .add("ccircle_checklist[circle_name]", circle_name)
+                .add("ccircle_checklist[circle_url]", circle_url)
+                .add("ccircle_checklist[comment]", comment)
+                .add("ccircle_checklist[cost]", cost)
+                .build();
+
+        updateComiketCircle(formBody);
+    }
+
+    private void updateComiketCircle(RequestBody formBody) {
+        String path = String.format("api/v1/ccircle_checklists/%d", mComiketCircle.getId());
+        mUpdateComiketCircleTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
+        mUpdateComiketCircleTask.setOnHttpClientPostExecuteListener(
+                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        mUpdateComiketCircleTask = null;
+                        Toast.makeText(getActivity(), "Update success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFail() {
+                        mUpdateComiketCircleTask = null;
+                        Toast.makeText(getActivity(), "Update fail", Toast.LENGTH_SHORT).show();
+                    }
+                }).execute();
     }
 
     private class OnCnacelListener implements View.OnTouchListener {

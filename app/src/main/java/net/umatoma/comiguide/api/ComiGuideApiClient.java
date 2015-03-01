@@ -26,11 +26,15 @@ public class ComiGuideApiClient {
     }
 
     public HttpClientTask callGetTask(String path) {
-        return new HttpClientTask(mUser, path);
+        return new HttpClientTask(mUser).getRequest(path);
     }
 
     public HttpClientTask callPostTask(String path, RequestBody formBody) {
-        return new HttpClientTask(mUser, path, formBody);
+        return new HttpClientTask(mUser).postRequest(path, formBody);
+    }
+
+    public HttpClientTask callPutTask(String path, RequestBody formBody) {
+        return new HttpClientTask(mUser).putRequest(path, formBody);
     }
 
     public interface OnHttpClientPostExecuteListener {
@@ -47,11 +51,16 @@ public class ComiGuideApiClient {
 
         private OnHttpClientPostExecuteListener mListener;
         private Request mRequest;
+        private User mUser;
+
+        public HttpClientTask(User user) {
+            mUser = user;
+        }
 
         // Get request
-        public HttpClientTask(User user, String path) {
+        public HttpClientTask getRequest(String path) {
             OkHttpClient client = new OkHttpClient();
-            String apiToken = user.getApiToken();
+            String apiToken = mUser.getApiToken();
 
             Uri uri = new Uri.Builder()
                     .scheme(API_SCHEME)
@@ -62,12 +71,14 @@ public class ComiGuideApiClient {
                     .url(uri.toString())
                     .addHeader(API_TOKEN_HEADER, apiToken)
                     .build();
+
+            return this;
         }
 
         // Post request
-        public HttpClientTask(User user, String path, RequestBody formBody) {
+        public HttpClientTask postRequest(String path, RequestBody formBody) {
             OkHttpClient client = new OkHttpClient();
-            String apiToken = user.getApiToken();
+            String apiToken = mUser.getApiToken();
 
             Uri uri = new Uri.Builder()
                     .scheme(API_SCHEME)
@@ -79,6 +90,27 @@ public class ComiGuideApiClient {
                     .addHeader(API_TOKEN_HEADER, apiToken)
                     .post(formBody)
                     .build();
+
+            return this;
+        }
+
+        // Put request
+        public HttpClientTask putRequest(String path, RequestBody formBody) {
+            OkHttpClient client = new OkHttpClient();
+            String apiToken = mUser.getApiToken();
+
+            Uri uri = new Uri.Builder()
+                    .scheme(API_SCHEME)
+                    .authority(API_AUTHORITY)
+                    .path(path)
+                    .build();
+            mRequest = new Request.Builder()
+                    .url(uri.toString())
+                    .addHeader(API_TOKEN_HEADER, apiToken)
+                    .put(formBody)
+                    .build();
+
+            return this;
         }
 
         @Override
