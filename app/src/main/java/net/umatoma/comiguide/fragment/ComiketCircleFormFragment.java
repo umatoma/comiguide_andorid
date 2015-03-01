@@ -23,6 +23,7 @@ import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -263,16 +264,20 @@ public class ComiketCircleFormFragment extends Fragment {
         String comment = mFormComment.getText().toString();
         String cost = mFormCost.getText().toString();
 
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("ccircle_checklist[layout_id]", String.valueOf(layout_id))
-                .add("ccircle_checklist[space_no_sub]", space_no_sub)
-                .add("ccircle_checklist[circle_name]", circle_name)
-                .add("ccircle_checklist[circle_url]", circle_url)
-                .add("ccircle_checklist[comment]", comment)
-                .add("ccircle_checklist[cost]", cost)
-                .build();
+        if (new EmptyValidator(circle_name).isValid()) {
+            RequestBody formBody = new FormEncodingBuilder()
+                    .add("ccircle_checklist[layout_id]", String.valueOf(layout_id))
+                    .add("ccircle_checklist[space_no_sub]", space_no_sub)
+                    .add("ccircle_checklist[circle_name]", circle_name)
+                    .add("ccircle_checklist[circle_url]", circle_url)
+                    .add("ccircle_checklist[comment]", comment)
+                    .add("ccircle_checklist[cost]", cost)
+                    .build();
 
-        updateComiketCircle(formBody);
+            updateComiketCircle(formBody);
+        } else {
+            mFormCircleName.setError(getString(R.string.form_error_empty));
+        }
     }
 
     private void updateComiketCircle(RequestBody formBody) {
