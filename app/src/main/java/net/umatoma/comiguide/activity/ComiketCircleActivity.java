@@ -39,7 +39,8 @@ import java.io.IOException;
 
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
-            ComiketCircleListFragment.OnFragmentInteractionListener {
+            ComiketCircleListFragment.OnFragmentInteractionListener,
+            ComiketCircleFormFragment.OnFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
@@ -149,6 +150,11 @@ public class ComiketCircleActivity extends ActionBarActivity
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.content_frame, new ComiketCircleFormFragment(circle), ComiketCircleFormFragment.TAG)
                 .commit();
+    }
+
+    @Override
+    public void onComiketCircleUpdated(ComiketCircle circle) {
+        mCircleArrayAdapter.updateItem(circle);
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {

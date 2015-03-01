@@ -43,6 +43,19 @@ public class ComiketCircleArrayAdapter
         return convertView;
     }
 
+    public void updateItem(ComiketCircle new_circle) {
+        int count = getCount();
+        for (int i = 0; i < count; i++) {
+            ComiketCircle circle = getItem(i);
+            if (circle.getId() == new_circle.getId()) {
+                insert(new_circle, i);
+                remove(circle);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     private static class ViewHolder {
         public RelativeLayout mColorLayout;
         public TextView mSpaceInfoView;

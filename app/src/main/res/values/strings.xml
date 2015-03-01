@@ -21,6 +21,7 @@
     <string name="form_comiket_circle_update">リスト更新</string>
     <string name="form_comiket_circle_create">リスト作成</string>
 
+    <string name="message_error_common">エラーが発生しました</string>
     <string name="message_success_comiket_circle_update">リストを更新しました</string>
     <string name="message_fail_comiket_circle_update">リストの更新に失敗しました</string>
 </resources>

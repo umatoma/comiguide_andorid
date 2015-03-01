@@ -31,6 +31,8 @@ import org.json.JSONObject;
 public class ComiketCircleFormFragment extends Fragment {
 
     public static final String TAG = "ComiketCircleFormFragment";
+
+    private OnFragmentInteractionListener mListener;
     private ComiketCircle mComiketCircle;
     private KeyValuePairAdapter mComiketBlockAdapter;
     private KeyValuePairAdapter mComiketLayoutAdapter;
@@ -58,6 +60,13 @@ public class ComiketCircleFormFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
 
         int resId = android.R.layout.simple_spinner_dropdown_item;
         mComiketBlockAdapter = new KeyValuePairAdapter(getActivity(), resId);
@@ -123,6 +132,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
     @Override
     public void onDetach() {
+        mListener = null;
         mLoadComiketBlocksTask = null;
         mLoadComiketLayoutsTask = null;
         super.onDetach();
@@ -274,11 +284,28 @@ public class ComiketCircleFormFragment extends Fragment {
                     @Override
                     public void onSuccess(JSONObject result) {
                         mUpdateComiketCircleTask = null;
-                        Toast.makeText(
-                                getActivity(),
-                                getString(R.string.message_success_comiket_circle_update),
-                                Toast.LENGTH_SHORT
-                        ).show();
+
+                        try {
+                            ComiketCircle circle = new ComiketCircle(result.getJSONObject("ccircle_checklist"));
+                            Toast.makeText(
+                                    getActivity(),
+                                    getString(R.string.message_success_comiket_circle_update),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            if (mListener != null) {
+                                mListener.onComiketCircleUpdated(circle);
+                            }
+
+                            removeSelf();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(
+                                    getActivity(),
+                                    getString(R.string.message_error_common),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
                     }
 
                     @Override
@@ -295,11 +322,23 @@ public class ComiketCircleFormFragment extends Fragment {
                 .execute();
     }
 
+    private void removeSelf() {
+        getFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .remove(this)
+                .commit();
+    }
+
     private class OnCnacelListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return true;
         }
+    }
+
+    public interface OnFragmentInteractionListener {
+        public void onComiketCircleUpdated(ComiketCircle circle);
     }
 
 }
