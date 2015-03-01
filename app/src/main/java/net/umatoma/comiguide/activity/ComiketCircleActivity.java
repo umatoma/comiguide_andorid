@@ -155,6 +155,14 @@ public class ComiketCircleActivity extends ActionBarActivity
     @Override
     public void onComiketCircleUpdated(ComiketCircle circle) {
         mCircleArrayAdapter.updateItem(circle);
+
+        FragmentManager manager = getSupportFragmentManager();
+        ComiketCircleMapFragment fragment
+                = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
+        if (fragment != null) {
+            fragment.setComiketCircle(circle);
+            fragment.showFooterView();
+        }
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {
