@@ -26,6 +26,7 @@ import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
+import net.umatoma.comiguide.fragment.OnComiketCircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
@@ -41,7 +42,7 @@ import java.io.IOException;
 public class ComiketCircleActivity extends ActionBarActivity
         implements ComiketCircleMapFragment.OnFragmentInteractionListener,
             ComiketCircleListFragment.OnFragmentInteractionListener,
-            OnComiketCircleUpdateListener {
+            OnComiketCircleUpdateListener, OnComiketCircleCreateListener {
 
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
@@ -119,6 +120,9 @@ public class ComiketCircleActivity extends ActionBarActivity
             case R.id.button_circle_list:
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 return;
+            case R.id.button_create_circle:
+                showComiketCircleCreateForm();
+                return;
         }
     }
 
@@ -167,6 +171,22 @@ public class ComiketCircleActivity extends ActionBarActivity
             fragment.setComiketCircle(circle);
             fragment.showFooterView();
         }
+    }
+
+    @Override
+    public void onComiketCircleCreate(ComiketCircle circle) {
+        mCircleArrayAdapter.add(circle);
+    }
+
+    private void showComiketCircleCreateForm() {
+        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment();
+        fragment.setOnComiketCircleCreateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
+                .commit();
     }
 
     private class LoadComiketCirclesTask extends AsyncTask<Void, Void, JSONObject> {

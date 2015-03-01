@@ -24,6 +24,8 @@
     <string name="message_error_common">エラーが発生しました</string>
     <string name="message_success_comiket_circle_update">リストを更新しました</string>
     <string name="message_fail_comiket_circle_update">リストの更新に失敗しました</string>
+    <string name="message_success_comiket_circle_create">リストを作成しました</string>
+    <string name="message_fail_comiket_circle_create">リストの作成に失敗しました</string>
 
     <string name="form_error_empty">値が入力されていません</string>
 </resources>
