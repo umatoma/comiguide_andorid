@@ -115,14 +115,19 @@ public class MapImageView extends ImageView {
     public void setImageResource (int resId) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), resId, options);
-        mImageOriginalWidth = options.outWidth;
-        mImageOriginalHeight = options.outHeight;
+        Bitmap b1 = BitmapFactory.decodeResource(getResources(), resId, options);
+        if (b1 != null) {
+            mImageOriginalWidth = options.outWidth;
+            mImageOriginalHeight = options.outHeight;
+            b1.recycle();
+        }
 
-        Bitmap b = BitmapFactory.decodeResource(getResources(), resId);
-        mImageWidth = b.getWidth();
-        mImageHeight = b.getHeight();
-        b.recycle();
+        Bitmap b2 = BitmapFactory.decodeResource(getResources(), resId);
+        if (b2 != null) {
+            mImageWidth = b2.getWidth();
+            mImageHeight = b2.getHeight();
+            b2.recycle();
+        }
 
         super.setImageResource(resId);
     }
