@@ -17,6 +17,7 @@ import android.widget.Toast;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.fragment.ComiketCIrcleMapDialogFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
@@ -61,15 +62,15 @@ public class ComiketCircleActivity extends ActionBarActivity
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         int comiket_id = 87;
-        int cmap_id = 1;
         int day = 1;
-        initialize(comiket_id, cmap_id, day);
+        int cmap_id = 1;
+        initialize(comiket_id, day, cmap_id);
     }
 
-    private void initialize(int comiket_id, int cmap_id, int day) {
+    private void initialize(int comiket_id, int day, int cmap_id) {
         mComiketId = comiket_id;
-        mCmapId = cmap_id;
         mDay = day;
+        mCmapId = cmap_id;
 
         mCircleArrayAdapter.clear();
 
@@ -153,7 +154,7 @@ public class ComiketCircleActivity extends ActionBarActivity
     public void onFunctionsButtonClicke(int id) {
         switch (id) {
             case R.id.button_change_map:
-                initialize(mComiketId, 1, 3);
+                showSelectMapDialog();
                 return;
             case R.id.button_circle_list:
                 mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -242,5 +243,16 @@ public class ComiketCircleActivity extends ActionBarActivity
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
                 .commit();
+    }
+
+    private void showSelectMapDialog() {
+        ComiketCIrcleMapDialogFragment.newInstance()
+                .setOnComiketCircleMapSelectListener(new ComiketCIrcleMapDialogFragment.OnComiketCircleMapSelectListener() {
+                    @Override
+                    public void onSelect(int day, int cmap_id) {
+                        initialize(mComiketId, day, cmap_id);
+                    }
+                })
+                .show(getSupportFragmentManager(), ComiketCIrcleMapDialogFragment.TAG);
     }
 }

@@ -1,0 +1,128 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    tools:context="net.umatoma.comiguide.fragment.ComiketCIrcleMapDialogFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dialog_comiket_circle_map_day1" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d1_e123"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east123"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d1_e456"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east456"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d1_w12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_west12"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dialog_comiket_circle_map_day2" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d2_e123"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east123"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d2_e456"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east456"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d2_w12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_west12"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dialog_comiket_circle_map_day3" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d3_e123"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east123"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d3_e456"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_east456"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_comiket_circle_map_d3_w12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_comiket_circle_map_west12"
+                android:layout_margin="4dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
