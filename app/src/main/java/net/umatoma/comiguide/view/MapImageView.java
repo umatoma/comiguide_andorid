@@ -116,9 +116,9 @@ public class MapImageView extends ImageView {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         Bitmap b1 = BitmapFactory.decodeResource(getResources(), resId, options);
+        mImageOriginalWidth = options.outWidth;
+        mImageOriginalHeight = options.outHeight;
         if (b1 != null) {
-            mImageOriginalWidth = options.outWidth;
-            mImageOriginalHeight = options.outHeight;
             b1.recycle();
         }
 
