@@ -189,7 +189,7 @@ public class ComiketCircleFormFragment extends Fragment {
                 for (int i = 0; i < length; i++) {
                     JSONObject area = areas.getJSONObject(i);
                     if (area.getInt("cmap_id") != mCmapId) {
-                        break;
+                        continue;
                     }
 
                     JSONArray blocks = area.getJSONArray("cblocks");
