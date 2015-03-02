@@ -72,6 +72,8 @@ public class ComiketCircleActivity extends ActionBarActivity
         mDay = day;
         mCmapId = cmap_id;
 
+        setTitle(comiket_id, day, cmap_id);
+
         mCircleArrayAdapter.clear();
 
         String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
@@ -104,6 +106,21 @@ public class ComiketCircleActivity extends ActionBarActivity
         transaction.replace(R.id.left_drawer,
                 new ComiketCircleListFragment(mCircleArrayAdapter), ComiketCircleListFragment.TAG);
         transaction.commit();
+    }
+
+    private void setTitle(int comiket_id, int day, int cmap_id) {
+        String map_name = getResources()
+                .getStringArray(R.array.comiket_circle_maps)[cmap_id - 1];
+        String title = new StringBuilder()
+                .append("C")
+                .append(comiket_id)
+                .append(" ")
+                .append(day)
+                .append("日目")
+                .append(" ")
+                .append(map_name)
+                .toString();
+        getSupportActionBar().setTitle(title);
     }
 
 

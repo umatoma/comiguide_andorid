@@ -29,6 +29,12 @@
     <string name="dialog_comiket_circle_map_east456">東456</string>
     <string name="dialog_comiket_circle_map_west12">西12</string>
 
+    <string-array name="comiket_circle_maps">
+        <item>東123</item>
+        <item>東456</item>
+        <item>西12</item>
+    </string-array>
+
     <string name="message_error_common">エラーが発生しました</string>
     <string name="message_success_comiket_circle_update">リストを更新しました</string>
     <string name="message_fail_comiket_circle_update">リストの更新に失敗しました</string>
