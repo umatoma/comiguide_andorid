@@ -1,39 +1,27 @@
 package net.umatoma.comiguide.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.model.ComiketCircle;
-import net.umatoma.comiguide.model.User;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-public class ComiketCircleListFragment extends Fragment {
+public class ComiketCircleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "ComiketCircleListFragment";
     private OnFragmentInteractionListener mListener;
-    private AbsListView mListView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ListView mListView;
     private ComiketCircleArrayAdapter mAdapter;
 
     public ComiketCircleListFragment() {}
@@ -53,7 +41,10 @@ public class ComiketCircleListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_comiket_circle_list, container, false);
 
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_reflesh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mListView = (ListView) view.findViewById(android.R.id.list);
         mListView.setEmptyView(view.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,17 +74,14 @@ public class ComiketCircleListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 2000);
     }
 
     public interface OnFragmentInteractionListener {
