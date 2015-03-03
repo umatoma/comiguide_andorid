@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.squareup.okhttp.Call;
@@ -25,6 +26,14 @@ import java.util.List;
 public class ComiGuideApiClient {
 
     private User mUser;
+
+    private static final int MEMORY_CACHE_SIZE = 1024 * 1024 * 10; // 10MB
+    private static LruCache<String, String> RESPONSE_MEMORY_CACHE = new LruCache<String, String>(MEMORY_CACHE_SIZE) {
+        @Override
+        protected int sizeOf(String key, String value) {
+            return value.getBytes().length;
+        }
+    };;
 
     public ComiGuideApiClient(Context context) {
         mUser = new User(context);
@@ -59,10 +68,12 @@ public class ComiGuideApiClient {
         private static final String API_TOKEN_HEADER = "X-Comiguide-Api-Token";
 
         private OnHttpClientPostExecuteListener mListener;
-        private Request mRequest;
+        private OkHttpClient mClient;
+        private Request.Builder mRequesBuilder;
         private Call mCall;
         private User mUser;
         private ProgressDialog mProgressDialog;
+        private boolean mUseCache = false;
 
         public HttpClientTask(User user) {
             mUser = user;
@@ -70,6 +81,10 @@ public class ComiGuideApiClient {
 
         @Override
         protected void onPreExecute() {
+            mClient = new OkHttpClient();
+
+            mRequesBuilder.addHeader(API_TOKEN_HEADER, mUser.getApiToken());
+
             if (mProgressDialog != null) {
                 mProgressDialog.setMessage("Now processing...");
                 mProgressDialog.show();
@@ -79,11 +94,28 @@ public class ComiGuideApiClient {
         @Override
         protected JSONObject doInBackground(Request... params) {
             try {
-                mCall = new OkHttpClient().newCall(mRequest);
+                Request request = mRequesBuilder.build();
+
+                if (mUseCache) {
+                    String cachedResponse =  RESPONSE_MEMORY_CACHE.get(request.urlString());
+                    if (cachedResponse != null) {
+                        Log.d(TAG, "Hit response cache");
+                        return new JSONObject(cachedResponse);
+                    }
+                    Log.d(TAG, "Missing response cache");
+                }
+
+                mCall = mClient.newCall(mRequesBuilder.build());
                 Response response = mCall.execute();
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Success doInBackground");
-                    return new JSONObject(response.body().string());
+                    String bodyString = response.body().string();
+
+                    if (mUseCache) {
+                        RESPONSE_MEMORY_CACHE.put(request.urlString(), bodyString);
+                        Log.d(TAG, "Put response cache");
+                    }
+
+                    return new JSONObject(bodyString);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -123,6 +155,11 @@ public class ComiGuideApiClient {
             }
         }
 
+        public HttpClientTask setCache() {
+            mUseCache = true;
+            return this;
+        }
+
         public HttpClientTask setProgressDialog(Context context) {
             mProgressDialog = new ProgressDialog(context);
             return this;
@@ -148,10 +185,8 @@ public class ComiGuideApiClient {
                 builder.appendQueryParameter(param.getName(), param.getValue());
             }
 
-            mRequest = new Request.Builder()
-                    .url(builder.build().toString())
-                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
-                    .build();
+            mRequesBuilder = new Request.Builder()
+                    .url(builder.build().toString());
 
             return this;
         }
@@ -163,11 +198,9 @@ public class ComiGuideApiClient {
                     .authority(API_AUTHORITY)
                     .path(path)
                     .build();
-            mRequest = new Request.Builder()
+            mRequesBuilder = new Request.Builder()
                     .url(uri.toString())
-                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
-                    .post(formBody)
-                    .build();
+                    .post(formBody);
 
             return this;
         }
@@ -179,11 +212,9 @@ public class ComiGuideApiClient {
                     .authority(API_AUTHORITY)
                     .path(path)
                     .build();
-            mRequest = new Request.Builder()
+            mRequesBuilder = new Request.Builder()
                     .url(uri.toString())
-                    .addHeader(API_TOKEN_HEADER, mUser.getApiToken())
-                    .put(formBody)
-                    .build();
+                    .put(formBody);
 
             return this;
         }

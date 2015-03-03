@@ -157,7 +157,9 @@ public class ComiketCircleFormFragment extends Fragment {
                     public void onFail() {
                         mLoadComiketBlocksTask = null;
                     }
-                }).execute();
+                })
+                .setCache()
+                .execute();
     }
 
     private void loadComiketLayoutOptions(int block_id) {
@@ -176,7 +178,9 @@ public class ComiketCircleFormFragment extends Fragment {
                     public void onFail() {
                         mLoadComiketLayoutsTask = null;
                     }
-                }).execute();
+                })
+                .setCache()
+                .execute();
     }
 
     private void setComiketBlockAdapterValues(JSONObject result) {
