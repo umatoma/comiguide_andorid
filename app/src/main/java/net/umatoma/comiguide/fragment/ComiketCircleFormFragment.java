@@ -113,6 +113,14 @@ public class ComiketCircleFormFragment extends Fragment {
 
             }
         });
+
+        return view;
+    }
+
+    @Override
+    public void onStart () {
+        super.onStart();
+
         mFormSpaceNoSub.setSelection(
                 mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
 
@@ -128,8 +136,6 @@ public class ComiketCircleFormFragment extends Fragment {
         }
 
         loadComiketBlockOptions();
-
-        return view;
     }
 
     @Override
