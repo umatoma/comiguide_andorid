@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -78,38 +79,22 @@ public class ComiketCircleActivity extends ActionBarActivity
 
         setTitle(comiket_id, day, cmap_id);
 
-        mCircleArrayAdapter.clear();
-
-        String path = String.format("api/v1/comikets/%d/ccircle_checklists", mComiketId);
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("day", String.valueOf(mDay)));
-        params.add(new BasicNameValuePair("cmap_id", String.valueOf(mCmapId)));
-        mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
-        mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
-
-                    @Override
-                    public void onSuccess(JSONObject result) {
-                        mLoadComiketCirclesTask = null;
-                        parseComiketCircles(result);
-                    }
-
-                    @Override
-                    public void onFail() {
-                        mLoadComiketCirclesTask = null;
-                        Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setProgressDialog(this)
-                .execute();
+        ComiketCircleListFragment listFragment = ComiketCircleListFragment.newInstance(mCircleArrayAdapter);
+        listFragment.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadComiketCircles(mComiketId, mDay, mCmapId);
+            }
+        });
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.content_frame,
                 new ComiketCircleMapFragment(mComiketId, mCmapId, mDay), ComiketCircleMapFragment.TAG);
-        transaction.replace(R.id.left_drawer,
-                new ComiketCircleListFragment(mCircleArrayAdapter), ComiketCircleListFragment.TAG);
+        transaction.replace(R.id.left_drawer, listFragment, ComiketCircleListFragment.TAG);
         transaction.commit();
+
+        loadComiketCircles(mComiketId, mDay, mCmapId);
     }
 
     private void setTitle(int comiket_id, int day, int cmap_id) {
@@ -241,6 +226,43 @@ public class ComiketCircleActivity extends ActionBarActivity
     @Override
     public void onComiketCircleCreate(ComiketCircle circle) {
         mCircleArrayAdapter.add(circle);
+    }
+
+    private void setRefreshing(boolean refreshing) {
+        FragmentManager manager = getSupportFragmentManager();
+        ComiketCircleListFragment fragment
+                = (ComiketCircleListFragment) manager.findFragmentByTag(ComiketCircleListFragment.TAG);
+        if (fragment != null) {
+            fragment.setRefreshing(refreshing);
+        }
+    }
+
+    private void loadComiketCircles(int comiket_id, int day, int cmap_id) {
+        String path = String.format("api/v1/comikets/%d/ccircle_checklists", comiket_id);
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("day", String.valueOf(day)));
+        params.add(new BasicNameValuePair("cmap_id", String.valueOf(cmap_id)));
+        mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
+        mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
+                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        mLoadComiketCirclesTask = null;
+                        mCircleArrayAdapter.clear();
+                        parseComiketCircles(result);
+                        setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onFail() {
+                        mLoadComiketCirclesTask = null;
+                        Toast.makeText(ComiketCircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
+                        setRefreshing(false);
+                    }
+                })
+                .setProgressDialog(this)
+                .execute();
     }
 
     private void parseComiketCircles(JSONObject result) {
