@@ -54,6 +54,7 @@ public class ComiketCircleListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comiket_circle_list, container, false);
 
         mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

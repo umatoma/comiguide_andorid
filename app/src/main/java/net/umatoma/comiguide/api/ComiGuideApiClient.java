@@ -33,7 +33,7 @@ public class ComiGuideApiClient {
         protected int sizeOf(String key, String value) {
             return value.getBytes().length;
         }
-    };;
+    };
 
     public ComiGuideApiClient(Context context) {
         mUser = new User(context);
