@@ -25,6 +25,7 @@ import net.umatoma.comiguide.fragment.OnComiketCircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
+import net.umatoma.comiguide.util.ComiketCircleMapSharedPref;
 import net.umatoma.comiguide.view.MapImageView;
 
 import org.apache.http.NameValuePair;
@@ -41,6 +42,7 @@ public class ComiketCircleActivity extends ActionBarActivity
             ComiketCircleListFragment.OnFragmentInteractionListener,
             OnComiketCircleUpdateListener, OnComiketCircleCreateListener {
 
+    public static final String TAG = "ComiketCircleActivity";
     private int mComiketId;
     private int mCmapId;
     private int mDay;
@@ -62,8 +64,10 @@ public class ComiketCircleActivity extends ActionBarActivity
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         int comiket_id = 87;
-        int day = 1;
-        int cmap_id = 1;
+        ComiketCircleMapSharedPref pref = new ComiketCircleMapSharedPref(this);
+        int day = pref.getDayHistory(1);
+        int cmap_id = pref.getMapIdHistory(1);
+
         initialize(comiket_id, day, cmap_id);
     }
 
@@ -164,6 +168,11 @@ public class ComiketCircleActivity extends ActionBarActivity
     @Override
     public void onStop() {
         mLoadComiketCirclesTask = null;
+
+        ComiketCircleMapSharedPref pref = new ComiketCircleMapSharedPref(this);
+        pref.setDayHistory(mDay);
+        pref.setMapIdHistory(mCmapId);
+
         super.onStop();
     }
 
