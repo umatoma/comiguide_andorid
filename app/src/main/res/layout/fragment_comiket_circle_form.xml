@@ -135,48 +135,56 @@
 
             <!-- Color -->
             <RadioGroup
+                android:id="@+id/form_comiket_circle_color"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_black"
                     app:colorValue="black"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_gray"
                     app:colorValue="gray"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_red"
                     app:colorValue="red"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_blue"
                     app:colorValue="blue"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_green"
                     app:colorValue="green"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_yellow"
                     app:colorValue="yellow"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
 
                 <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_orange"
                     app:colorValue="orange"
                     android:layout_margin="4dp"
                     android:layout_width="36dp"

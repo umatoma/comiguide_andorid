@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ import net.umatoma.comiguide.validator.EmptyValidator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class ComiketCircleFormFragment extends Fragment {
 
@@ -47,6 +50,7 @@ public class ComiketCircleFormFragment extends Fragment {
     private EditText mFormCircleUrl;
     private EditText mFormComment;
     private EditText mFormCost;
+    private RadioGroup mFormColor;
     private Button mButtonSubmit;
     private ComiGuideApiClient.HttpClientTask mLoadComiketBlocksTask;
     private ComiGuideApiClient.HttpClientTask mLoadComiketLayoutsTask;
@@ -88,6 +92,7 @@ public class ComiketCircleFormFragment extends Fragment {
         mFormCircleUrl = (EditText) view.findViewById(R.id.form_comiket_circle_url);
         mFormComment = (EditText) view.findViewById(R.id.form_comiket_circle_comment);
         mFormCost = (EditText) view.findViewById(R.id.form_comiket_circle_cost);
+        mFormColor = (RadioGroup) view.findViewById(R.id.form_comiket_circle_color);
         mButtonSubmit = (Button) view.findViewById(R.id.form_submit);
 
         mFormComiketBlock.setAdapter(mComiketBlockAdapter);
@@ -123,6 +128,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
         mFormSpaceNoSub.setSelection(
                 mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
+        mFormColor.check(getColorId(mComiketCircle.getColor()));
 
         mFormCircleName.setText(mComiketCircle.getCircleName());
         mFormCircleUrl.setText(mComiketCircle.getCircleUrl());
@@ -256,6 +262,43 @@ public class ComiketCircleFormFragment extends Fragment {
         }
     }
 
+    private int getColorId(String color) {
+        if (color.equals("gray")) {
+            return R.id.color_gray;
+        } else if (color.equals("red")) {
+            return R.id.color_red;
+        } else if (color.equals("green")) {
+            return R.id.color_green;
+        } else if (color.equals("blue")) {
+            return R.id.color_blue;
+        } else if (color.equals("yellow")) {
+            return R.id.color_yellow;
+        } else if (color.equals("orange")) {
+            return R.id.color_orange;
+        } else {
+            return R.id.color_black;
+        }
+    }
+
+    private String getSelectedColor() {
+        switch (mFormColor.getCheckedRadioButtonId()) {
+            case R.id.color_gray:
+                return "black";
+            case R.id.color_red:
+                return "red";
+            case R.id.color_green:
+                return "green";
+            case R.id.color_blue:
+                return "blue";
+            case R.id.color_yellow:
+                return "yellow";
+            case R.id.color_orange:
+                return "orange";
+            default:
+                return "black";
+        }
+    }
+
     private int getSelectedLayoutId() {
         int position = mFormComiketLayout.getSelectedItemPosition();
         return Integer.parseInt(mComiketLayoutAdapter.getItem(position).first);
@@ -273,7 +316,7 @@ public class ComiketCircleFormFragment extends Fragment {
         String circle_url = mFormCircleUrl.getText().toString();
         String comment = mFormComment.getText().toString();
         String cost = mFormCost.getText().toString();
-        String color = mComiketCircle.getColor();
+        String color = getSelectedColor();
 
         if (new EmptyValidator(circle_name).isValid()) {
             if (mComiketCircle.isCreated()) {
