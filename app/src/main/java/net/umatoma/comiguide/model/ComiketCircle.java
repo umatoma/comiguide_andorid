@@ -11,6 +11,7 @@ public class ComiketCircle {
 
     private static final HashMap<String, Integer> COLOR_MAP = new HashMap<String, Integer>(){
         { put("black",  Color.parseColor("#000000")); }
+        { put("gray",   Color.parseColor("#9e9e9e")); }
         { put("red",    Color.parseColor("#f44336")); }
         { put("green",  Color.parseColor("#4caf50")); }
         { put("blue",   Color.parseColor("#2196f3")); }

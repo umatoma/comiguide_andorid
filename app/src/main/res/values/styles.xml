@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="colorRadioButtonStyle">@style/ColorRadioButton</item>
     </style>
 
     <style name="AppThemeNoActionBar" parent="AppTheme">
@@ -18,6 +19,11 @@
     <style name="AppTheme.Button" parent="android:Widget.Button">
         <item name="android:background">@drawable/app_theme_button</item>
         <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="ColorRadioButton" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/color_radio_button</item>
+        <item name="android:background">@drawable/color_radio_button</item>
     </style>
 
 </resources>
