@@ -30,8 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 public class ComiketCircleFormFragment extends Fragment {
 
     public static final String TAG = "ComiketCircleFormFragment";
@@ -283,7 +281,7 @@ public class ComiketCircleFormFragment extends Fragment {
     private String getSelectedColor() {
         switch (mFormColor.getCheckedRadioButtonId()) {
             case R.id.color_gray:
-                return "black";
+                return "gray";
             case R.id.color_red:
                 return "red";
             case R.id.color_green:
