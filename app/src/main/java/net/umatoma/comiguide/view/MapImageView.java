@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -33,12 +31,16 @@ public class MapImageView extends ImageView {
     private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener;
 
     public MapImageView(Context context) {
-        super(context);
-        initialize(context);
+        this(context, null);
     }
 
     public MapImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize(context);
+    }
+
+    public MapImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         initialize(context);
     }
 
@@ -101,14 +103,7 @@ public class MapImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d(TAG, "onDraw");
         super.onDraw(canvas);
-
-//        float cx = (float)getWidth() / 2.0f;
-//        float cy = (float)getHeight() / 2.0f;
-//        Paint paint = new Paint();
-//        paint.setColor(Color.GREEN);
-//        canvas.drawCircle(cx, cy, 10.0f, paint);
     }
 
     @Override
