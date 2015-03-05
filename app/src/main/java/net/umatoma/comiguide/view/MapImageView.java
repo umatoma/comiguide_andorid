@@ -14,21 +14,22 @@ import android.widget.ImageView;
 
 public class MapImageView extends ImageView {
 
-    private static final String TAG = "MapImageView";
-    private static final float MAX_SCALE_FACTOR = 8.0f;
-    private static final float MIN_SCALE_FACTOR = 0.8f;
-    private float mDefaultScale = 1.0f;
-    private float mMaxScale = 2.0f;
-    private float mMinScale = 0.5f;
-    private long mScrollEndAt = 0;
-    private int mImageWidth = 0;
-    private int mImageHeight = 0;
-    private int mImageOriginalWidth = 0;
-    private int mImageOriginalHeight = 0;
-    private GestureDetector mGestureDetector;
-    private GestureDetector.SimpleOnGestureListener mGestureListener;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener;
+    protected static final String TAG = "MapImageView";
+    protected static final float MAX_SCALE_FACTOR = 8.0f;
+    protected static final float MIN_SCALE_FACTOR = 0.8f;
+    protected float mDefaultScale = 1.0f;
+    protected float mMaxScale = 2.0f;
+    protected float mMinScale = 0.5f;
+    protected long mScrollEndAt = 0;
+    protected int mImageWidth = 0;
+    protected int mImageHeight = 0;
+    protected float mImageScale = 1.0f;
+    protected int mImageOriginalWidth = 0;
+    protected int mImageOriginalHeight = 0;
+    protected GestureDetector mGestureDetector;
+    protected GestureDetector.SimpleOnGestureListener mGestureListener;
+    protected ScaleGestureDetector mScaleGestureDetector;
+    protected ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener;
 
     public MapImageView(Context context) {
         this(context, null);
@@ -121,6 +122,7 @@ public class MapImageView extends ImageView {
         if (b2 != null) {
             mImageWidth = b2.getWidth();
             mImageHeight = b2.getHeight();
+            mImageScale = (float) mImageWidth / (float) mImageOriginalWidth;
             b2.recycle();
         }
 
@@ -190,12 +192,11 @@ public class MapImageView extends ImageView {
     }
 
     public void setCurrentPosition(float dx, float dy) {
-        float img_scale = (float) mImageWidth / (float) mImageOriginalWidth;
         float px = (float) getWidth() / 2.0f;
         float py = (float) getHeight() / 2.0f;
         float scale = mDefaultScale * MAX_SCALE_FACTOR;
         Matrix matrix = getImageMatrix();
-        matrix.setTranslate(-dx * img_scale, -dy * img_scale);
+        matrix.setTranslate(-dx * mImageScale, -dy * mImageScale);
         matrix.preTranslate(px, py);
         matrix.postScale(scale, scale, px, py);
         setImageMatrix(matrix);

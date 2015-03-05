@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.view.ComiketCircleMapView;
 import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleMapFragment extends Fragment {
@@ -25,12 +27,17 @@ public class ComiketCircleMapFragment extends Fragment {
     private FloatingActionButton mCreateCircleButton;
     private FloatingActionButton mCircleListButton;
     private FloatingActionButton mChangeMapButton;
-    private MapImageView mMapImage;
+    private ComiketCircleMapView mMapImage;
     private ComiketCircle mComiketCircle;
+    private ComiketCircleArrayAdapter mAdapter;
+
+    public static ComiketCircleMapFragment newInstance(int comiket_id, int cmap_id, int day) {
+        return new ComiketCircleMapFragment(comiket_id, cmap_id, day);
+    }
 
     public ComiketCircleMapFragment() {}
 
-    public ComiketCircleMapFragment(int comiket_id, int cmap_id, int day) {
+    private ComiketCircleMapFragment(int comiket_id, int cmap_id, int day) {
         mComiketId = comiket_id;
         mCmapId = cmap_id;
         mDay = day;
@@ -61,8 +68,9 @@ public class ComiketCircleMapFragment extends Fragment {
             }
         });
 
-        mMapImage = (MapImageView)view.findViewById(R.id.circle_map);
+        mMapImage = (ComiketCircleMapView)view.findViewById(R.id.circle_map);
         mMapImage.setImageResource(getMapImageResourceId(mDay, mCmapId));
+        mMapImage.setComiketCircleArrayAdapter(mAdapter);
 
         mCreateCircleButton = (FloatingActionButton)view.findViewById(R.id.button_create_circle);
         mCircleListButton   = (FloatingActionButton)view.findViewById(R.id.button_circle_list);
@@ -129,6 +137,10 @@ public class ComiketCircleMapFragment extends Fragment {
         ((TextView) view.findViewById(R.id.circle_name)).setText(circle.getCircleName());
         ((TextView) view.findViewById(R.id.cost)).setText(circle.getCost());
         ((TextView) view.findViewById(R.id.comment)).setText(circle.getComment());
+    }
+
+    public void setComiketCircleArrayAdapter(ComiketCircleArrayAdapter adapter) {
+        mAdapter = adapter;
     }
 
     public void showFooterView() {

@@ -79,18 +79,21 @@ public class ComiketCircleActivity extends ActionBarActivity
 
         setTitle(comiket_id, day, cmap_id);
 
-        ComiketCircleListFragment listFragment = ComiketCircleListFragment.newInstance(mCircleArrayAdapter);
+        ComiketCircleListFragment listFragment
+                = ComiketCircleListFragment.newInstance(mCircleArrayAdapter);
         listFragment.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 loadComiketCircles(mComiketId, mDay, mCmapId);
             }
         });
+        ComiketCircleMapFragment mapFragment
+                = ComiketCircleMapFragment.newInstance(mComiketId, mCmapId, mDay);
+        mapFragment.setComiketCircleArrayAdapter(mCircleArrayAdapter);
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.content_frame,
-                new ComiketCircleMapFragment(mComiketId, mCmapId, mDay), ComiketCircleMapFragment.TAG);
+        transaction.replace(R.id.content_frame, mapFragment, ComiketCircleMapFragment.TAG);
         transaction.replace(R.id.left_drawer, listFragment, ComiketCircleListFragment.TAG);
         transaction.commit();
 
