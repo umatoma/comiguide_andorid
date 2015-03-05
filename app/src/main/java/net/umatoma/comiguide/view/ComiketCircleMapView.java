@@ -40,16 +40,52 @@ public class ComiketCircleMapView extends MapImageView {
             float trans_x = values[Matrix.MTRANS_X];
             float trans_y = values[Matrix.MTRANS_Y];
             float space_size = (float) CIRCLE_CPACE_SIZE * mImageScale * scale;
+            float space_size_half = space_size / 2.0f;
             Paint paint = new Paint();
+            paint.setAlpha(128);
 
             int count = mAdapter.getCount();
             for (int i = 0; i < count; i++) {
                 ComiketCircle circle = mAdapter.getItem(i);
                 ComiketLayout layout = circle.getComiketLayout();
+
+
+                float right, bottom;
                 float left = (float) layout.getPosX() * mImageScale * scale + trans_x;
                 float top = (float) layout.getPosY() * mImageScale * scale + trans_y;
-                float right = left + space_size;
-                float bottom = top + space_size;
+                int layout_type = layout.getLayout();
+                switch (layout_type) {
+                    case 1:
+                        if (circle.getSpaceNoSub().equals("b")) {
+                            left += space_size_half;
+                        }
+                        right = left + space_size_half;
+                        bottom = top + space_size;
+                        break;
+                    case 2:
+                        if (circle.getSpaceNoSub().equals("a")) {
+                            top += space_size_half;
+                        }
+                        right = left + space_size;
+                        bottom = top + space_size_half;
+                        break;
+                    case 3:
+                        if (circle.getSpaceNoSub().equals("a")) {
+                            left += space_size_half;
+                        }
+                        right = left + space_size_half;
+                        bottom = top + space_size;
+                        break;
+                    case 4:
+                        if (circle.getSpaceNoSub().equals("b")) {
+                            top += space_size_half;
+                        }
+                        right = left + space_size;
+                        bottom = top + space_size_half;
+                        break;
+                    default:
+                        continue;
+                }
 
                 paint.setColor(circle.getColorCode());
                 canvas.drawRect(left, top, right, bottom, paint);

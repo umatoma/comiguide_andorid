@@ -30,6 +30,10 @@ public class ComiketLayout {
         return mCblockId;
     }
 
+    public int getLayout() {
+        return mLayout;
+    }
+
     public int getSpaceNo() {
         return mSpaceNo;
     }
