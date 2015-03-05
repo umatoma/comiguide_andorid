@@ -15,6 +15,7 @@ public class ComiketLayout {
 
     public ComiketLayout(JSONObject layout) throws JSONException {
         mId = layout.getInt("id");
+        mCblockId = layout.getInt("cblock_id");
         mSpaceNo = layout.getInt("space_no");
         mLayout = layout.getInt("layout");
         mPosX = layout.getInt("pos_x");

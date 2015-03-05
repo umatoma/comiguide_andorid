@@ -4,6 +4,7 @@ package net.umatoma.comiguide.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ public class ComiketCircleFormFragment extends Fragment {
 
     private OnComiketCircleUpdateListener mOnUpdateListener;
     private OnComiketCircleCreateListener mOnCreateListener;
+    private boolean mFirstLoad = true;
     private int mCmapId;
     private ComiketCircle mComiketCircle;
     private KeyValuePairAdapter mComiketBlockAdapter;
@@ -247,9 +249,10 @@ public class ComiketCircleFormFragment extends Fragment {
                 }
 
                 int position = 0;
-                if (mComiketCircle.isCreated() && mComiketLayoutAdapter.getCount() == 0) {
+                if (mComiketCircle.isCreated() && mFirstLoad) {
                     position = mComiketLayoutAdapter
                             .getPositionFromKey(String.valueOf(mComiketCircle.getClayoutId()), 0);
+                    mFirstLoad = false;
                 }
                 mFormComiketLayout.setSelection(position);
             } catch (JSONException e) {
