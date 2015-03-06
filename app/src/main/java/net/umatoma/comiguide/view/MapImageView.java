@@ -1,5 +1,6 @@
 package net.umatoma.comiguide.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
+import android.widget.Scroller;
 
 public class MapImageView extends ImageView {
 
@@ -26,6 +28,10 @@ public class MapImageView extends ImageView {
     protected float mImageScale = 1.0f;
     protected int mImageOriginalWidth = 0;
     protected int mImageOriginalHeight = 0;
+    protected float mViewWidthHalf = 1.0f;
+    protected float mViewHeightHalf = 1.0f;
+    protected Scroller mScroller;
+    protected ValueAnimator mAnimator;
     protected GestureDetector mGestureDetector;
     protected GestureDetector.SimpleOnGestureListener mGestureListener;
     protected ScaleGestureDetector mScaleGestureDetector;
@@ -51,7 +57,7 @@ public class MapImageView extends ImageView {
             @Override
             public boolean onDoubleTap (MotionEvent e) {
                 Log.d(TAG, "onDoubleTap");
-                invalidate();
+                zoomCurrentPosition();
                 return true;
             }
 
@@ -89,17 +95,27 @@ public class MapImageView extends ImageView {
         };
         mGestureDetector = new GestureDetector(context, mGestureListener);
         mScaleGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
+
+        mScroller = new Scroller(context);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         Log.d(TAG, "onTouchEvent");
+
+        if (mAnimator != null && mAnimator.isRunning()) {
+            return true;
+        }
+
         if (ev.getPointerCount() > 1) {
             mScaleGestureDetector.onTouchEvent(ev);
+            return true;
         } else if (System.currentTimeMillis() - mScrollEndAt > 100) {
             mGestureDetector.onTouchEvent(ev);
+            return true;
         }
-        return true;
+
+        return false;
     }
 
     @Override
@@ -152,6 +168,9 @@ public class MapImageView extends ImageView {
             setImageMatrix(matrix);
             invalidate();
         }
+
+        mViewWidthHalf = (float) getWidth() / 2.0f;
+        mViewHeightHalf = (float) getHeight() / 2.0f;
     }
 
     private void setScaleParams(float scale) {
@@ -192,14 +211,34 @@ public class MapImageView extends ImageView {
     }
 
     public void setCurrentPosition(float dx, float dy) {
-        float px = (float) getWidth() / 2.0f;
-        float py = (float) getHeight() / 2.0f;
         float scale = mDefaultScale * MAX_SCALE_FACTOR;
         Matrix matrix = getImageMatrix();
         matrix.setTranslate(-dx * mImageScale, -dy * mImageScale);
-        matrix.preTranslate(px, py);
-        matrix.postScale(scale, scale, px, py);
+        matrix.preTranslate(mViewWidthHalf, mViewHeightHalf);
+        matrix.postScale(scale, scale, mViewWidthHalf, mViewHeightHalf);
         setImageMatrix(matrix);
         invalidate();
+    }
+
+    public void zoomCurrentPosition() {
+        float[] values = new float[9];
+        Matrix matrix = getImageMatrix();
+        matrix.getValues(values);
+        float target_scale = mDefaultScale * MAX_SCALE_FACTOR;
+        float current_scale = values[Matrix.MSCALE_X];
+        mAnimator = ValueAnimator.ofFloat(current_scale, target_scale);
+        mAnimator.setDuration(500);
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float[] values = new float[9];
+                Matrix matrix = getImageMatrix();
+                matrix.getValues(values);
+                float scale = (Float) animation.getAnimatedValue() / values[Matrix.MSCALE_X];
+                postImageScale(scale);
+                invalidate();
+            }
+        });
+        mAnimator.start();
     }
 }
