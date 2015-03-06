@@ -41,13 +41,14 @@ public class ComiketCircleMapView extends MapImageView {
             float trans_y = values[Matrix.MTRANS_Y];
             float space_size = (float) CIRCLE_CPACE_SIZE * mImageScale * scale;
             float space_size_half = space_size / 2.0f;
-            Paint paint = new Paint();
-            paint.setAlpha(128);
 
             int count = mAdapter.getCount();
             for (int i = 0; i < count; i++) {
                 ComiketCircle circle = mAdapter.getItem(i);
                 ComiketLayout layout = circle.getComiketLayout();
+                Paint paint = new Paint();
+                paint.setColor(circle.getColorCode());
+                paint.setAlpha(150);
 
 
                 float right, bottom;
@@ -86,8 +87,6 @@ public class ComiketCircleMapView extends MapImageView {
                     default:
                         continue;
                 }
-
-                paint.setColor(circle.getColorCode());
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
