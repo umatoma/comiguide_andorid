@@ -55,6 +55,10 @@ public class ComiGuideApiClient {
         return new HttpClientTask(mUser).putRequest(path, formBody);
     }
 
+    public HttpClientTask callDeleteTask(String path) {
+        return new HttpClientTask(mUser).deleteRequest(path);
+    }
+
     public interface OnHttpClientPostExecuteListener {
         public void onSuccess(JSONObject result);
         public void onFail();
@@ -176,10 +180,7 @@ public class ComiGuideApiClient {
         }
 
         public HttpClientTask getRequest(String path, List<NameValuePair> params) {
-            Uri.Builder builder = new Uri.Builder()
-                    .scheme(API_SCHEME)
-                    .authority(API_AUTHORITY)
-                    .path(path);
+            Uri.Builder builder = getDefaultUriBuider(path);
 
             for (NameValuePair param : params) {
                 builder.appendQueryParameter(param.getName(), param.getValue());
@@ -193,11 +194,7 @@ public class ComiGuideApiClient {
 
         // Post request
         public HttpClientTask postRequest(String path, RequestBody formBody) {
-            Uri uri = new Uri.Builder()
-                    .scheme(API_SCHEME)
-                    .authority(API_AUTHORITY)
-                    .path(path)
-                    .build();
+            Uri uri = getDefaultUriBuider(path).build();
             mRequesBuilder = new Request.Builder()
                     .url(uri.toString())
                     .post(formBody);
@@ -207,16 +204,29 @@ public class ComiGuideApiClient {
 
         // Put request
         public HttpClientTask putRequest(String path, RequestBody formBody) {
-            Uri uri = new Uri.Builder()
-                    .scheme(API_SCHEME)
-                    .authority(API_AUTHORITY)
-                    .path(path)
-                    .build();
+            Uri uri = getDefaultUriBuider(path).build();
             mRequesBuilder = new Request.Builder()
                     .url(uri.toString())
                     .put(formBody);
 
             return this;
+        }
+
+        // Delete request
+        public HttpClientTask deleteRequest(String path) {
+            Uri uri = getDefaultUriBuider(path).build();
+            mRequesBuilder = new Request.Builder()
+                    .url(uri.toString())
+                    .delete();
+
+            return this;
+        }
+
+        private Uri.Builder getDefaultUriBuider(String path) {
+            return new Uri.Builder()
+                    .scheme(API_SCHEME)
+                    .authority(API_AUTHORITY)
+                    .path(path);
         }
     }
 }

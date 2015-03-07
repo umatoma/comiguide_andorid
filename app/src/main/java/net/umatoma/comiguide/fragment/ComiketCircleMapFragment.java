@@ -157,6 +157,12 @@ public class ComiketCircleMapFragment extends Fragment {
         getView().findViewById(R.id.footer_content_inner).setVisibility(View.VISIBLE);
     }
 
+    public void hideFooterView(ComiketCircle circle) {
+        if (mComiketCircle.getId() == circle.getId()) {
+            getView().findViewById(R.id.footer_content_inner).setVisibility(View.GONE);
+        }
+    }
+
     public interface OnFragmentInteractionListener {
         public void onFunctionsButtonClicke(int id);
         public void onFooterViewClick(ComiketCircle circle);

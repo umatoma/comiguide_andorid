@@ -55,8 +55,7 @@ public class ComiketCircleActivity extends ActionBarActivity
     private DrawerLayout mDrawerLayout;
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
     private ComiGuideApiClient.HttpClientTask mLoadComiketCirclesTask;
-
-    @Override
+    private ComiGuideApiClient.HttpClientTask mDeleteCircleTask;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comiket_circle);
@@ -352,7 +351,30 @@ public class ComiketCircleActivity extends ActionBarActivity
                 .commit();
     }
 
-    private void deleteCircle(ComiketCircle circle) {
+    private void deleteCircle(final ComiketCircle circle) {
+        String path = String.format("api/v1/ccircle_checklists/%d", circle.getId());
+        mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
+        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                mCircleArrayAdapter.remove(circle);
+                FragmentManager manager = getSupportFragmentManager();
+                ComiketCircleMapFragment fragment
+                        = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
+                if (fragment != null) {
+                    fragment.hideFooterView(circle);
+                }
+                Toast.makeText(ComiketCircleActivity.this,
+                        getString(R.string.message_success_comiket_circle_delete), Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onFail() {
+                Toast.makeText(ComiketCircleActivity.this,
+                        getString(R.string.message_error_common), Toast.LENGTH_SHORT).show();
+            }
+        });
+        mDeleteCircleTask.setProgressDialog(this);
+        mDeleteCircleTask.execute();
     }
 }
