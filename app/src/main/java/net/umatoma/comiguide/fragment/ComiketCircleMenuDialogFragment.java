@@ -49,18 +49,27 @@ public class ComiketCircleMenuDialogFragment extends DialogFragment implements A
         mMenuList.setAdapter(mAdapter);
         mMenuList.setOnItemClickListener(this);
 
-        return new AlertDialog
-                .Builder(getActivity())
-                .setTitle(mCircle.getCircleName())
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .setView(view)
-                .create();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if (mCircle != null) {
+            builder.setTitle(mCircle.getCircleName());
+            builder.setNegativeButton(R.string.dialog_cancel, null);
+            builder.setView(view);
+        }
+        return builder.create();
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        if (mAdapter.getCount() == 0) {
+            dismiss();
+        }
     }
 
     @Override
     public void onDetach () {
-        super.onDetach();
         mOnItemClickListener = null;
+        super.onDetach();
     }
 
     @Override
@@ -68,7 +77,6 @@ public class ComiketCircleMenuDialogFragment extends DialogFragment implements A
         if (mOnItemClickListener != null) {
             mOnItemClickListener.onItemClick(parent, view, position, id);
         }
-        dismiss();
     }
 
     public ComiketCircleMenuDialogFragment setMenuOptions(ArrayList<MenuListAdapter.MenuOption> list) {
