@@ -56,8 +56,8 @@ public class MapImageView extends ImageView {
         mGestureListener = new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap (MotionEvent e) {
-                Log.d(TAG, "onDoubleTap");
-                zoomCurrentPosition();
+                Log.d(TAG, String.format("onDoubleTap, x : %f, y : %f", e.getX(), e.getY()));
+                zoomCurrentPosition(e.getX(), e.getY());
                 return true;
             }
 
@@ -192,8 +192,11 @@ public class MapImageView extends ImageView {
     private void postImageScale(float scale_x, float scale_y) {
         float px = (float)getWidth() / 2.0f;
         float py = (float)getHeight() / 2.0f;
-        float[] values = new float[9];
+        postImageScale(scale_x, scale_y, px, py);
+    }
 
+    private void postImageScale(float scale_x, float scale_y, float px, float py) {
+        float[] values = new float[9];
         Matrix matrix = getImageMatrix();
         matrix.getValues(values);
 
@@ -220,9 +223,9 @@ public class MapImageView extends ImageView {
         invalidate();
     }
 
-    public void zoomCurrentPosition() {
-        float[] values = new float[9];
-        Matrix matrix = getImageMatrix();
+    public void zoomCurrentPosition(final float px, final float py) {
+        final float[] values = new float[9];
+        final Matrix matrix = getImageMatrix();
         matrix.getValues(values);
         float target_scale = mDefaultScale * MAX_SCALE_FACTOR;
         float current_scale = values[Matrix.MSCALE_X];
@@ -235,7 +238,7 @@ public class MapImageView extends ImageView {
                 Matrix matrix = getImageMatrix();
                 matrix.getValues(values);
                 float scale = (Float) animation.getAnimatedValue() / values[Matrix.MSCALE_X];
-                postImageScale(scale);
+                postImageScale(scale, scale, px, py);
                 invalidate();
             }
         });
