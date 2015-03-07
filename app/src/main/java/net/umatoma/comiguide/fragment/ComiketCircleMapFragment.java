@@ -14,7 +14,6 @@ import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.view.ComiketCircleMapView;
-import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleMapFragment extends Fragment {
 
@@ -64,7 +63,18 @@ public class ComiketCircleMapFragment extends Fragment {
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFooterViewClick(mComiketCircle);
+                if (mListener != null) {
+                    mListener.onFooterViewClick(mComiketCircle);
+                }
+            }
+        });
+        footerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onFooterViewLongClick(mComiketCircle);
+                }
+                return true;
             }
         });
 
@@ -150,6 +160,7 @@ public class ComiketCircleMapFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         public void onFunctionsButtonClicke(int id);
         public void onFooterViewClick(ComiketCircle circle);
+        public void onFooterViewLongClick(ComiketCircle circle);
     }
 
 }

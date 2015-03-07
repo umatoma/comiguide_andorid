@@ -29,6 +29,10 @@
     <string name="dialog_comiket_circle_map_east456">東456</string>
     <string name="dialog_comiket_circle_map_west12">西12</string>
 
+    <string name="dialog_comiket_circle_menu_show">表示</string>
+    <string name="dialog_comiket_circle_menu_edit">編集</string>
+    <string name="dialog_comiket_circle_menu_delete">削除</string>
+
     <string-array name="comiket_circle_maps">
         <item>東123</item>
         <item>東456</item>

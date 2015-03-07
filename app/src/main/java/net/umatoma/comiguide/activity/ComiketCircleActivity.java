@@ -1,5 +1,7 @@
 package net.umatoma.comiguide.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,15 +15,19 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
+import net.umatoma.comiguide.adapter.MenuListAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.ComiketCIrcleMapDialogFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleMapFragment;
+import net.umatoma.comiguide.fragment.ComiketCircleMenuDialogFragment;
 import net.umatoma.comiguide.fragment.OnComiketCircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
 import net.umatoma.comiguide.model.ComiketCircle;
@@ -211,6 +217,27 @@ public class ComiketCircleActivity extends ActionBarActivity
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
                 .commit();
+    }
+
+    @Override
+    public void onFooterViewLongClick(ComiketCircle circle) {
+        ArrayList<MenuListAdapter.MenuOption> options = new ArrayList<>();
+        options.add(new MenuListAdapter.MenuOption(
+                R.drawable.ic_map_marker, getString(R.string.dialog_comiket_circle_menu_show)));
+        options.add(new MenuListAdapter.MenuOption(
+                R.drawable.ic_edit, getString(R.string.dialog_comiket_circle_menu_edit)));
+        options.add(new MenuListAdapter.MenuOption(
+                R.drawable.ic_delete, getString(R.string.dialog_comiket_circle_menu_delete)));
+
+        ComiketCircleMenuDialogFragment fragment = ComiketCircleMenuDialogFragment.newInstance(circle);
+        fragment.setMenuOptions(options);
+        fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+        fragment.show(getSupportFragmentManager(), ComiketCircleMenuDialogFragment.TAG);
     }
 
     @Override
