@@ -77,6 +77,7 @@ public class ComiketCircleMenuDialogFragment extends DialogFragment implements A
         if (mOnItemClickListener != null) {
             mOnItemClickListener.onItemClick(parent, view, position, id);
         }
+        dismiss();
     }
 
     public ComiketCircleMenuDialogFragment setMenuOptions(ArrayList<MenuListAdapter.MenuOption> list) {

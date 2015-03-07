@@ -1,7 +1,5 @@
 package net.umatoma.comiguide.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -188,40 +186,16 @@ public class ComiketCircleActivity extends ActionBarActivity
 
     @Override
     public void onComiketCircleSelected(ComiketCircle circle) {
-        FragmentManager manager = getSupportFragmentManager();
-        ComiketCircleMapFragment fragment
-                = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
-
-        if (fragment != null) {
-            MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
-            ComiketLayout layout = circle.getComiketLayout();
-            float dx = (float) layout.getPosX();
-            float dy = (float) layout.getPosY();
-            mapImageView.setCurrentPosition(dx, dy);
-
-            fragment.setComiketCircle(circle);
-            fragment.showFooterView();
-        } else {
-            // On edit or create circle mode.
-        }
-
-        mDrawerLayout.closeDrawers();
+        showCircleInfo(circle);
     }
 
     @Override
     public void onFooterViewClick(ComiketCircle circle) {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(circle)
-                .setOnComiketCircleUpdateListener(this);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
-                .commit();
+        showCircleEditFragment(circle);
     }
 
     @Override
-    public void onFooterViewLongClick(ComiketCircle circle) {
+    public void onFooterViewLongClick(final ComiketCircle circle) {
         Log.d(TAG, "onFooterViewLongClick");
         ArrayList<MenuListAdapter.MenuOption> options = new ArrayList<>();
         options.add(new MenuListAdapter.MenuOption(
@@ -236,7 +210,17 @@ public class ComiketCircleActivity extends ActionBarActivity
         fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                switch (position) {
+                    case 0:
+                        showCircleInfo(circle);
+                        return;
+                    case 1:
+                        showCircleEditFragment(circle);
+                        return;
+                    case 2:
+                        deleteCircle(circle);
+                        return;
+                }
             }
         });
         fragment.show(getSupportFragmentManager(), ComiketCircleMenuDialogFragment.TAG);
@@ -334,5 +318,41 @@ public class ComiketCircleActivity extends ActionBarActivity
                     }
                 })
                 .show(getSupportFragmentManager(), ComiketCIrcleMapDialogFragment.TAG);
+    }
+
+    private void showCircleInfo(ComiketCircle circle) {
+        FragmentManager manager = getSupportFragmentManager();
+        ComiketCircleMapFragment fragment
+                = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
+
+        if (fragment != null) {
+            MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
+            ComiketLayout layout = circle.getComiketLayout();
+            float dx = (float) layout.getPosX();
+            float dy = (float) layout.getPosY();
+            mapImageView.setCurrentPosition(dx, dy);
+
+            fragment.setComiketCircle(circle);
+            fragment.showFooterView();
+        } else {
+            // On edit or create circle mode.
+        }
+
+        mDrawerLayout.closeDrawers();
+    }
+
+    private void showCircleEditFragment(ComiketCircle circle) {
+        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(circle)
+                .setOnComiketCircleUpdateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, ComiketCircleFormFragment.TAG)
+                .commit();
+    }
+
+    private void deleteCircle(ComiketCircle circle) {
+
     }
 }
