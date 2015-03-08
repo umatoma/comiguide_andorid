@@ -3,7 +3,9 @@ package net.umatoma.comiguide.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +31,8 @@ public class ComiketCircleMapFragment extends Fragment {
     private ComiketCircleMapView mMapImage;
     private ComiketCircle mComiketCircle;
     private ComiketCircleArrayAdapter mAdapter;
+    protected GestureDetector mGestureDetector;
+    private View mFooterView;
 
     public static ComiketCircleMapFragment newInstance(int comiket_id, int cmap_id, int day) {
         return new ComiketCircleMapFragment(comiket_id, cmap_id, day);
@@ -58,23 +62,29 @@ public class ComiketCircleMapFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_comiket_circle_map, container, false);
-        View footerView = view.findViewById(R.id.footer_content_inner);
-        footerView.setVisibility(View.GONE);
-        footerView.setOnClickListener(new View.OnClickListener() {
+        mFooterView = view.findViewById(R.id.footer_content_inner);
+        mFooterView.setVisibility(View.GONE);
+        mFooterView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
+                mGestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+        mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onSingleTapConfirmed (MotionEvent e) {
                 if (mListener != null) {
                     mListener.onFooterViewClick(mComiketCircle);
                 }
+                return true;
             }
-        });
-        footerView.setOnLongClickListener(new View.OnLongClickListener() {
+
             @Override
-            public boolean onLongClick(View v) {
+            public void onLongPress (MotionEvent e) {
                 if (mListener != null) {
                     mListener.onFooterViewLongClick(mComiketCircle);
                 }
-                return true;
             }
         });
 
@@ -141,12 +151,11 @@ public class ComiketCircleMapFragment extends Fragment {
     public void setComiketCircle(ComiketCircle circle) {
         mComiketCircle = circle;
 
-        View view = getView().findViewById(R.id.footer_content_inner);
-        view.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
-        ((TextView) view.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
-        ((TextView) view.findViewById(R.id.circle_name)).setText(circle.getCircleName());
-        ((TextView) view.findViewById(R.id.cost)).setText(circle.getCost());
-        ((TextView) view.findViewById(R.id.comment)).setText(circle.getComment());
+        mFooterView.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
+        ((TextView) mFooterView.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
+        ((TextView) mFooterView.findViewById(R.id.circle_name)).setText(circle.getCircleName());
+        ((TextView) mFooterView.findViewById(R.id.cost)).setText(circle.getCost());
+        ((TextView) mFooterView.findViewById(R.id.comment)).setText(circle.getComment());
     }
 
     public void setComiketCircleArrayAdapter(ComiketCircleArrayAdapter adapter) {
@@ -154,12 +163,12 @@ public class ComiketCircleMapFragment extends Fragment {
     }
 
     public void showFooterView() {
-        getView().findViewById(R.id.footer_content_inner).setVisibility(View.VISIBLE);
+        mFooterView.setVisibility(View.VISIBLE);
     }
 
     public void hideFooterView(ComiketCircle circle) {
         if (mComiketCircle.getId() == circle.getId()) {
-            getView().findViewById(R.id.footer_content_inner).setVisibility(View.GONE);
+            mFooterView.setVisibility(View.GONE);
         }
     }
 
