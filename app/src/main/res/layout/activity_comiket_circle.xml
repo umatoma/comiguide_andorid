@@ -14,12 +14,13 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/tool_bar"
-            app:theme="@style/ActionBar"
-            app:popupTheme="@style/Theme.AppCompat.Light"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            app:titleTextAppearance="@style/ActionBarTitleStyle"
+            app:popupTheme="@style/Theme.AppCompat.Light"/>
 
         <FrameLayout
             android:id="@+id/content_frame"

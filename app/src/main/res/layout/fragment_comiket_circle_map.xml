@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         fab:fab_icon="@drawable/ic_plus"
         fab:fab_size="mini"
-        fab:fab_colorNormal="#ff00bcd4"
-        fab:fab_colorPressed="#ff007e91"
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
         android:layout_above="@+id/footer_content"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
@@ -31,8 +31,8 @@
         android:layout_alignLeft="@+id/button_create_circle"
         fab:fab_icon="@drawable/ic_list"
         fab:fab_size="mini"
-        fab:fab_colorNormal="#ff00bcd4"
-        fab:fab_colorPressed="#ff007e91"/>
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_change_map"
@@ -42,8 +42,8 @@
         android:layout_alignLeft="@+id/button_circle_list"
         fab:fab_icon="@drawable/ic_layers"
         fab:fab_size="mini"
-        fab:fab_colorNormal="#ff00bcd4"
-        fab:fab_colorPressed="#ff007e91"/>
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"/>
 
     <FrameLayout
         android:id="@+id/footer_content"
