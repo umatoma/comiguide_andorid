@@ -56,6 +56,8 @@ public class ComiketCircleActivity extends ActionBarActivity
     private ComiketCircleArrayAdapter mCircleArrayAdapter;
     private ComiGuideApiClient.HttpClientTask mLoadComiketCirclesTask;
     private ComiGuideApiClient.HttpClientTask mDeleteCircleTask;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comiket_circle);
@@ -120,11 +122,11 @@ public class ComiketCircleActivity extends ActionBarActivity
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_comiket_circle, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_comiket_circle, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
