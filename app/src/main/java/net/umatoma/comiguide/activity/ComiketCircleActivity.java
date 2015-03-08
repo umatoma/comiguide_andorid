@@ -144,14 +144,14 @@ public class ComiketCircleActivity extends ActionBarActivity
         if(keyCode == KeyEvent.KEYCODE_BACK) {
             FragmentManager manager = getSupportFragmentManager();
             Fragment fragment = manager.findFragmentByTag(ComiketCircleFormFragment.TAG);
-            if (fragment != null) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
+            } else if (fragment != null) {
                 manager.beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                         .remove(fragment)
                         .commit();
-                return false;
-            } else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                mDrawerLayout.closeDrawer(Gravity.LEFT);
                 return false;
             }
         }
