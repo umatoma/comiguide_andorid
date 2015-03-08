@@ -1,5 +1,9 @@
 package net.umatoma.comiguide.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -77,6 +81,12 @@ public class ComiketCircleMapFragment extends Fragment {
                 if (mListener != null) {
                     mListener.onFooterViewClick(mComiketCircle);
                 }
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTap (MotionEvent e) {
+                hideFooterView();
                 return true;
             }
 
@@ -163,7 +173,26 @@ public class ComiketCircleMapFragment extends Fragment {
     }
 
     public void showFooterView() {
+        PropertyValuesHolder holderAlpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mFooterView, holderAlpha);
+        animator.setDuration(300);
+        animator.start();
         mFooterView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFooterView() {
+        PropertyValuesHolder holderAlpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mFooterView, holderAlpha);
+        animator.setDuration(300);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                View view = (View) ((ObjectAnimator) animation).getTarget();
+                view.setVisibility(View.GONE);
+            }
+        });
+        animator.start();
     }
 
     public void hideFooterView(ComiketCircle circle) {
