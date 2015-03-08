@@ -24,9 +24,9 @@ import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
 import net.umatoma.comiguide.model.User;
 
-public class HomeActivity extends ActionBarActivity
-        implements SideMenuFragment.OnFragmentInteractionListener {
+public class HomeActivity extends ActionBarActivity {
 
+    private static final String TAG = "HomeActivity";
     private User mUser;
     private ImageView mUserIcon;
     private TextView mUserName;
@@ -78,7 +78,7 @@ public class HomeActivity extends ActionBarActivity
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.left_drawer, SideMenuFragment.newInstance());
+        transaction.replace(R.id.left_drawer, SideMenuFragment.newInstance());
         transaction.commit();
     }
 
@@ -131,11 +131,6 @@ public class HomeActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
 }

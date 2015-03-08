@@ -1,8 +1,6 @@
 package net.umatoma.comiguide.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import net.umatoma.comiguide.adapter.SideMenuAdapter;
 
 public class SideMenuFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
     private ListView mMenuList;
     private SideMenuAdapter mMenuAdapter;
 
@@ -48,25 +45,8 @@ public class SideMenuFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     private class MenuItemClickListener implements ListView.OnItemClickListener {

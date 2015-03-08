@@ -8,6 +8,45 @@
     <string name="toast_logout">ログアウトしました</string>
     <string name="title_activity_comiket_circle">コミケ - サークル</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="form_comiket_block">ブロック</string>
+    <string name="form_comiket_layout">レイアウト</string>
+    <string name="form_comiket_circle_space_no_sub">a/b</string>
+    <string name="form_comiket_circle_name">サークル名</string>
+    <string name="form_comiket_circle_url">URL</string>
+    <string name="form_comiket_circle_comment">コメント</string>
+    <string name="form_comiket_circle_cost">費用</string>
+    <string name="form_comiket_circle_color">カラー</string>
+    <string name="form_comiket_circle_update">リスト更新</string>
+    <string name="form_comiket_circle_create">リスト作成</string>
+
+    <string name="dialog_comiket_circle_map_title">マップ選択</string>
+    <string name="dialog_comiket_circle_map_day1">1日目</string>
+    <string name="dialog_comiket_circle_map_day2">2日目</string>
+    <string name="dialog_comiket_circle_map_day3">3日目</string>
+    <string name="dialog_comiket_circle_map_east123">東123</string>
+    <string name="dialog_comiket_circle_map_east456">東456</string>
+    <string name="dialog_comiket_circle_map_west12">西12</string>
+
+    <string name="dialog_comiket_circle_menu_show">表示</string>
+    <string name="dialog_comiket_circle_menu_edit">編集</string>
+    <string name="dialog_comiket_circle_menu_delete">削除</string>
+
+    <string-array name="comiket_circle_maps">
+        <item>東123</item>
+        <item>東456</item>
+        <item>西12</item>
+    </string-array>
+
+    <string name="message_error_common">エラーが発生しました</string>
+    <string name="message_success_comiket_circle_update">リストを更新しました</string>
+    <string name="message_fail_comiket_circle_update">リストの更新に失敗しました</string>
+    <string name="message_success_comiket_circle_create">リストを作成しました</string>
+    <string name="message_fail_comiket_circle_create">リストの作成に失敗しました</string>
+    <string name="message_success_comiket_circle_delete">リストを削除しました</string>
+
+    <string name="form_error_empty">値が入力されていません</string>
+    <string name="dialog_ok">決定</string>
+    <string name="dialog_cancel">キャンセル</string>
 </resources>
