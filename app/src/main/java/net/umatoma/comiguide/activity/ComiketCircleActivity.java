@@ -12,12 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.adapter.MenuListAdapter;
@@ -70,7 +70,7 @@ public class ComiketCircleActivity extends ActionBarActivity
         mCircleArrayAdapter = new ComiketCircleArrayAdapter(this);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
-        int comiket_id = 87;
+        int comiket_id = ComiGuide.COMIKET_ID;
         ComiketCircleMapSharedPref pref = new ComiketCircleMapSharedPref(this);
         int day = pref.getDayHistory(1);
         int cmap_id = pref.getMapIdHistory(1);
