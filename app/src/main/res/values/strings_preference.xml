@@ -5,4 +5,15 @@
 
     <string name="prefs_key_account_logout">account_logout</string>
     <string name="prefs_title_account_logout">ログアウト</string>
+
+    <string name="prefs_key_comiket_id">comiket_id</string>
+    <string name="prefs_title_comiket_id">コミケID</string>
+    <string-array name="prefs_entries_comiket_id">
+        <item>C87</item>
+        <item>C86</item>
+    </string-array>
+    <integer-array name="prefs_entry_values_comiket_id">
+        <item>87</item>
+        <item>86</item>
+    </integer-array>
 </resources>

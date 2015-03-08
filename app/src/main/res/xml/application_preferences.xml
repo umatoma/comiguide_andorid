@@ -2,5 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/prefs_category_application">
+
+        <Preference
+            android:key="@string/prefs_key_comiket_id"
+            android:title="@string/prefs_title_comiket_id"/>
     </PreferenceCategory>
 </PreferenceScreen>
