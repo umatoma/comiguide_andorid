@@ -3,9 +3,7 @@ package net.umatoma.comiguide.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -28,7 +26,8 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.model.User;
-import net.umatoma.comiguide.util.SharedPrefKeys;
+import net.umatoma.comiguide.validator.EmailValidator;
+import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,21 +105,14 @@ public class LoginActivity extends Activity {
         boolean cancel = false;
         View focusView = null;
 
-
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (!isPasswordValid(password)) {
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+        if (!isEmailValid(email)) {
             focusView = mEmailView;
             cancel = true;
         }
@@ -139,13 +131,34 @@ public class LoginActivity extends Activity {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        EmptyValidator emptyValidator = new EmptyValidator(this, email);
+        if (!emptyValidator.isValid()) {
+            mEmailView.setError(emptyValidator.getErrorMessage());
+            return false;
+        }
+
+        EmailValidator emailValidator = new EmailValidator(this, email);
+        if (!emailValidator.isValid()) {
+            mEmailView.setError(emailValidator.getErrorMessage());
+            return false;
+        }
+
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        EmptyValidator emptyValidator = new EmptyValidator(this, password);
+        if (!emptyValidator.isValid()) {
+            mPasswordView.setError(emptyValidator.getErrorMessage());
+            return false;
+        }
+
+        if (password.length() <= 4) {
+            mPasswordView.setError(getString(R.string.validate_error_min_length));
+            return false;
+        }
+
+        return true;
     }
 
     /**

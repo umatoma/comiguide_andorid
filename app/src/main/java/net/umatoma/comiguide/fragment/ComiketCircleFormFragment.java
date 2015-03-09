@@ -4,7 +4,6 @@ package net.umatoma.comiguide.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -319,7 +318,8 @@ public class ComiketCircleFormFragment extends Fragment {
         String cost = mFormCost.getText().toString();
         String color = getSelectedColor();
 
-        if (new EmptyValidator(circle_name).isValid()) {
+        EmptyValidator validator = new EmptyValidator(getActivity(), circle_name);
+        if (validator.isValid()) {
             if (mComiketCircle.isCreated()) {
                 RequestBody formBody = new FormEncodingBuilder()
                         .add("ccircle_checklist[clayout_id]", String.valueOf(layout_id))
@@ -350,7 +350,7 @@ public class ComiketCircleFormFragment extends Fragment {
                 createComiketCircle(formBody);
             }
         } else {
-            mFormCircleName.setError(getString(R.string.form_error_empty));
+            mFormCircleName.setError(validator.getErrorMessage());
         }
     }
 
