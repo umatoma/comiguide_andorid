@@ -37,4 +37,9 @@
         <item name="android:background">@drawable/color_radio_button</item>
     </style>
 
+    <style name="AppTheme.LoginEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/login_edit_text_background</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
 </resources>
