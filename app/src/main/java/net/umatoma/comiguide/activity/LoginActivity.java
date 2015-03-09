@@ -25,6 +25,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.model.User;
 import net.umatoma.comiguide.validator.EmailValidator;
 import net.umatoma.comiguide.validator.EmptyValidator;
@@ -43,7 +44,7 @@ public class LoginActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private ComiGuideApiClient.HttpClientTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -125,8 +126,52 @@ public class LoginActivity extends Activity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            RequestBody formBody = new FormEncodingBuilder()
+                    .add("user[email]", email)
+                    .add("user[password]", password)
+                    .build();
+            mAuthTask = new ComiGuideApiClient(this).callPostTask("api/v1/users/sign_in", formBody);
+            mAuthTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    mAuthTask = null;
+                    showProgress(false);
+
+                    try {
+                        JSONObject apiTokenObject = result.getJSONObject("api_token");
+                        JSONObject userObject = result.getJSONObject("user");
+
+                        User user = new User(LoginActivity.this);
+                        user.setApiToken(apiTokenObject.getString("token"));
+                        user.setUserId(userObject.getInt("id"));
+                        user.setUserName(userObject.getString("username"));
+                        user.save();
+
+                        Toast.makeText(LoginActivity.this,
+                                getString(R.string.success_login), Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                    mAuthTask = null;
+                    showProgress(false);
+
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.error_login_fail), Toast.LENGTH_SHORT).show();
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+            });
+            mAuthTask.setApiToken(false);
+            mAuthTask.execute();
         }
     }
 

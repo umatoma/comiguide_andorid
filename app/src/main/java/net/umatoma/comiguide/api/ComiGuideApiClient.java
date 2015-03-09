@@ -78,6 +78,7 @@ public class ComiGuideApiClient {
         private User mUser;
         private ProgressDialog mProgressDialog;
         private boolean mUseCache = false;
+        private boolean mSetApiToken = true;
 
         public HttpClientTask(User user) {
             mUser = user;
@@ -87,7 +88,9 @@ public class ComiGuideApiClient {
         protected void onPreExecute() {
             mClient = new OkHttpClient();
 
-            mRequesBuilder.addHeader(API_TOKEN_HEADER, mUser.getApiToken());
+            if (mSetApiToken) {
+                mRequesBuilder.addHeader(API_TOKEN_HEADER, mUser.getApiToken());
+            }
 
             if (mProgressDialog != null) {
                 mProgressDialog.setMessage("Now processing...");
@@ -166,6 +169,11 @@ public class ComiGuideApiClient {
 
         public HttpClientTask setProgressDialog(Context context) {
             mProgressDialog = new ProgressDialog(context);
+            return this;
+        }
+
+        public HttpClientTask setApiToken(boolean setApiToken) {
+            mSetApiToken = setApiToken;
             return this;
         }
 
