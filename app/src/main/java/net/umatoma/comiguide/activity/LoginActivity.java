@@ -4,14 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,9 +38,8 @@ import java.io.IOException;
  */
 public class LoginActivity extends Activity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    private static final String COMIGUIDE_SIGN_UP_PATH = "https://comiguide.net/users/sign_up";
+
     private ComiGuideApiClient.HttpClientTask mAuthTask = null;
 
     // UI references.
@@ -51,6 +47,7 @@ public class LoginActivity extends Activity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView mSignUpView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +69,14 @@ public class LoginActivity extends Activity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mSignUpView = (TextView) findViewById(R.id.sign_up);
+        mSignUpView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(COMIGUIDE_SIGN_UP_PATH)));
+            }
+        });
     }
 
 
