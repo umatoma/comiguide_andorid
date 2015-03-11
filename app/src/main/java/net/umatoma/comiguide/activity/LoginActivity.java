@@ -3,17 +3,12 @@ package net.umatoma.comiguide.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,8 +22,10 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.model.User;
-import net.umatoma.comiguide.util.SharedPrefKeys;
+import net.umatoma.comiguide.validator.EmailValidator;
+import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,16 +38,16 @@ import java.io.IOException;
  */
 public class LoginActivity extends Activity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
+    private static final String COMIGUIDE_SIGN_UP_PATH = "https://comiguide.net/users/sign_up";
+
+    private ComiGuideApiClient.HttpClientTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView mSignUpView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +56,8 @@ public class LoginActivity extends Activity {
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -82,6 +69,14 @@ public class LoginActivity extends Activity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mSignUpView = (TextView) findViewById(R.id.sign_up);
+        mSignUpView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(COMIGUIDE_SIGN_UP_PATH)));
+            }
+        });
     }
 
 
@@ -106,21 +101,14 @@ public class LoginActivity extends Activity {
         boolean cancel = false;
         View focusView = null;
 
-
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (!isPasswordValid(password)) {
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+        if (!isEmailValid(email)) {
             focusView = mEmailView;
             cancel = true;
         }
@@ -133,19 +121,84 @@ public class LoginActivity extends Activity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            RequestBody formBody = new FormEncodingBuilder()
+                    .add("user[email]", email)
+                    .add("user[password]", password)
+                    .build();
+            mAuthTask = new ComiGuideApiClient(this).callPostTask("api/v1/users/sign_in", formBody);
+            mAuthTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    mAuthTask = null;
+                    showProgress(false);
+
+                    try {
+                        JSONObject apiTokenObject = result.getJSONObject("api_token");
+                        JSONObject userObject = result.getJSONObject("user");
+
+                        User user = new User(LoginActivity.this);
+                        user.setApiToken(apiTokenObject.getString("token"));
+                        user.setUserId(userObject.getInt("id"));
+                        user.setUserName(userObject.getString("username"));
+                        user.save();
+
+                        Toast.makeText(LoginActivity.this,
+                                getString(R.string.success_login), Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                    mAuthTask = null;
+                    showProgress(false);
+
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.error_login_fail), Toast.LENGTH_SHORT).show();
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+            });
+            mAuthTask.setApiToken(false);
+            mAuthTask.execute();
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        EmptyValidator emptyValidator = new EmptyValidator(this, email);
+        if (!emptyValidator.isValid()) {
+            mEmailView.setError(emptyValidator.getErrorMessage());
+            return false;
+        }
+
+        EmailValidator emailValidator = new EmailValidator(this, email);
+        if (!emailValidator.isValid()) {
+            mEmailView.setError(emailValidator.getErrorMessage());
+            return false;
+        }
+
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        EmptyValidator emptyValidator = new EmptyValidator(this, password);
+        if (!emptyValidator.isValid()) {
+            mPasswordView.setError(emptyValidator.getErrorMessage());
+            return false;
+        }
+
+        if (password.length() <= 4) {
+            mPasswordView.setError(getString(R.string.validate_error_min_length));
+            return false;
+        }
+
+        return true;
     }
 
     /**

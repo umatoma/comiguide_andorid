@@ -46,7 +46,10 @@
     <string name="message_fail_comiket_circle_create">リストの作成に失敗しました</string>
     <string name="message_success_comiket_circle_delete">リストを削除しました</string>
 
-    <string name="form_error_empty">値が入力されていません</string>
+    <string name="validate_error_empty">値が入力されていません</string>
+    <string name="validate_error_email">不正なメールアドレスです</string>
+    <string name="validate_error_min_length">値が短すぎます</string>
+
     <string name="dialog_ok">決定</string>
     <string name="dialog_cancel">キャンセル</string>
 </resources>

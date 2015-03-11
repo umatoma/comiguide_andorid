@@ -6,6 +6,7 @@
     <string name="prompt_password">パスワード</string>
     <string name="action_sign_in">ログイン</string>
     <string name="action_sign_in_short">ログイン</string>
+    <string name="action_sign_up">新規ユーザー登録</string>
 
     <string name="success_login">ログインしました</string>
 
