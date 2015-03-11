@@ -42,4 +42,9 @@
         <item name="android:padding">12dp</item>
     </style>
 
+    <style name="ClickableTextView" parent="android:Widget.TextView">
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@drawable/clickable_text_color</item>
+    </style>
+
 </resources>
