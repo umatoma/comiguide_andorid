@@ -6,4 +6,10 @@
     <color name="colorAccentDark">#006064</color>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#9e9e9e</color>
+
+    <color name="toolbarTextColorPrimary">#fff</color>
+    <color name="toolbarTextColorSecondary">#fff</color>
+
+    <color name="popupMenuTextColorPrimary">#212121</color>
+    <color name="popupMenuTextColorSecondary">#9e9e9e</color>
 </resources>

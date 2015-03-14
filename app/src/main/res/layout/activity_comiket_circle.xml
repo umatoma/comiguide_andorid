@@ -19,8 +19,8 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:layout_alignParentTop="true"
-            app:titleTextAppearance="@style/ActionBarTitleStyle"
-            app:popupTheme="@style/Theme.AppCompat.Light"/>
+            app:theme="@style/ActionBar"
+            app:popupTheme="@style/PopupMenu"/>
 
         <FrameLayout
             android:id="@+id/content_frame"
