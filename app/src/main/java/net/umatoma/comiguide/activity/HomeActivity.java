@@ -2,7 +2,6 @@ package net.umatoma.comiguide.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +27,7 @@ public class HomeActivity extends ActionBarActivity {
 
     private static final String TAG = "HomeActivity";
     private User mUser;
-    private ImageView mUserIcon;
-    private TextView mUserName;
+    private View mListHeaderView;
     private ListView mNotificationList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -61,12 +57,12 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mUserIcon = (ImageView) findViewById(R.id.user_icon);
-        mUserName = (TextView) findViewById(R.id.user_name);
         mNotificationList = (ListView) findViewById(R.id.notification_list);
 
         mUser = new User(this);
-        mUserName.setText(mUser.getUserName());
+        mListHeaderView = getLayoutInflater().inflate(R.layout.header_notification_list, null);
+        ((TextView) mListHeaderView.findViewById(R.id.user_name)).setText(mUser.getUserName());
+        mNotificationList.addHeaderView(mListHeaderView);
 
         mNotificationAdaper = new NotificationListAdapter(this);
         mNotificationList.setAdapter(mNotificationAdaper);
@@ -74,7 +70,9 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Notification notification = (Notification) parent.getItemAtPosition(position);
-                Toast.makeText(HomeActivity.this, notification.getContent(), Toast.LENGTH_SHORT).show();
+                if (notification != null) {
+                    Toast.makeText(HomeActivity.this, notification.getContent(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
