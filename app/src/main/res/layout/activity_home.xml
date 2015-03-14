@@ -7,13 +7,37 @@
     tools:context=".activity.HomeActivity">
 
     <!-- The main content view -->
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include layout="@layout/include_home" />
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/user_icon"
+            android:background="@drawable/circle_background"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="User Name"
+            android:layout_gravity="center_horizontal" />
+
+        <ListView
+            android:id="@+id/notification_list"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <!-- The navigation drawer -->
     <FrameLayout

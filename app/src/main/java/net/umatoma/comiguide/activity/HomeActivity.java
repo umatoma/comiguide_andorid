@@ -21,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.NotificationListAdapter;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
+import net.umatoma.comiguide.model.Notification;
 import net.umatoma.comiguide.model.User;
 
 public class HomeActivity extends ActionBarActivity {
@@ -33,7 +35,7 @@ public class HomeActivity extends ActionBarActivity {
     private ListView mNotificationList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ArrayAdapter<String> mNotificationAdaper;
+    private NotificationListAdapter mNotificationAdaper;
     private ActionBar mActionBar;
 
     @Override
@@ -66,13 +68,13 @@ public class HomeActivity extends ActionBarActivity {
         mUser = new User(this);
         mUserName.setText(mUser.getUserName());
 
-        mNotificationAdaper = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        mNotificationAdaper = new NotificationListAdapter(this);
         mNotificationList.setAdapter(mNotificationAdaper);
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String str = (String) parent.getItemAtPosition(position);
-                Toast.makeText(HomeActivity.this, str, Toast.LENGTH_SHORT);
+                Notification notification = (Notification) parent.getItemAtPosition(position);
+                Toast.makeText(HomeActivity.this, notification.getContent(), Toast.LENGTH_SHORT).show();
             }
         });
 
