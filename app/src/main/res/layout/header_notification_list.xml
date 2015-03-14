@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#333">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/user_info_container"
+        android:layout_alignRight="@+id/user_info_container"
+        android:layout_alignTop="@+id/user_info_container"
+        android:layout_alignBottom="@+id/user_info_container"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_notification_list_header" />
+
+    <LinearLayout
+        android:id="@+id/user_info_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#9000"
+        android:paddingTop="32dp"
+        android:paddingBottom="64dp">
+
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:src="@drawable/user_icon"
+            android:background="@drawable/circle_background"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#fff"
+            android:text="User Name"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</RelativeLayout>

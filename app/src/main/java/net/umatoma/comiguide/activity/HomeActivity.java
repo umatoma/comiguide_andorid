@@ -2,7 +2,6 @@ package net.umatoma.comiguide.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,30 +9,32 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.NotificationListAdapter;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
+import net.umatoma.comiguide.model.Notification;
 import net.umatoma.comiguide.model.User;
 
 public class HomeActivity extends ActionBarActivity {
 
     private static final String TAG = "HomeActivity";
     private User mUser;
-    private ImageView mUserIcon;
-    private TextView mUserName;
+    private View mListHeaderView;
     private ListView mNotificationList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ArrayAdapter<String> mNotificationAdaper;
+    private NotificationListAdapter mNotificationAdaper;
     private ActionBar mActionBar;
 
     @Override
@@ -41,11 +42,13 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setScrimColor(getResources().getColor(R.color.drawerLayoutScrim));
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             public void onDrawerClosed(View view) {
@@ -59,20 +62,22 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mUserIcon = (ImageView) findViewById(R.id.user_icon);
-        mUserName = (TextView) findViewById(R.id.user_name);
         mNotificationList = (ListView) findViewById(R.id.notification_list);
 
         mUser = new User(this);
-        mUserName.setText(mUser.getUserName());
+        mListHeaderView = getLayoutInflater().inflate(R.layout.header_notification_list, null);
+        ((TextView) mListHeaderView.findViewById(R.id.user_name)).setText(mUser.getUserName());
+        mNotificationList.addHeaderView(mListHeaderView);
 
-        mNotificationAdaper = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        mNotificationAdaper = new NotificationListAdapter(this);
         mNotificationList.setAdapter(mNotificationAdaper);
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String str = (String) parent.getItemAtPosition(position);
-                Toast.makeText(HomeActivity.this, str, Toast.LENGTH_SHORT);
+                Notification notification = (Notification) parent.getItemAtPosition(position);
+                if (notification != null) {
+                    Toast.makeText(HomeActivity.this, notification.getContent(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -90,6 +95,8 @@ public class HomeActivity extends ActionBarActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+
+        mDrawerLayout.closeDrawers();
     }
 
     @Override
@@ -131,6 +138,18 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
 }

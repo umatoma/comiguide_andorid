@@ -11,7 +11,7 @@
         android:padding="8dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_list"
-        android:background="@drawable/side_menu_list_icon"/>
+        android:background="@drawable/circle_background"/>
 
     <TextView
         android:id="@+id/menu_text"

@@ -4,6 +4,8 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <string name="title_notification_list">お知らせ</string>
+
     <string name="side_menu_text_comiket_circle">コミケサークル</string>
     <string name="side_menu_text_comiket_kigyo">コミケ企業ブース</string>
     <string name="side_menu_text_comiket_info">コミケとは？</string>

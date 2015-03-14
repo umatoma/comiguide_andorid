@@ -33,8 +33,7 @@
         </activity>
         <activity
             android:name=".activity.ComiketCircleActivity"
-            android:label="@string/title_activity_comiket_circle"
-            android:theme="@style/AppThemeNoActionBar" >
+            android:label="@string/title_activity_comiket_circle" >
         </activity>
     </application>
 
