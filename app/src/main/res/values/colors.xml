@@ -12,4 +12,6 @@
 
     <color name="popupMenuTextColorPrimary">#212121</color>
     <color name="popupMenuTextColorSecondary">#9e9e9e</color>
+
+    <color name="drawerLayoutScrim">#c000</color>
 </resources>
