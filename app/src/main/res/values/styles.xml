@@ -22,12 +22,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/toolbarTextColorPrimary</item>
         <item name="android:textColorSecondary">@color/toolbarTextColorSecondary</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
     <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/popupMenuTextColorPrimary</item>
         <item name="android:textColorSecondary">@color/popupMenuTextColorSecondary</item>
+        <item name="android:background">#fff</item>
     </style>
 
     <style name="AppTheme.Button" parent="android:Widget.Button">

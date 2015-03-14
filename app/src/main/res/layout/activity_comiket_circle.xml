@@ -16,8 +16,6 @@
             android:id="@+id/tool_bar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
             android:layout_alignParentTop="true"
             app:theme="@style/ActionBar"
             app:popupTheme="@style/PopupMenu"/>
