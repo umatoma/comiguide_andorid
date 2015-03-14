@@ -92,6 +92,8 @@ public class HomeActivity extends ActionBarActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+
+        mDrawerLayout.closeDrawers();
     }
 
     @Override
