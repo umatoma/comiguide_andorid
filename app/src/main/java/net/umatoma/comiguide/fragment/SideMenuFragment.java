@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ public class SideMenuFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_side_menu, container, false);
+        view.setOnTouchListener(new OnCancelListener());
         mMenuAdapter = new SideMenuAdapter(getActivity());
         mMenuList = (ListView)view.findViewById(R.id.menu_list);
         mMenuList.setAdapter(mMenuAdapter);
@@ -64,6 +66,13 @@ public class SideMenuFragment extends Fragment {
                     startActivity(intent);
                     return;
             }
+        }
+    }
+
+    private class OnCancelListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 

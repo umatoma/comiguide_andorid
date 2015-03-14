@@ -82,7 +82,7 @@ public class ComiketCircleFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comiket_circle_form, container, false);
-        view.setOnTouchListener(new OnCnacelListener()); // Not through touch event.
+        view.setOnTouchListener(new OnCancelListener()); // Not through touch event.
 
         mFormComiketBlock = (Spinner) view.findViewById(R.id.form_comiket_block);
         mFormComiketLayout = (Spinner) view.findViewById(R.id.form_comiket_layout);
@@ -466,7 +466,7 @@ public class ComiketCircleFormFragment extends Fragment {
         return this;
     }
 
-    private class OnCnacelListener implements View.OnTouchListener {
+    private class OnCancelListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return true;
