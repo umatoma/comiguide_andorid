@@ -24,7 +24,6 @@ public class SettingsActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.content_prefs_account, new AccountPreferenceFragment())
                 .replace(R.id.content_prefs_application, new ApplicationPreferenceFragment())
                 .commit();
     }
@@ -33,6 +32,7 @@ public class SettingsActivity extends ActionBarActivity {
 
         private AlertDialog mComiketIdDialog;
         private Preference mComiketIdPref;
+        private User mUser;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -60,27 +60,6 @@ public class SettingsActivity extends ActionBarActivity {
                     return true;
                 }
             });
-        }
-
-        private void storeComiketId(int comiket_id) {
-            getPreferenceManager()
-                    .getDefaultSharedPreferences(getActivity())
-                    .edit()
-                    .putInt(getString(R.string.prefs_key_comiket_id), comiket_id)
-                    .apply();
-            ComiGuide.COMIKET_ID = comiket_id;
-            mComiketIdPref.setSummary(String.format("C%d", comiket_id));
-        }
-    }
-
-    public static class AccountPreferenceFragment extends PreferenceFragment {
-
-        private User mUser;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.account_preferences);
 
             mUser = new User(getActivity());
 
@@ -95,6 +74,16 @@ public class SettingsActivity extends ActionBarActivity {
                     return false;
                 }
             });
+        }
+
+        private void storeComiketId(int comiket_id) {
+            getPreferenceManager()
+                    .getDefaultSharedPreferences(getActivity())
+                    .edit()
+                    .putInt(getString(R.string.prefs_key_comiket_id), comiket_id)
+                    .apply();
+            ComiGuide.COMIKET_ID = comiket_id;
+            mComiketIdPref.setSummary(String.format("C%d", comiket_id));
         }
     }
 }
