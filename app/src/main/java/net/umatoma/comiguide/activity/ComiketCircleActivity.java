@@ -327,7 +327,7 @@ public class ComiketCircleActivity extends ActionBarActivity
                 = (ComiketCircleMapFragment) manager.findFragmentByTag(ComiketCircleMapFragment.TAG);
 
         if (fragment != null) {
-            MapImageView mapImageView = (MapImageView) findViewById(R.id.circle_map);
+            MapImageView mapImageView = fragment.getMapImageView();
             ComiketLayout layout = circle.getComiketLayout();
             float dx = (float) layout.getPosX();
             float dy = (float) layout.getPosY();

@@ -1,27 +1,21 @@
 package net.umatoma.comiguide.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.view.ComiketCircleMapView;
+import net.umatoma.comiguide.view.MapImageView;
 
-public class ComiketCircleMapFragment extends Fragment {
+public class ComiketCircleMapFragment extends MapFragment {
 
     public static final String TAG = "ComiketCircleMapFragment";
 
@@ -29,14 +23,9 @@ public class ComiketCircleMapFragment extends Fragment {
     private int mCmapId;
     private int mDay;
     private OnFragmentInteractionListener mListener;
-    private FloatingActionButton mCreateCircleButton;
-    private FloatingActionButton mCircleListButton;
-    private FloatingActionButton mChangeMapButton;
-    private ComiketCircleMapView mMapImage;
     private ComiketCircle mComiketCircle;
     private ComiketCircleArrayAdapter mAdapter;
-    protected GestureDetector mGestureDetector;
-    private View mFooterView;
+    private ComiketCircleMapView mMapView;
 
     public static ComiketCircleMapFragment newInstance(int comiket_id, int cmap_id, int day) {
         return new ComiketCircleMapFragment(comiket_id, cmap_id, day);
@@ -65,65 +54,14 @@ public class ComiketCircleMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_comiket_circle_map, container, false);
-        mFooterView = view.findViewById(R.id.footer_content_inner);
-        mFooterView.setVisibility(View.GONE);
-        mFooterView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mGestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-        mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener(){
-            @Override
-            public boolean onSingleTapConfirmed (MotionEvent e) {
-                if (mListener != null) {
-                    mListener.onFooterViewClick(mComiketCircle);
-                }
-                return true;
-            }
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-            @Override
-            public boolean onDoubleTap (MotionEvent e) {
-                hideFooterView();
-                return true;
-            }
+        mMapView = new ComiketCircleMapView(getActivity());
+        mMapView.setImageResource(getMapImageResourceId(mDay, mCmapId));
+        mMapView.setComiketCircleArrayAdapter(mAdapter);
 
-            @Override
-            public void onLongPress (MotionEvent e) {
-                if (mListener != null) {
-                    mListener.onFooterViewLongClick(mComiketCircle);
-                }
-            }
-        });
-
-        mMapImage = (ComiketCircleMapView)view.findViewById(R.id.circle_map);
-        mMapImage.setImageResource(getMapImageResourceId(mDay, mCmapId));
-        mMapImage.setComiketCircleArrayAdapter(mAdapter);
-
-        mCreateCircleButton = (FloatingActionButton)view.findViewById(R.id.button_create_circle);
-        mCircleListButton   = (FloatingActionButton)view.findViewById(R.id.button_circle_list);
-        mChangeMapButton   = (FloatingActionButton)view.findViewById(R.id.button_change_map);
-
-        mCreateCircleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFunctionsButtonClicke(R.id.button_create_circle);
-            }
-        });
-        mCircleListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFunctionsButtonClicke(R.id.button_circle_list);
-            }
-        });
-        mChangeMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFunctionsButtonClicke(R.id.button_change_map);
-            }
-        });
+        FrameLayout mapImageContainerView = (FrameLayout) view.findViewById(R.id.circle_map_container);
+        mapImageContainerView.addView(mMapView);
         return view;
     }
 
@@ -161,44 +99,56 @@ public class ComiketCircleMapFragment extends Fragment {
     public void setComiketCircle(ComiketCircle circle) {
         mComiketCircle = circle;
 
-        mFooterView.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
-        ((TextView) mFooterView.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
-        ((TextView) mFooterView.findViewById(R.id.circle_name)).setText(circle.getCircleName());
-        ((TextView) mFooterView.findViewById(R.id.cost)).setText(circle.getCost());
-        ((TextView) mFooterView.findViewById(R.id.comment)).setText(circle.getComment());
+        View footerView = getFooterView();
+        footerView.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
+        ((TextView) footerView.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
+        ((TextView) footerView.findViewById(R.id.circle_name)).setText(circle.getCircleName());
+        ((TextView) footerView.findViewById(R.id.cost)).setText(circle.getCost());
+        ((TextView) footerView.findViewById(R.id.comment)).setText(circle.getComment());
     }
 
     public void setComiketCircleArrayAdapter(ComiketCircleArrayAdapter adapter) {
         mAdapter = adapter;
     }
 
-    public void showFooterView() {
-        PropertyValuesHolder holderAlpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mFooterView, holderAlpha);
-        animator.setDuration(300);
-        animator.start();
-        mFooterView.setVisibility(View.VISIBLE);
-    }
-
-    public void hideFooterView() {
-        PropertyValuesHolder holderAlpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mFooterView, holderAlpha);
-        animator.setDuration(300);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                View view = (View) ((ObjectAnimator) animation).getTarget();
-                view.setVisibility(View.GONE);
-            }
-        });
-        animator.start();
-    }
-
     public void hideFooterView(ComiketCircle circle) {
         if (mComiketCircle.getId() == circle.getId()) {
-            mFooterView.setVisibility(View.GONE);
+            hideFooterView();
         }
+    }
+
+    public MapImageView getMapImageView() {
+        return mMapView;
+    }
+
+    @Override
+    protected int getFooterLayoutResorce() {
+        return R.layout.comiket_circle_map_footer;
+    }
+
+    @Override
+    protected void onCreateButtonClick(View v) {
+        mListener.onFunctionsButtonClicke(R.id.button_create_circle);
+    }
+
+    @Override
+    protected void onShowListButtonClick(View v) {
+        mListener.onFunctionsButtonClicke(R.id.button_circle_list);
+    }
+
+    @Override
+    protected void onChangeMapButtonClick(View v) {
+        mListener.onFunctionsButtonClicke(R.id.button_change_map);
+    }
+
+    @Override
+    protected void onFooterViewClick(MotionEvent e) {
+        mListener.onFooterViewClick(mComiketCircle);
+    }
+
+    @Override
+    protected void onFooterViewLongClick(MotionEvent e) {
+        mListener.onFooterViewLongClick(mComiketCircle);
     }
 
     public interface OnFragmentInteractionListener {
