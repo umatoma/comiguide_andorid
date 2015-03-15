@@ -14,5 +14,9 @@
         <Preference
             android:key="@string/prefs_key_comiket_id"
             android:title="@string/prefs_title_comiket_id"/>
+
+        <Preference
+            android:key="@string/prefs_key_comic1_id"
+            android:title="@string/prefs_title_comic1_id"/>
     </PreferenceCategory>
 </PreferenceScreen>

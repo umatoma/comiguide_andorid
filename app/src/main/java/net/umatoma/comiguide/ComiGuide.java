@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 public class ComiGuide extends Application {
 
     public static int COMIKET_ID = 87;
+    public static int COMIC1_ID = 8;
 
     @Override
     public void onCreate () {
@@ -17,6 +18,12 @@ public class ComiGuide extends Application {
             COMIKET_ID = prefs.getInt(getString(R.string.prefs_key_comiket_id), COMIKET_ID);
         } else {
             prefs.edit().putInt(getString(R.string.prefs_key_comiket_id), COMIKET_ID).apply();
+        }
+
+        if (prefs.contains(getString(R.string.prefs_key_comic1_id))) {
+            COMIC1_ID = prefs.getInt(getString(R.string.prefs_key_comic1_id), COMIC1_ID);
+        } else {
+            prefs.edit().putInt(getString(R.string.prefs_key_comic1_id), COMIC1_ID).apply();
         }
     }
 }
