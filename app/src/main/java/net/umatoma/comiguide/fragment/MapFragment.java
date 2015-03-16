@@ -25,6 +25,7 @@ public class MapFragment extends Fragment {
     private GestureDetector mGestureDetector;
     private FrameLayout mFooterContainer;
     private View mFooterView;
+    private OnFunctionButtonClickListener mOnFunctionButtonClickListener;
 
     public MapFragment() {}
 
@@ -73,23 +74,35 @@ public class MapFragment extends Fragment {
         mCreateCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCreateButtonClick(v);
+                if (mOnFunctionButtonClickListener != null) {
+                    mOnFunctionButtonClickListener.onCreateButtonClick(v);
+                }
             }
         });
         mCircleListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListButtonClick(v);
+                if (mOnFunctionButtonClickListener != null) {
+                    mOnFunctionButtonClickListener.onShowListButtonClick(v);
+                }
             }
         });
         mChangeMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onChangeMapButtonClick(v);
+                if (mOnFunctionButtonClickListener != null) {
+                    mOnFunctionButtonClickListener.onChangeMapButtonClick(v);
+                }
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mOnFunctionButtonClickListener = null;
     }
 
     public void showFooterView() {
@@ -115,6 +128,10 @@ public class MapFragment extends Fragment {
         animator.start();
     }
 
+    public void setOnFunctionButtonClickListener(OnFunctionButtonClickListener listener) {
+        mOnFunctionButtonClickListener = listener;
+    }
+
     protected View getFooterView() {
         return mFooterView;
     }
@@ -122,12 +139,6 @@ public class MapFragment extends Fragment {
     protected int getFooterLayoutResorce() {
         return -1;
     }
-
-    protected void onCreateButtonClick(View v) {}
-
-    protected void onShowListButtonClick(View v) {}
-
-    protected void onChangeMapButtonClick(View v) {}
 
     protected void onFooterViewClick(MotionEvent e) {}
 

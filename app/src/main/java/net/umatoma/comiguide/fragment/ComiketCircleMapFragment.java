@@ -22,7 +22,7 @@ public class ComiketCircleMapFragment extends MapFragment {
     private int mComiketId;
     private int mCmapId;
     private int mDay;
-    private OnFragmentInteractionListener mListener;
+    private OnFooterViewClickListener mListener;
     private ComiketCircle mComiketCircle;
     private ComiketCircleArrayAdapter mAdapter;
     private ComiketCircleMapView mMapView;
@@ -43,7 +43,7 @@ public class ComiketCircleMapFragment extends MapFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnFooterViewClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -127,21 +127,6 @@ public class ComiketCircleMapFragment extends MapFragment {
     }
 
     @Override
-    protected void onCreateButtonClick(View v) {
-        mListener.onFunctionsButtonClicke(R.id.button_create_circle);
-    }
-
-    @Override
-    protected void onShowListButtonClick(View v) {
-        mListener.onFunctionsButtonClicke(R.id.button_circle_list);
-    }
-
-    @Override
-    protected void onChangeMapButtonClick(View v) {
-        mListener.onFunctionsButtonClicke(R.id.button_change_map);
-    }
-
-    @Override
     protected void onFooterViewClick(MotionEvent e) {
         mListener.onFooterViewClick(mComiketCircle);
     }
@@ -151,8 +136,7 @@ public class ComiketCircleMapFragment extends MapFragment {
         mListener.onFooterViewLongClick(mComiketCircle);
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFunctionsButtonClicke(int id);
+    public interface OnFooterViewClickListener {
         public void onFooterViewClick(ComiketCircle circle);
         public void onFooterViewLongClick(ComiketCircle circle);
     }
