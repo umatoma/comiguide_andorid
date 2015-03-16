@@ -1,12 +1,10 @@
 package net.umatoma.comiguide.activity;
 
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
