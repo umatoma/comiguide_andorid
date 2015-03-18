@@ -1,30 +1,27 @@
 package net.umatoma.comiguide.activity;
 
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.Comic1CircleAdapter;
+import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
+import net.umatoma.comiguide.model.Comic1Circle;
 
-public class Comic1CircleActivity extends ActionBarActivity {
+public class Comic1CircleActivity extends MapActivity
+        implements Comic1CircleMapFragment.OnFooterViewClickListener {
 
     private int mComic1Id;
-    private DrawerLayout mDrawerLayout;
+    private Comic1CircleMapFragment mMapFragment;
+    private Comic1CircleAdapter mCircleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comic1_circle);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mCircleAdapter = new Comic1CircleAdapter(this);
 
         initialize(ComiGuide.COMIC1_ID);
     }
@@ -32,5 +29,25 @@ public class Comic1CircleActivity extends ActionBarActivity {
     private void initialize(int comic1_id) {
         mComic1Id = comic1_id;
         getSupportActionBar().setTitle(String.format("COMIC1☆%d", mComic1Id));
+
+        mMapFragment = Comic1CircleMapFragment.getInstance(mComic1Id);
+        mMapFragment.setCircleAdapter(mCircleAdapter);
+        mMapFragment.setOnFooterViewClickListener(this);
+        setMapFragment(mMapFragment);
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.content_frame, mMapFragment, Comic1CircleMapFragment.TAG);
+        transaction.commit();
+    }
+
+    @Override
+    public void onFooterViewClick(Comic1Circle circle) {
+
+    }
+
+    @Override
+    public void onFooterViewLongClick(Comic1Circle circle) {
+
     }
 }

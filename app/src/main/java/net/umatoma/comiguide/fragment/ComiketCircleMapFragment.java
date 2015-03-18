@@ -62,6 +62,7 @@ public class ComiketCircleMapFragment extends MapFragment {
 
         FrameLayout mapImageContainerView = (FrameLayout) view.findViewById(R.id.circle_map_container);
         mapImageContainerView.addView(mMapView);
+
         return view;
     }
 
