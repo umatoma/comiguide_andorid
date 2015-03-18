@@ -53,4 +53,5 @@
 
     <string name="dialog_ok">決定</string>
     <string name="dialog_cancel">キャンセル</string>
+    <string name="title_activity_map">MapActivity</string>
 </resources>

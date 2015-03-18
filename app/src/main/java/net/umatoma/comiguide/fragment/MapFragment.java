@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.view.MapImageView;
 
 public class MapFragment extends Fragment {
 
@@ -23,6 +24,7 @@ public class MapFragment extends Fragment {
     private FloatingActionButton mCircleListButton;
     private FloatingActionButton mChangeMapButton;
     private GestureDetector mGestureDetector;
+    private MapImageView mMapImageView;
     private FrameLayout mFooterContainer;
     private View mFooterView;
     private OnFunctionButtonClickListener mOnFunctionButtonClickListener;
@@ -130,6 +132,16 @@ public class MapFragment extends Fragment {
 
     public void setOnFunctionButtonClickListener(OnFunctionButtonClickListener listener) {
         mOnFunctionButtonClickListener = listener;
+    }
+
+    public void setMapPosition(float dx, float dy) {
+        if (mMapImageView != null) {
+            mMapImageView.setCurrentPosition(dx, dy);
+        }
+    }
+
+    protected void setMapImageView(MapImageView view) {
+        mMapImageView = view;
     }
 
     protected View getFooterView() {

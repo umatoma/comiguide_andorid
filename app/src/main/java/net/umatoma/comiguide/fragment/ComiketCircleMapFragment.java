@@ -13,7 +13,6 @@ import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.view.ComiketCircleMapView;
-import net.umatoma.comiguide.view.MapImageView;
 
 public class ComiketCircleMapFragment extends MapFragment {
 
@@ -59,6 +58,7 @@ public class ComiketCircleMapFragment extends MapFragment {
         mMapView = new ComiketCircleMapView(getActivity());
         mMapView.setImageResource(getMapImageResourceId(mDay, mCmapId));
         mMapView.setComiketCircleArrayAdapter(mAdapter);
+        setMapImageView(mMapView);
 
         FrameLayout mapImageContainerView = (FrameLayout) view.findViewById(R.id.circle_map_container);
         mapImageContainerView.addView(mMapView);
@@ -115,10 +115,6 @@ public class ComiketCircleMapFragment extends MapFragment {
         if (mComiketCircle.getId() == circle.getId()) {
             hideFooterView();
         }
-    }
-
-    public MapImageView getMapImageView() {
-        return mMapView;
     }
 
     @Override
