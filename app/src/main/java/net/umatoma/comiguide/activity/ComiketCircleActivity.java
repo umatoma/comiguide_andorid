@@ -106,13 +106,13 @@ public class ComiketCircleActivity extends MapActivity
     }
 
     @Override
-    public void onShowListButtonClick(View v) {
-        getDrawerLayout().openDrawer(Gravity.LEFT);
+    public void onChangeMapButtonClick(View v) {
+        showSelectMapDialog();
     }
 
     @Override
-    public void onChangeMapButtonClick(View v) {
-        showSelectMapDialog();
+    public void onShowListButtonClick(View v) {
+        getDrawerLayout().openDrawer(Gravity.LEFT);
     }
 
     private void setTitle(int comiket_id, int day, int cmap_id) {
@@ -207,12 +207,6 @@ public class ComiketCircleActivity extends MapActivity
     @Override
     public void onComiketCircleCreate(ComiketCircle circle) {
         mCircleArrayAdapter.add(circle);
-    }
-
-    private void setRefreshing(boolean refreshing) {
-        if (mCircleListFragment != null) {
-            mCircleListFragment.setRefreshing(refreshing);
-        }
     }
 
     private void loadComiketCircles(int comiket_id, int day, int cmap_id) {

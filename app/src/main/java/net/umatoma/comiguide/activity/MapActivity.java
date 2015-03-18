@@ -55,6 +55,12 @@ public class MapActivity extends ActionBarActivity implements OnFunctionButtonCl
         mDrawerLayout.closeDrawers();
     }
 
+    protected void setRefreshing(boolean refreshing) {
+        if (mCircleListFragment != null) {
+            mCircleListFragment.setRefreshing(refreshing);
+        }
+    }
+
     @Override
     public void onCreateButtonClick(View v) {
 
