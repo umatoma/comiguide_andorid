@@ -15,6 +15,9 @@ import net.umatoma.comiguide.fragment.Comic1CircleListFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
 import net.umatoma.comiguide.fragment.OnComic1CircleSelectListener;
 import net.umatoma.comiguide.model.Comic1Circle;
+import net.umatoma.comiguide.model.Comic1Layout;
+import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.model.ComiketLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,6 +137,18 @@ public class Comic1CircleActivity extends MapActivity
 
     @Override
     public void onCircleSelect(Comic1Circle circle) {
+        showCircleInfo(circle);
+    }
 
+    private void showCircleInfo(Comic1Circle circle) {
+        Comic1Layout layout = circle.getComic1Layout();
+        float dx = (float) layout.getPosX();
+        float dy = (float) layout.getPosY();
+
+        mMapFragment.setMapPosition(dx, dy);
+        mMapFragment.setCircle(circle);
+        mMapFragment.showFooterView();
+
+        closeDrawers();
     }
 }

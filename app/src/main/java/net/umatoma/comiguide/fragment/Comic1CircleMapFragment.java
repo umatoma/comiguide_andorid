@@ -6,10 +6,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.Comic1CircleAdapter;
 import net.umatoma.comiguide.model.Comic1Circle;
+import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.view.Comic1CircleMapView;
 import net.umatoma.comiguide.view.ComiketCircleMapView;
 import net.umatoma.comiguide.view.MapImageView;
 
@@ -21,7 +24,7 @@ public class Comic1CircleMapFragment extends MapFragment {
     private Comic1Circle mCircle;
     private Comic1CircleAdapter mCircleAdapter;
     private OnFooterViewClickListener mOnFooterViewClickListener;
-    private MapImageView mMapImageView;
+    private Comic1CircleMapView mMapImageView;
 
     public static Comic1CircleMapFragment getInstance(int comic1_id) {
         return new Comic1CircleMapFragment(comic1_id);
@@ -41,8 +44,9 @@ public class Comic1CircleMapFragment extends MapFragment {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        mMapImageView = new ComiketCircleMapView(getActivity());
+        mMapImageView = new Comic1CircleMapView(getActivity());
         mMapImageView.setImageResource(R.drawable.ccircle_map_d1_e123);
+        mMapImageView.setComic1CircleAdapter(mCircleAdapter);
         setMapImageView(mMapImageView);
 
         FrameLayout mapImageContainerView = (FrameLayout) view.findViewById(R.id.circle_map_container);
@@ -83,6 +87,17 @@ public class Comic1CircleMapFragment extends MapFragment {
 
     public void setCircleAdapter(Comic1CircleAdapter adapter) {
         mCircleAdapter = adapter;
+    }
+
+    public void setCircle(Comic1Circle circle) {
+        mCircle = circle;
+
+        View footerView = getFooterView();
+        footerView.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
+        ((TextView) footerView.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
+        ((TextView) footerView.findViewById(R.id.circle_name)).setText(circle.getCircleName());
+        ((TextView) footerView.findViewById(R.id.cost)).setText(circle.getCost());
+        ((TextView) footerView.findViewById(R.id.comment)).setText(circle.getComment());
     }
 
     public interface OnFooterViewClickListener {
