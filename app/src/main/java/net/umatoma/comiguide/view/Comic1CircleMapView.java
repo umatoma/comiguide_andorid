@@ -12,7 +12,7 @@ import net.umatoma.comiguide.model.Comic1Layout;
 
 public class Comic1CircleMapView extends MapImageView {
 
-    private static final int CIRCLE_CPACE_SIZE = 11;
+    private static final int CIRCLE_CPACE_SIZE = 13;
     private Comic1CircleAdapter mCircleAdapter;
 
     public Comic1CircleMapView(Context context) {
@@ -51,8 +51,8 @@ public class Comic1CircleMapView extends MapImageView {
 
 
                 float right, bottom;
-                float left = (float) layout.getPosX() * mImageScale * scale + trans_x;
-                float top = (float) layout.getPosY() * mImageScale * scale + trans_y;
+                float left = (float) layout.getMapPosX() * mImageScale * scale + trans_x;
+                float top = (float) layout.getMapPosY() * mImageScale * scale + trans_y;
                 int layout_type = layout.getLayout();
                 switch (layout_type) {
                     case 1:

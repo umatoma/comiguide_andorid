@@ -11,6 +11,8 @@ public class Comic1Layout {
     private int mLayout = 1;
     private int mPosX;
     private int mPosY;
+    private int mMapPosX;
+    private int mMapPosY;
     private Comic1Block mComic1Block;
 
     public Comic1Layout(JSONObject layout) throws JSONException {
@@ -20,6 +22,8 @@ public class Comic1Layout {
         mLayout = layout.getInt("layout");
         mPosX = layout.getInt("pos_x");
         mPosY = layout.getInt("pos_y");
+        mMapPosX = layout.getInt("map_pos_x");
+        mMapPosY = layout.getInt("map_pos_y");
         mComic1Block = new Comic1Block(layout.getJSONObject("c1block"));
     }
 
@@ -45,6 +49,14 @@ public class Comic1Layout {
 
     public int getPosY() {
         return mPosY;
+    }
+
+    public int getMapPosX() {
+        return mMapPosX;
+    }
+
+    public int getMapPosY() {
+        return mMapPosY;
     }
 
     public Comic1Block getComic1Block() {

@@ -45,7 +45,7 @@ public class Comic1CircleMapFragment extends MapFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         mMapImageView = new Comic1CircleMapView(getActivity());
-        mMapImageView.setImageResource(R.drawable.ccircle_map_d1_e123);
+        mMapImageView.setImageResource(R.drawable.c1circle_map_8);
         mMapImageView.setComic1CircleAdapter(mCircleAdapter);
         setMapImageView(mMapImageView);
 

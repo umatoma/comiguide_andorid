@@ -142,8 +142,8 @@ public class Comic1CircleActivity extends MapActivity
 
     private void showCircleInfo(Comic1Circle circle) {
         Comic1Layout layout = circle.getComic1Layout();
-        float dx = (float) layout.getPosX();
-        float dy = (float) layout.getPosY();
+        float dx = (float) layout.getMapPosX();
+        float dy = (float) layout.getMapPosY();
 
         mMapFragment.setMapPosition(dx, dy);
         mMapFragment.setCircle(circle);
