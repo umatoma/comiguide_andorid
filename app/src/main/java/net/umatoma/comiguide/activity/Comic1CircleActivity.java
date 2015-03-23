@@ -1,9 +1,11 @@
 package net.umatoma.comiguide.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,12 +16,10 @@ import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleListFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
-import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
+import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.OnComic1CircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComic1CircleSelectListener;
 import net.umatoma.comiguide.fragment.OnComic1CircleUpdateListener;
-import net.umatoma.comiguide.model.Comic1Circle;
-import net.umatoma.comiguide.model.Comic1Layout;
 import net.umatoma.comiguide.model.Comic1Circle;
 import net.umatoma.comiguide.model.Comic1Layout;
 
@@ -141,6 +141,26 @@ public class Comic1CircleActivity extends MapActivity
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.content_frame, fragment, Comic1CircleFormFragment.TAG)
                 .commit();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            FragmentManager manager = getSupportFragmentManager();
+            Fragment fragment = manager.findFragmentByTag(Comic1CircleFormFragment.TAG);
+            if (getDrawerLayout().isDrawerOpen(Gravity.LEFT)) {
+                getDrawerLayout().closeDrawer(Gravity.LEFT);
+                return false;
+            } else if (fragment != null) {
+                manager.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .remove(fragment)
+                        .commit();
+                return false;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
