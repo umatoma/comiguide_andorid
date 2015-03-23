@@ -150,7 +150,7 @@ public class Comic1CircleActivity extends MapActivity
 
     @Override
     public void onCreateButtonClick(View v) {
-        // showComic1CircleCreateForm();
+        showComic1CircleCreateForm();
     }
 
     @Override
@@ -181,11 +181,15 @@ public class Comic1CircleActivity extends MapActivity
 
     @Override
     public void onComic1CircleCreate(Comic1Circle circle) {
-
+        mCircleAdapter.add(circle);
+        mMapFragment.setCircle(circle);
+        mMapFragment.showFooterView();
     }
 
     @Override
     public void onComic1CircleUpdate(Comic1Circle circle) {
-
+        mCircleAdapter.updateItem(circle);
+        mMapFragment.setCircle(circle);
+        mMapFragment.showFooterView();
     }
 }
