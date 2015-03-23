@@ -31,7 +31,7 @@ public class Comic1Layout {
         return mId;
     }
 
-    public int getCblockId() {
+    public int getC1blockId() {
         return mC1blockId;
     }
 

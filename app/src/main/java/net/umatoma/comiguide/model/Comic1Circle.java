@@ -43,8 +43,8 @@ public class Comic1Circle {
         mComic1Layout = new Comic1Layout(circle.getJSONObject("c1layout"));
     }
 
-    public Comic1Circle(int Comic1_id, int day) {
-        mComic1Id = Comic1_id;
+    public Comic1Circle(int comic1_id) {
+        mComic1Id = comic1_id;
     }
 
     public int getId() {

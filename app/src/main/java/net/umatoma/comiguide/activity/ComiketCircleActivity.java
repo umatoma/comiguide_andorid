@@ -4,11 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -27,12 +22,10 @@ import net.umatoma.comiguide.fragment.ComiketCircleMenuDialogFragment;
 import net.umatoma.comiguide.fragment.OnComiketCircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleSelectListener;
 import net.umatoma.comiguide.fragment.OnComiketCircleUpdateListener;
-import net.umatoma.comiguide.fragment.OnFunctionButtonClickListener;
 import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
 import net.umatoma.comiguide.util.ComiketCircleMapSharedPref;
-import net.umatoma.comiguide.view.MapImageView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -312,7 +305,7 @@ public class ComiketCircleActivity extends MapActivity
                 }
 
                 Toast.makeText(ComiketCircleActivity.this,
-                        getString(R.string.message_success_comiket_circle_delete), Toast.LENGTH_SHORT).show();
+                        getString(R.string.message_success_circle_delete), Toast.LENGTH_SHORT).show();
             }
 
             @Override

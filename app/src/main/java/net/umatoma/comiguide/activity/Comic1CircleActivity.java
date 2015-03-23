@@ -11,20 +11,24 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.Comic1CircleAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleListFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
+import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
+import net.umatoma.comiguide.fragment.OnComic1CircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComic1CircleSelectListener;
+import net.umatoma.comiguide.fragment.OnComic1CircleUpdateListener;
 import net.umatoma.comiguide.model.Comic1Circle;
 import net.umatoma.comiguide.model.Comic1Layout;
-import net.umatoma.comiguide.model.ComiketCircle;
-import net.umatoma.comiguide.model.ComiketLayout;
+import net.umatoma.comiguide.model.Comic1Circle;
+import net.umatoma.comiguide.model.Comic1Layout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Comic1CircleActivity extends MapActivity
-        implements Comic1CircleMapFragment.OnFooterViewClickListener, OnComic1CircleSelectListener {
+        implements Comic1CircleMapFragment.OnFooterViewClickListener, OnComic1CircleSelectListener, OnComic1CircleCreateListener, OnComic1CircleUpdateListener {
 
     private int mComic1Id;
     private Comic1CircleMapFragment mMapFragment;
@@ -105,6 +109,40 @@ public class Comic1CircleActivity extends MapActivity
         }
     }
 
+    private void showCircleInfo(Comic1Circle circle) {
+        Comic1Layout layout = circle.getComic1Layout();
+        float dx = (float) layout.getMapPosX();
+        float dy = (float) layout.getMapPosY();
+
+        mMapFragment.setMapPosition(dx, dy);
+        mMapFragment.setCircle(circle);
+        mMapFragment.showFooterView();
+
+        closeDrawers();
+    }
+
+    private void showCircleEditFragment(Comic1Circle circle) {
+        Comic1CircleFormFragment fragment = new Comic1CircleFormFragment(circle);
+        fragment.setOnComic1CircleUpdateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, Comic1CircleFormFragment.TAG)
+                .commit();
+    }
+
+    private void showComic1CircleCreateForm() {
+        Comic1CircleFormFragment fragment = new Comic1CircleFormFragment(mComic1Id);
+        fragment.setOnComic1CircleCreateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, Comic1CircleFormFragment.TAG)
+                .commit();
+    }
+
     @Override
     protected void onCircleListRefresh() {
         loadCircles(mComic1Id);
@@ -112,7 +150,7 @@ public class Comic1CircleActivity extends MapActivity
 
     @Override
     public void onCreateButtonClick(View v) {
-        // showComiketCircleCreateForm();
+        // showComic1CircleCreateForm();
     }
 
     @Override
@@ -127,7 +165,7 @@ public class Comic1CircleActivity extends MapActivity
 
     @Override
     public void onFooterViewClick(Comic1Circle circle) {
-
+        showCircleEditFragment(circle);
     }
 
     @Override
@@ -140,15 +178,14 @@ public class Comic1CircleActivity extends MapActivity
         showCircleInfo(circle);
     }
 
-    private void showCircleInfo(Comic1Circle circle) {
-        Comic1Layout layout = circle.getComic1Layout();
-        float dx = (float) layout.getMapPosX();
-        float dy = (float) layout.getMapPosY();
 
-        mMapFragment.setMapPosition(dx, dy);
-        mMapFragment.setCircle(circle);
-        mMapFragment.showFooterView();
+    @Override
+    public void onComic1CircleCreate(Comic1Circle circle) {
 
-        closeDrawers();
+    }
+
+    @Override
+    public void onComic1CircleUpdate(Comic1Circle circle) {
+
     }
 }
