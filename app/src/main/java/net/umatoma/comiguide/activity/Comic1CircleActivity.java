@@ -16,10 +16,12 @@ import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleListFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
-import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
+import net.umatoma.comiguide.fragment.Comic1CircleMenuDialogFragment;
+import net.umatoma.comiguide.fragment.ComiketCircleMenuDialogFragment;
 import net.umatoma.comiguide.fragment.OnComic1CircleCreateListener;
 import net.umatoma.comiguide.fragment.OnComic1CircleSelectListener;
 import net.umatoma.comiguide.fragment.OnComic1CircleUpdateListener;
+import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.Comic1Circle;
 import net.umatoma.comiguide.model.Comic1Layout;
 
@@ -189,8 +191,24 @@ public class Comic1CircleActivity extends MapActivity
     }
 
     @Override
-    public void onFooterViewLongClick(Comic1Circle circle) {
-
+    public void onFooterViewLongClick(final Comic1Circle circle) {
+        Comic1CircleMenuDialogFragment fragment = Comic1CircleMenuDialogFragment.newInstance(circle);
+        fragment.setOnMenuDialogSelectListener(new OnMenuDialogSelectListener() {
+            @Override
+            public void onMenuSelect(int menuId) {
+                switch (menuId) {
+                    case ComiketCircleMenuDialogFragment.MENU_MAP:
+                        showCircleInfo(circle);
+                        return;
+                    case ComiketCircleMenuDialogFragment.MENU_EDIT:
+                        showCircleEditFragment(circle);
+                        return;
+                    case ComiketCircleMenuDialogFragment.MENU_DELETE:
+                        return;
+                }
+            }
+        });
+        fragment.show(getSupportFragmentManager(), ComiketCircleMenuDialogFragment.TAG);
     }
 
     @Override
