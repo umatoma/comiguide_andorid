@@ -24,6 +24,7 @@ import net.umatoma.comiguide.fragment.OnComic1CircleUpdateListener;
 import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.Comic1Circle;
 import net.umatoma.comiguide.model.Comic1Layout;
+import net.umatoma.comiguide.model.ComiketCircle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,7 @@ public class Comic1CircleActivity extends MapActivity
     private Comic1CircleListFragment mCircleListFragment;
     private Comic1CircleAdapter mCircleAdapter;
     private ComiGuideApiClient.HttpClientTask mLoadCirclesTask;
+    private ComiGuideApiClient.HttpClientTask mDeleteCircleTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,32 @@ public class Comic1CircleActivity extends MapActivity
         } else {
             Toast.makeText(Comic1CircleActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void deleteCircle(final Comic1Circle circle) {
+        String path = String.format("api/v1/c1circle_checklists/%d", circle.getId());
+        mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
+        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                mCircleAdapter.remove(circle);
+
+                if (mMapFragment != null) {
+                    mMapFragment.hideFooterView(circle);
+                }
+
+                Toast.makeText(Comic1CircleActivity.this,
+                        getString(R.string.message_success_circle_delete), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFail() {
+                Toast.makeText(Comic1CircleActivity.this,
+                        getString(R.string.message_error_common), Toast.LENGTH_SHORT).show();
+            }
+        });
+        mDeleteCircleTask.setProgressDialog(this);
+        mDeleteCircleTask.execute();
     }
 
     private void showCircleInfo(Comic1Circle circle) {
@@ -204,6 +232,7 @@ public class Comic1CircleActivity extends MapActivity
                         showCircleEditFragment(circle);
                         return;
                     case ComiketCircleMenuDialogFragment.MENU_DELETE:
+                        deleteCircle(circle);
                         return;
                 }
             }

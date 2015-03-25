@@ -100,6 +100,12 @@ public class Comic1CircleMapFragment extends MapFragment {
         ((TextView) footerView.findViewById(R.id.comment)).setText(circle.getComment());
     }
 
+    public void hideFooterView(Comic1Circle circle) {
+        if (mCircle.getId() == circle.getId()) {
+            hideFooterView();
+        }
+    }
+
     public interface OnFooterViewClickListener {
         public void onFooterViewClick(Comic1Circle circle);
         public void onFooterViewLongClick(Comic1Circle circle);
