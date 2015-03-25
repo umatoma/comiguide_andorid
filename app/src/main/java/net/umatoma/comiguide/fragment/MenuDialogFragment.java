@@ -33,7 +33,7 @@ public class MenuDialogFragment extends DialogFragment implements AdapterView.On
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_comiket_circle_menu_dialog, null, false);
+        View view = inflater.inflate(R.layout.fragment_menu_dialog, null, false);
 
         mAdapter = new MenuListAdapter(getActivity());
         mAdapter.addAll(mMenuOptionList);
