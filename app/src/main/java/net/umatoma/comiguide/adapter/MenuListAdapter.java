@@ -40,10 +40,12 @@ public class MenuListAdapter extends ArrayAdapter<MenuListAdapter.MenuOption> {
 
     public static class MenuOption {
 
-        private int menuIconId;
-        private String menuText;
+        public int menuId;
+        public int menuIconId;
+        public String menuText;
 
-        public MenuOption(int icon_id, String menu_text) {
+        public MenuOption(int id, int icon_id, String menu_text) {
+            menuId = id;
             menuIconId = icon_id;
             menuText = menu_text;
         }

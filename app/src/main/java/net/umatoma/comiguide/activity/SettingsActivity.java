@@ -24,7 +24,6 @@ public class SettingsActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.content_prefs_account, new AccountPreferenceFragment())
                 .replace(R.id.content_prefs_application, new ApplicationPreferenceFragment())
                 .commit();
     }
@@ -33,12 +32,16 @@ public class SettingsActivity extends ActionBarActivity {
 
         private AlertDialog mComiketIdDialog;
         private Preference mComiketIdPref;
+        private AlertDialog mComic1IdDialog;
+        private Preference mComic1IdPref;
+        private User mUser;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.application_preferences);
 
+            // COMIKET_ID
             mComiketIdDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.prefs_title_comiket_id))
                     .setItems(R.array.prefs_entries_comiket_id, new DialogInterface.OnClickListener() {
@@ -60,30 +63,32 @@ public class SettingsActivity extends ActionBarActivity {
                     return true;
                 }
             });
-        }
 
-        private void storeComiketId(int comiket_id) {
-            getPreferenceManager()
-                    .getDefaultSharedPreferences(getActivity())
-                    .edit()
-                    .putInt(getString(R.string.prefs_key_comiket_id), comiket_id)
-                    .apply();
-            ComiGuide.COMIKET_ID = comiket_id;
-            mComiketIdPref.setSummary(String.format("C%d", comiket_id));
-        }
-    }
+            // COMIC1_ID
+            mComic1IdDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.prefs_title_comic1_id))
+                    .setItems(R.array.prefs_entries_comic1_id, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int[] values = getResources().getIntArray(R.array.prefs_entry_values_comic1_id);
+                            storeComic1Id(values[which]);
+                        }
+                    })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .create();
 
-    public static class AccountPreferenceFragment extends PreferenceFragment {
+            mComic1IdPref = findPreference(getString(R.string.prefs_key_comic1_id));
+            mComic1IdPref.setSummary(String.format("COMIC1☆%d", ComiGuide.COMIC1_ID));
+            mComic1IdPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mComic1IdDialog.show();
+                    return true;
+                }
+            });
 
-        private User mUser;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.account_preferences);
-
+            // ACCOUNT
             mUser = new User(getActivity());
-
             Preference logoutPref = findPreference(getString(R.string.prefs_key_account_logout));
             logoutPref.setSummary(mUser.getUserName());
             logoutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -95,6 +100,26 @@ public class SettingsActivity extends ActionBarActivity {
                     return false;
                 }
             });
+        }
+
+        private void storeComiketId(int comiket_id) {
+            getPreferenceManager()
+                    .getDefaultSharedPreferences(getActivity())
+                    .edit()
+                    .putInt(getString(R.string.prefs_key_comiket_id), comiket_id)
+                    .apply();
+            ComiGuide.COMIKET_ID = comiket_id;
+            mComiketIdPref.setSummary(String.format("C%d", comiket_id));
+        }
+
+        private void storeComic1Id(int comic1_id) {
+            getPreferenceManager()
+                    .getDefaultSharedPreferences(getActivity())
+                    .edit()
+                    .putInt(getString(R.string.prefs_key_comic1_id), comic1_id)
+                    .apply();
+            ComiGuide.COMIC1_ID = comic1_id;
+            mComic1IdPref.setSummary(String.format("COMIC1☆%d", comic1_id));
         }
     }
 }

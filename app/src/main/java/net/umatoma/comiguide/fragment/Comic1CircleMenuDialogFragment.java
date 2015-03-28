@@ -1,32 +1,31 @@
 package net.umatoma.comiguide.fragment;
 
-
 import android.app.Dialog;
 import android.os.Bundle;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.MenuListAdapter;
-import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.model.Comic1Circle;
 
 import java.util.ArrayList;
 
-public class ComiketCircleMenuDialogFragment extends MenuDialogFragment {
+public class Comic1CircleMenuDialogFragment extends MenuDialogFragment {
 
-    public static final String TAG = "ComiketCircleMenuDialogFragment";
+    public static final String TAG = "Comic1CircleMenuFragment";
 
     public static final int MENU_MAP = 1;
     public static final int MENU_EDIT = 2;
     public static final int MENU_DELETE = 3;
 
-    public static ComiketCircleMenuDialogFragment newInstance(ComiketCircle circle) {
-        return new ComiketCircleMenuDialogFragment(circle);
+    public static Comic1CircleMenuDialogFragment newInstance(Comic1Circle circle) {
+        return new Comic1CircleMenuDialogFragment(circle);
     }
 
-    public ComiketCircleMenuDialogFragment() {
+    public Comic1CircleMenuDialogFragment() {
         // Required empty public constructor
     }
 
-    private ComiketCircleMenuDialogFragment(ComiketCircle circle) {
+    private Comic1CircleMenuDialogFragment(Comic1Circle circle) {
         setTitle(circle.getCircleName());
     }
 

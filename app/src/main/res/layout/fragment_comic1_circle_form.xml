@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    tools:context="net.umatoma.comiguide.fragment.ComiketCircleFormFragment">
+    tools:context="net.umatoma.comiguide.fragment.Comic1CircleFormFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                         android:text="@string/form_circle_block" />
 
                     <Spinner
-                        android:id="@+id/form_comiket_block"
+                        android:id="@+id/form_block"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -53,7 +53,7 @@
                         android:text="@string/form_circle_layout" />
 
                     <Spinner
-                        android:id="@+id/form_comiket_layout"
+                        android:id="@+id/form_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -71,7 +71,7 @@
                         android:text="@string/form_circle_space_no_sub" />
 
                     <Spinner
-                        android:id="@+id/form_comiket_circle_space_no_sub"
+                        android:id="@+id/form_space_no_sub"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -86,7 +86,7 @@
                 android:text="@string/form_circle_name" />
 
             <EditText
-                android:id="@+id/form_comiket_circle_name"
+                android:id="@+id/form_circle_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true" />
@@ -100,7 +100,7 @@
                 android:text="@string/form_circle_url" />
 
             <EditText
-                android:id="@+id/form_comiket_circle_url"
+                android:id="@+id/form_circle_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true" />
@@ -114,7 +114,7 @@
                 android:text="@string/form_circle_comment" />
 
             <EditText
-                android:id="@+id/form_comiket_circle_comment"
+                android:id="@+id/form_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true" />
@@ -128,14 +128,14 @@
                 android:text="@string/form_circle_cost" />
 
             <EditText
-                android:id="@+id/form_comiket_circle_cost"
+                android:id="@+id/form_circle_cost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true" />
 
             <!-- Color -->
             <RadioGroup
-                android:id="@+id/form_comiket_circle_color"
+                android:id="@+id/form_circle_color"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
