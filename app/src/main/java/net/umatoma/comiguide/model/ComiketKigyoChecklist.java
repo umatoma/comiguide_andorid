@@ -28,7 +28,7 @@ public class ComiketKigyoChecklist {
 
     public ComiketKigyoChecklist(JSONObject circle) throws JSONException {
         mId = circle.getInt("id");
-        mCkigyoId = circle.getInt("clayout_id");
+        mCkigyoId = circle.getInt("ckigyo_id");
         mComment = circle.getString("comment");
         mCost = circle.getString("cost");
         mColor = circle.getString("color");
