@@ -13,6 +13,7 @@ import android.widget.ListView;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.activity.Comic1CircleActivity;
 import net.umatoma.comiguide.activity.ComiketCircleActivity;
+import net.umatoma.comiguide.activity.ComiketKigyoActivity;
 import net.umatoma.comiguide.activity.SettingsActivity;
 import net.umatoma.comiguide.adapter.SideMenuAdapter;
 
@@ -58,6 +59,10 @@ public class SideMenuFragment extends Fragment {
             SideMenuAdapter.MenuEnum menuEnum = mMenuAdapter.getItem(position);
             Intent intent;
             switch (menuEnum) {
+                case COMIKET_KIGYO:
+                    intent = new Intent(getActivity(), ComiketKigyoActivity.class);
+                    startActivity(intent);
+                    return;
                 case COMIKET_CIRCLE:
                     intent = new Intent(getActivity(), ComiketCircleActivity.class);
                     startActivity(intent);

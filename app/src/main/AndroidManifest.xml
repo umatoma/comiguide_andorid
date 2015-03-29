@@ -40,6 +40,10 @@
             android:name=".activity.Comic1CircleActivity"
             android:label="@string/title_activity_comic1_circle" >
         </activity>
+        <activity
+            android:name=".activity.ComiketKigyoActivity"
+            android:label="@string/title_activity_comiket_kigyo" >
+        </activity>
     </application>
 
 </manifest>
