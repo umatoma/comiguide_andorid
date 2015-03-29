@@ -12,7 +12,8 @@ import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
 public class ComiketKigyoMapView extends MapImageView {
 
-    private static final int BOOTH_SIZE = 18;
+    private static final int BOOTH_SIZE_X = 36;
+    private static final int BOOTH_SIZE_Y = 18;
     private ComiketKigyoChecklistAdapter mChecklistAdapter;
 
     public ComiketKigyoMapView(Context context) {
@@ -38,8 +39,8 @@ public class ComiketKigyoMapView extends MapImageView {
             float scale = values[Matrix.MSCALE_X];
             float trans_x = values[Matrix.MTRANS_X];
             float trans_y = values[Matrix.MTRANS_Y];
-            float space_size = (float) BOOTH_SIZE * mImageScale * scale;
-            float space_size_half = space_size / 2.0f;
+            float space_size_x = (float) BOOTH_SIZE_X * mImageScale * scale;
+            float space_size_y = (float) BOOTH_SIZE_Y * mImageScale * scale;
 
             int count = mChecklistAdapter.getCount();
             for (int i = 0; i < count; i++) {
@@ -52,8 +53,8 @@ public class ComiketKigyoMapView extends MapImageView {
 
                 float left = (float) kigyo.getMapPosX() * mImageScale * scale + trans_x;
                 float top = (float) kigyo.getMapPosY() * mImageScale * scale + trans_y;
-                float right = left + space_size_half;
-                float bottom = top + space_size;
+                float right = left + space_size_x * kigyo.getW();
+                float bottom = top + space_size_y * kigyo.getH();
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
