@@ -10,6 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.view.MapImageView;
 
@@ -19,7 +20,7 @@ public class ComiketKigyoMapFragment extends MapFragment {
 
     private int mComiketId;
     private ComiketKigyoChecklist mChecklist;
-    private ListAdapter mChecklistAdapter;
+    private ComiketKigyoChecklistAdapter mChecklistAdapter;
     private OnFooterViewClickListener mOnFooterViewClickListener;
     private MapImageView mMapImageView;
 
@@ -82,9 +83,9 @@ public class ComiketKigyoMapFragment extends MapFragment {
         mOnFooterViewClickListener = listener;
     }
 
-//    public void setCircleAdapter(ComiketKigyoChecklistAdapter adapter) {
-//        mChecklistAdapter = adapter;
-//    }
+    public void setCircleAdapter(ComiketKigyoChecklistAdapter adapter) {
+        mChecklistAdapter = adapter;
+    }
 
     public void setCircle(ComiketKigyoChecklist circle) {
         mChecklist = circle;
