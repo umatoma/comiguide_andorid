@@ -6,13 +6,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
-import net.umatoma.comiguide.view.MapImageView;
+import net.umatoma.comiguide.view.ComiketKigyoMapView;
 
 public class ComiketKigyoMapFragment extends MapFragment {
 
@@ -22,7 +21,7 @@ public class ComiketKigyoMapFragment extends MapFragment {
     private ComiketKigyoChecklist mChecklist;
     private ComiketKigyoChecklistAdapter mChecklistAdapter;
     private OnFooterViewClickListener mOnFooterViewClickListener;
-    private MapImageView mMapImageView;
+    private ComiketKigyoMapView mMapImageView;
 
     public static ComiketKigyoMapFragment getInstance(int comiket_id) {
         return new ComiketKigyoMapFragment(comiket_id);
@@ -42,10 +41,10 @@ public class ComiketKigyoMapFragment extends MapFragment {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-//        mMapImageView = new ComiketKigyoChecklistMapView(getActivity());
-//        mMapImageView.setImageResource(R.drawable.c1circle_map_8);
-//        mMapImageView.setComiketKigyoChecklistAdapter(mChecklistAdapter);
-//        setMapImageView(mMapImageView);
+        mMapImageView = new ComiketKigyoMapView(getActivity());
+        mMapImageView.setImageResource(R.drawable.ckigyo_map_c87);
+        mMapImageView.setComiketKigyoCheckistAdapter(mChecklistAdapter);
+        setMapImageView(mMapImageView);
 
         FrameLayout mapImageContainerView = (FrameLayout) view.findViewById(R.id.circle_map_container);
         mapImageContainerView.addView(mMapImageView);
