@@ -5,35 +5,32 @@ import android.os.Bundle;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.MenuListAdapter;
-import net.umatoma.comiguide.model.Comic1Circle;
+import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
 import java.util.ArrayList;
 
-public class Comic1CircleMenuDialogFragment extends MenuDialogFragment {
+public class ComiketKigyoChecklistMenuDialogFragment extends MenuDialogFragment {
 
-    public static final String TAG = "Comic1CircleMenuFragment";
+    public static final String TAG = "ComiketKigyoChecklistMenuDialogFragment";
 
-    public static final int MENU_MAP = 1;
-    public static final int MENU_EDIT = 2;
-    public static final int MENU_DELETE = 3;
+    public static final int MENU_EDIT = 1;
+    public static final int MENU_DELETE = 2;
 
-    public static Comic1CircleMenuDialogFragment newInstance(Comic1Circle circle) {
-        return new Comic1CircleMenuDialogFragment(circle);
+    public static ComiketKigyoChecklistMenuDialogFragment newInstance(ComiketKigyoChecklist checklist) {
+        return new ComiketKigyoChecklistMenuDialogFragment(checklist);
     }
 
-    public Comic1CircleMenuDialogFragment() {
+    public ComiketKigyoChecklistMenuDialogFragment() {
         // Required empty public constructor
     }
 
-    private Comic1CircleMenuDialogFragment(Comic1Circle circle) {
-        setTitle(circle.getCircleName());
+    private ComiketKigyoChecklistMenuDialogFragment(ComiketKigyoChecklist checklist) {
+        setTitle(checklist.getComiketKigyo().getName());
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ArrayList<MenuListAdapter.MenuOption> list = new ArrayList<>();
-        list.add(new MenuListAdapter.MenuOption(
-                MENU_MAP, R.drawable.ic_map_marker, getString(R.string.dialog_menu_show)));
         list.add(new MenuListAdapter.MenuOption(
                 MENU_EDIT, R.drawable.ic_edit, getString(R.string.dialog_menu_edit)));
         list.add(new MenuListAdapter.MenuOption(

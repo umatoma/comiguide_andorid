@@ -15,10 +15,12 @@ import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistFormFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistListFragment;
+import net.umatoma.comiguide.fragment.ComiketKigyoChecklistMenuDialogFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoMapFragment;
 import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistSelectListener;
 import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistUpdateListener;
+import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
@@ -110,16 +112,16 @@ public class ComiketKigyoActivity extends MapActivity
         }
     }
 
-    private void deleteCircle(final ComiketKigyoChecklist circle) {
-        String path = String.format("api/v1/ckigyo_checklists/%d", circle.getId());
+    private void deleteCircle(final ComiketKigyoChecklist checklist) {
+        String path = String.format("api/v1/ckigyo_checklists/%d", checklist.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
         mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
-                mCircleAdapter.remove(circle);
+                mCircleAdapter.remove(checklist);
 
                 if (mMapFragment != null) {
-                    mMapFragment.hideFooterView(circle);
+                    mMapFragment.hideFooterView(checklist);
                 }
 
                 Toast.makeText(ComiketKigyoActivity.this,
@@ -201,9 +203,7 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     @Override
-    public void onChangeMapButtonClick(View v) {
-        // showSelectMapDialog();
-    }
+    public void onChangeMapButtonClick(View v) {}
 
     @Override
     public void onShowListButtonClick(View v) {
@@ -216,25 +216,22 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     @Override
-    public void onFooterViewLongClick(final ComiketKigyoChecklist circle) {
-//        ComiketKigyoChecklistMenuDialogFragment fragment = ComiketKigyoChecklistMenuDialogFragment.newInstance(circle);
-//        fragment.setOnMenuDialogSelectListener(new OnMenuDialogSelectListener() {
-//            @Override
-//            public void onMenuSelect(int menuId) {
-//                switch (menuId) {
-//                    case ComiketCircleMenuDialogFragment.MENU_MAP:
-//                        showCircleInfo(circle);
-//                        return;
-//                    case ComiketCircleMenuDialogFragment.MENU_EDIT:
-//                        showCircleEditFragment(circle);
-//                        return;
-//                    case ComiketCircleMenuDialogFragment.MENU_DELETE:
-//                        deleteCircle(circle);
-//                        return;
-//                }
-//            }
-//        });
-//        fragment.show(getSupportFragmentManager(), ComiketCircleMenuDialogFragment.TAG);
+    public void onFooterViewLongClick(final ComiketKigyoChecklist checklist) {
+        ComiketKigyoChecklistMenuDialogFragment fragment = ComiketKigyoChecklistMenuDialogFragment.newInstance(checklist);
+        fragment.setOnMenuDialogSelectListener(new OnMenuDialogSelectListener() {
+            @Override
+            public void onMenuSelect(int menuId) {
+                switch (menuId) {
+                    case ComiketKigyoChecklistMenuDialogFragment.MENU_EDIT:
+                        showCircleEditFragment(checklist);
+                        return;
+                    case ComiketKigyoChecklistMenuDialogFragment.MENU_DELETE:
+                        deleteCircle(checklist);
+                        return;
+                }
+            }
+        });
+        fragment.show(getSupportFragmentManager(), ComiketKigyoChecklistMenuDialogFragment.TAG);
     }
 
     @Override
