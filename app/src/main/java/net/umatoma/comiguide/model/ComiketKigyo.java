@@ -32,6 +32,10 @@ public class ComiketKigyo {
         return mId;
     }
 
+    public int getComiketId() {
+        return mComiketId;
+    }
+
     public int getKigyoNo() {
         return mKigyoNo;
     }

@@ -86,14 +86,14 @@ public class ComiketKigyoMapFragment extends MapFragment {
         mChecklistAdapter = adapter;
     }
 
-    public void setCircle(ComiketKigyoChecklist circle) {
-        mChecklist = circle;
+    public void setChecklist(ComiketKigyoChecklist checklist) {
+        mChecklist = checklist;
 
         View footerView = getFooterView();
-        footerView.findViewById(R.id.color).setBackgroundColor(circle.getColorCode());
-        ((TextView) footerView.findViewById(R.id.space_info)).setText(circle.getSpaceInfo());
-        ((TextView) footerView.findViewById(R.id.cost)).setText(circle.getCost());
-        ((TextView) footerView.findViewById(R.id.comment)).setText(circle.getComment());
+        footerView.findViewById(R.id.color).setBackgroundColor(checklist.getColorCode());
+        ((TextView) footerView.findViewById(R.id.space_info)).setText(checklist.getSpaceInfo());
+        ((TextView) footerView.findViewById(R.id.cost)).setText(checklist.getCost());
+        ((TextView) footerView.findViewById(R.id.comment)).setText(checklist.getComment());
     }
 
     public void hideFooterView(ComiketKigyoChecklist circle) {

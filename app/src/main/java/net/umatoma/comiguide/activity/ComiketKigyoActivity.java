@@ -1,6 +1,7 @@
 package net.umatoma.comiguide.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
@@ -12,9 +13,12 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.fragment.ComiketKigyoChecklistFormFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistListFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoMapFragment;
+import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistCreateListener;
 import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistSelectListener;
+import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistUpdateListener;
 import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
@@ -24,7 +28,7 @@ import org.json.JSONObject;
 
 public class ComiketKigyoActivity extends MapActivity
         implements ComiketKigyoMapFragment.OnFooterViewClickListener,
-                OnComiketKigyoChecklistSelectListener {
+                OnComiketKigyoChecklistSelectListener, OnComiketKigyoChecklistUpdateListener, OnComiketKigyoChecklistCreateListener {
 
     private int mComiketId;
     private ComiketKigyoMapFragment mMapFragment;
@@ -138,50 +142,50 @@ public class ComiketKigyoActivity extends MapActivity
         float dy = (float) kigyo.getMapPosY();
 
         mMapFragment.setMapPosition(dx, dy);
-        mMapFragment.setCircle(circle);
+        mMapFragment.setChecklist(circle);
         mMapFragment.showFooterView();
 
         closeDrawers();
     }
 
     private void showCircleEditFragment(ComiketKigyoChecklist circle) {
-//        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(circle);
-//        fragment.setOnComiketKigyoChecklistUpdateListener(this);
-//
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-//                .add(R.id.content_frame, fragment, ComiketKigyoChecklistFormFragment.TAG)
-//                .commit();
+        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(circle);
+        fragment.setOnComiketKigyoChecklistUpdateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, ComiketKigyoChecklistFormFragment.TAG)
+                .commit();
     }
 
     private void showComiketKigyoChecklistCreateForm() {
-//        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(mComiketId);
-//        fragment.setOnComiketKigyoChecklistCreateListener(this);
-//
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-//                .add(R.id.content_frame, fragment, ComiketKigyoChecklistFormFragment.TAG)
-//                .commit();
+        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(mComiketId);
+        fragment.setOnComiketKigyoChecklistCreateListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.content_frame, fragment, ComiketKigyoChecklistFormFragment.TAG)
+                .commit();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(keyCode == KeyEvent.KEYCODE_BACK) {
-//            FragmentManager manager = getSupportFragmentManager();
-//            Fragment fragment = manager.findFragmentByTag(ComiketKigyoChecklistFormFragment.TAG);
-//            if (getDrawerLayout().isDrawerOpen(Gravity.LEFT)) {
-//                getDrawerLayout().closeDrawer(Gravity.LEFT);
-//                return false;
-//            } else if (fragment != null) {
-//                manager.beginTransaction()
-//                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-//                        .remove(fragment)
-//                        .commit();
-//                return false;
-//            }
-//        }
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            FragmentManager manager = getSupportFragmentManager();
+            Fragment fragment = manager.findFragmentByTag(ComiketKigyoChecklistFormFragment.TAG);
+            if (getDrawerLayout().isDrawerOpen(Gravity.LEFT)) {
+                getDrawerLayout().closeDrawer(Gravity.LEFT);
+                return false;
+            } else if (fragment != null) {
+                manager.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .remove(fragment)
+                        .commit();
+                return false;
+            }
+        }
 
         return super.onKeyDown(keyCode, event);
     }
@@ -237,19 +241,19 @@ public class ComiketKigyoActivity extends MapActivity
     public void onChecklistSelect(ComiketKigyoChecklist circle) {
         showCircleInfo(circle);
     }
-//
-//
-//    @Override
-//    public void onComiketKigyoChecklistCreate(ComiketKigyoChecklist circle) {
-//        mCircleAdapter.add(circle);
-//        mMapFragment.setCircle(circle);
-//        mMapFragment.showFooterView();
-//    }
-//
-//    @Override
-//    public void onComiketKigyoChecklistUpdate(ComiketKigyoChecklist circle) {
-//        mCircleAdapter.updateItem(circle);
-//        mMapFragment.setCircle(circle);
-//        mMapFragment.showFooterView();
-//    }
+
+
+    @Override
+    public void onComiketKigyoChecklistCreate(ComiketKigyoChecklist checklist) {
+        mCircleAdapter.add(checklist);
+        mMapFragment.setChecklist(checklist);
+        mMapFragment.showFooterView();
+    }
+
+    @Override
+    public void onComiketKigyoChecklistUpdate(ComiketKigyoChecklist checklist) {
+        mCircleAdapter.updateItem(checklist);
+        mMapFragment.setChecklist(checklist);
+        mMapFragment.showFooterView();
+    }
 }

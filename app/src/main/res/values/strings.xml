@@ -22,6 +22,8 @@
     <string name="form_circle_update">リスト更新</string>
     <string name="form_circle_create">リスト作成</string>
 
+    <string name="form_ckigyo">企業ブース</string>
+
     <string name="dialog_comiket_circle_map_title">マップ選択</string>
     <string name="dialog_comiket_circle_map_day1">1日目</string>
     <string name="dialog_comiket_circle_map_day2">2日目</string>
