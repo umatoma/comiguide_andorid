@@ -12,7 +12,9 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.fragment.ComiketKigyoChecklistListFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoMapFragment;
+import net.umatoma.comiguide.fragment.OnComiketKigyoChecklistSelectListener;
 import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
@@ -21,10 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ComiketKigyoActivity extends MapActivity
-        implements ComiketKigyoMapFragment.OnFooterViewClickListener {
+        implements ComiketKigyoMapFragment.OnFooterViewClickListener,
+                OnComiketKigyoChecklistSelectListener {
 
     private int mComiketId;
     private ComiketKigyoMapFragment mMapFragment;
+    private ComiketKigyoChecklistListFragment mChecklistListFragment;
     private ComiketKigyoChecklistAdapter mCircleAdapter;
     private ComiGuideApiClient.HttpClientTask mLoadCirclesTask;
     private ComiGuideApiClient.HttpClientTask mDeleteCircleTask;
@@ -42,9 +46,9 @@ public class ComiketKigyoActivity extends MapActivity
         mComiketId = comic1_id;
         getSupportActionBar().setTitle(String.format("C%d 企業ブース", mComiketId));
 
-//        mCircleListFragment = ComiketKigyoListFragment.newInstance(mCircleAdapter);
-//        mCircleListFragment.setOnComiketKigyoChecklistSelectListener(this);
-//        setCircleListFragment(mCircleListFragment);
+        mChecklistListFragment = ComiketKigyoChecklistListFragment.newInstance(mCircleAdapter);
+        mChecklistListFragment.setOnComiketKigyoChecklistSelectListener(this);
+        setCircleListFragment(mChecklistListFragment);
 
         mMapFragment = ComiketKigyoMapFragment.getInstance(mComiketId);
         mMapFragment.setCircleAdapter(mCircleAdapter);
@@ -54,7 +58,7 @@ public class ComiketKigyoActivity extends MapActivity
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.content_frame, mMapFragment, ComiketKigyoMapFragment.TAG);
-//        transaction.replace(R.id.left_drawer, mCircleListFragment, ComiketKigyoListFragment.TAG);
+        transaction.replace(R.id.left_drawer, mChecklistListFragment, ComiketKigyoChecklistListFragment.TAG);
         transaction.commit();
 
         loadCircles(mComiketId);
@@ -229,10 +233,10 @@ public class ComiketKigyoActivity extends MapActivity
 //        fragment.show(getSupportFragmentManager(), ComiketCircleMenuDialogFragment.TAG);
     }
 
-//    @Override
-//    public void onCircleSelect(ComiketKigyoChecklist circle) {
-//        showCircleInfo(circle);
-//    }
+    @Override
+    public void onChecklistSelect(ComiketKigyoChecklist circle) {
+        showCircleInfo(circle);
+    }
 //
 //
 //    @Override
