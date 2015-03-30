@@ -1,0 +1,134 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context="net.umatoma.comiguide.fragment.ComiketKigyoChecklistFormFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/form_ckigyo" />
+
+                <Spinner
+                    android:id="@+id/form_ckigyo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Comment -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/form_circle_comment" />
+
+            <EditText
+                android:id="@+id/form_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+
+            <!-- Cost -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/form_circle_cost" />
+
+            <EditText
+                android:id="@+id/form_circle_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+
+            <!-- Color -->
+            <RadioGroup
+                android:id="@+id/form_circle_color"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_black"
+                    app:colorValue="black"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_gray"
+                    app:colorValue="gray"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_red"
+                    app:colorValue="red"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_blue"
+                    app:colorValue="blue"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_green"
+                    app:colorValue="green"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_yellow"
+                    app:colorValue="yellow"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+
+                <net.umatoma.comiguide.view.ColorRadioButton
+                    android:id="@+id/color_orange"
+                    app:colorValue="orange"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+            </RadioGroup>
+
+            <Button
+                style="@style/AppTheme.Button"
+                android:id="@+id/form_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Submit" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

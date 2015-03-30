@@ -34,11 +34,11 @@ public class ComiketCircleMenuDialogFragment extends MenuDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ArrayList<MenuListAdapter.MenuOption> list = new ArrayList<>();
         list.add(new MenuListAdapter.MenuOption(
-                MENU_MAP, R.drawable.ic_map_marker, getString(R.string.dialog_comiket_circle_menu_show)));
+                MENU_MAP, R.drawable.ic_map_marker, getString(R.string.dialog_menu_show)));
         list.add(new MenuListAdapter.MenuOption(
-                MENU_EDIT, R.drawable.ic_edit, getString(R.string.dialog_comiket_circle_menu_edit)));
+                MENU_EDIT, R.drawable.ic_edit, getString(R.string.dialog_menu_edit)));
         list.add(new MenuListAdapter.MenuOption(
-                MENU_DELETE, R.drawable.ic_delete, getString(R.string.dialog_comiket_circle_menu_delete)));
+                MENU_DELETE, R.drawable.ic_delete, getString(R.string.dialog_menu_delete)));
         setMenuOptionList(list);
 
         return super.onCreateDialog(savedInstanceState);

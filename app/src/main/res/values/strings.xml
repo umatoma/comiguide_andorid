@@ -22,6 +22,8 @@
     <string name="form_circle_update">リスト更新</string>
     <string name="form_circle_create">リスト作成</string>
 
+    <string name="form_ckigyo">企業ブース</string>
+
     <string name="dialog_comiket_circle_map_title">マップ選択</string>
     <string name="dialog_comiket_circle_map_day1">1日目</string>
     <string name="dialog_comiket_circle_map_day2">2日目</string>
@@ -30,9 +32,9 @@
     <string name="dialog_comiket_circle_map_east456">東456</string>
     <string name="dialog_comiket_circle_map_west12">西12</string>
 
-    <string name="dialog_comiket_circle_menu_show">表示</string>
-    <string name="dialog_comiket_circle_menu_edit">編集</string>
-    <string name="dialog_comiket_circle_menu_delete">削除</string>
+    <string name="dialog_menu_show">表示</string>
+    <string name="dialog_menu_edit">編集</string>
+    <string name="dialog_menu_delete">削除</string>
 
     <string-array name="comiket_circle_maps">
         <item>東123</item>
@@ -54,4 +56,5 @@
     <string name="dialog_ok">決定</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_comiket_kigyo">ComiketKigyoActivity</string>
 </resources>
