@@ -112,7 +112,7 @@ public class ComiketKigyoActivity extends MapActivity
         }
     }
 
-    private void deleteCircle(final ComiketKigyoChecklist checklist) {
+    private void deleteChecklist(final ComiketKigyoChecklist checklist) {
         String path = String.format("api/v1/ckigyo_checklists/%d", checklist.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
         mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
@@ -138,7 +138,7 @@ public class ComiketKigyoActivity extends MapActivity
         mDeleteCircleTask.execute();
     }
 
-    private void showCircleInfo(ComiketKigyoChecklist circle) {
+    private void showChecklistInfo(ComiketKigyoChecklist circle) {
         ComiketKigyo kigyo = circle.getComiketKigyo();
         float dx = (float) kigyo.getMapPosX();
         float dy = (float) kigyo.getMapPosY();
@@ -150,7 +150,7 @@ public class ComiketKigyoActivity extends MapActivity
         closeDrawers();
     }
 
-    private void showCircleEditFragment(ComiketKigyoChecklist circle) {
+    private void showChecklistEditFragment(ComiketKigyoChecklist circle) {
         ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(circle);
         fragment.setOnComiketKigyoChecklistUpdateListener(this);
 
@@ -212,7 +212,7 @@ public class ComiketKigyoActivity extends MapActivity
 
     @Override
     public void onFooterViewClick(ComiketKigyoChecklist circle) {
-        showCircleEditFragment(circle);
+        showChecklistEditFragment(circle);
     }
 
     @Override
@@ -222,11 +222,14 @@ public class ComiketKigyoActivity extends MapActivity
             @Override
             public void onMenuSelect(int menuId) {
                 switch (menuId) {
+                    case ComiketKigyoChecklistMenuDialogFragment.MENU_MAP:
+                        showChecklistInfo(checklist);
+                        return;
                     case ComiketKigyoChecklistMenuDialogFragment.MENU_EDIT:
-                        showCircleEditFragment(checklist);
+                        showChecklistEditFragment(checklist);
                         return;
                     case ComiketKigyoChecklistMenuDialogFragment.MENU_DELETE:
-                        deleteCircle(checklist);
+                        deleteChecklist(checklist);
                         return;
                 }
             }
@@ -236,7 +239,7 @@ public class ComiketKigyoActivity extends MapActivity
 
     @Override
     public void onChecklistSelect(ComiketKigyoChecklist circle) {
-        showCircleInfo(circle);
+        showChecklistInfo(circle);
     }
 
 

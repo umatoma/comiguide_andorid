@@ -144,8 +144,9 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
                 int length = kigyos.length();
                 for (int i = 0; i < length; i++) {
                     JSONObject block = kigyos.getJSONObject(i);
+                    String value = String.format("[%d] %s", block.getInt("kigyo_no"), block.getString("name"));
                     Pair<String, String> pair
-                            = new Pair<>(block.getString("id"), block.getString("name"));
+                            = new Pair<>(block.getString("id"), value);
                     mKigyoAdapter.add(pair);
                 }
 

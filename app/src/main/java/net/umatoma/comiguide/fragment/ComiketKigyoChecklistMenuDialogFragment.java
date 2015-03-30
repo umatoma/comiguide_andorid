@@ -13,8 +13,9 @@ public class ComiketKigyoChecklistMenuDialogFragment extends MenuDialogFragment 
 
     public static final String TAG = "ComiketKigyoChecklistMenuDialogFragment";
 
-    public static final int MENU_EDIT = 1;
-    public static final int MENU_DELETE = 2;
+    public static final int MENU_MAP = 1;
+    public static final int MENU_EDIT = 2;
+    public static final int MENU_DELETE = 3;
 
     public static ComiketKigyoChecklistMenuDialogFragment newInstance(ComiketKigyoChecklist checklist) {
         return new ComiketKigyoChecklistMenuDialogFragment(checklist);
@@ -31,6 +32,8 @@ public class ComiketKigyoChecklistMenuDialogFragment extends MenuDialogFragment 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ArrayList<MenuListAdapter.MenuOption> list = new ArrayList<>();
+        list.add(new MenuListAdapter.MenuOption(
+                MENU_MAP, R.drawable.ic_map_marker, getString(R.string.dialog_menu_show)));
         list.add(new MenuListAdapter.MenuOption(
                 MENU_EDIT, R.drawable.ic_edit, getString(R.string.dialog_menu_edit)));
         list.add(new MenuListAdapter.MenuOption(

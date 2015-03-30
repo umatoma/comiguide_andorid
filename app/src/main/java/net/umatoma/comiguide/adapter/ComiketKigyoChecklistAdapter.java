@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
+import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
 public class ComiketKigyoChecklistAdapter extends ArrayAdapter<ComiketKigyoChecklist> {
@@ -24,18 +25,21 @@ public class ComiketKigyoChecklistAdapter extends ArrayAdapter<ComiketKigyoCheck
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.adapter_comic1_circle, null);
+            convertView = inflater.inflate(R.layout.adapter_comiket_kigyo_checklist, null);
             viewHolder = new ViewHolder();
             viewHolder.mColorLayout = (RelativeLayout) convertView.findViewById(R.id.color);
             viewHolder.mSpaceInfoView = (TextView) convertView.findViewById(R.id.space_info);
+            viewHolder.mKigyoNameView = (TextView) convertView.findViewById(R.id.kigyo_name);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ComiketKigyoChecklist circle = getItem(position);
-        viewHolder.mColorLayout.setBackgroundColor(circle.getColorCode());
-        viewHolder.mSpaceInfoView.setText(circle.getSpaceInfo());
+        ComiketKigyoChecklist checklist = getItem(position);
+        ComiketKigyo kigyo = checklist.getComiketKigyo();
+        viewHolder.mColorLayout.setBackgroundColor(checklist.getColorCode());
+        viewHolder.mSpaceInfoView.setText(String.valueOf(kigyo.getKigyoNo()));
+        viewHolder.mKigyoNameView.setText(kigyo.getName());
 
         return convertView;
     }
@@ -56,5 +60,6 @@ public class ComiketKigyoChecklistAdapter extends ArrayAdapter<ComiketKigyoCheck
     private static class ViewHolder {
         public RelativeLayout mColorLayout;
         public TextView mSpaceInfoView;
+        public TextView mKigyoNameView;
     }
 }

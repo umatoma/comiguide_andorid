@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
+import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.view.ComiketKigyoMapView;
 
@@ -88,10 +89,12 @@ public class ComiketKigyoMapFragment extends MapFragment {
 
     public void setChecklist(ComiketKigyoChecklist checklist) {
         mChecklist = checklist;
+        ComiketKigyo kigyo = checklist.getComiketKigyo();
 
         View footerView = getFooterView();
         footerView.findViewById(R.id.color).setBackgroundColor(checklist.getColorCode());
-        ((TextView) footerView.findViewById(R.id.space_info)).setText(checklist.getSpaceInfo());
+        ((TextView) footerView.findViewById(R.id.space_info)).setText(String.valueOf(kigyo.getKigyoNo()));
+        ((TextView) footerView.findViewById(R.id.circle_name)).setText(kigyo.getName());
         ((TextView) footerView.findViewById(R.id.cost)).setText(checklist.getCost());
         ((TextView) footerView.findViewById(R.id.comment)).setText(checklist.getComment());
     }
