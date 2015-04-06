@@ -54,6 +54,12 @@ public class ComiketKigyoMapFragment extends MapFragment {
     }
 
     @Override
+    public void onStart () {
+        super.onStart();
+        hideChangeMapButton();
+    }
+
+    @Override
     public void onDetach() {
         mOnFooterViewClickListener = null;
 

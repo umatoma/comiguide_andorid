@@ -138,6 +138,14 @@ public class MapFragment extends Fragment {
         }
     }
 
+    protected void hideChangeMapButton() {
+        View view = getView();
+        if (view != null) {
+            FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.button_change_map);
+            button.setVisibility(View.GONE);
+        }
+    }
+
     protected void setMapImageView(MapImageView view) {
         mMapImageView = view;
     }

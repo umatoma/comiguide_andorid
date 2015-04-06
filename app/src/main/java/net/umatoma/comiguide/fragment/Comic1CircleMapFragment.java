@@ -56,6 +56,12 @@ public class Comic1CircleMapFragment extends MapFragment {
     }
 
     @Override
+    public void onStart () {
+        super.onStart();
+        hideChangeMapButton();
+    }
+
+    @Override
     public void onDetach() {
         mOnFooterViewClickListener = null;
 
