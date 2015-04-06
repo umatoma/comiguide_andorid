@@ -1,6 +1,7 @@
 package net.umatoma.comiguide.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import net.umatoma.comiguide.adapter.SideMenuAdapter;
 
 public class SideMenuFragment extends Fragment {
 
+    private static final String COMIGUIDE_BLOG_PATH = "http://comiguide.hatenablog.com/";
     private ListView mMenuList;
     private SideMenuAdapter mMenuAdapter;
 
@@ -69,6 +71,10 @@ public class SideMenuFragment extends Fragment {
                     return;
                 case COMIC1:
                     intent = new Intent(getActivity(), Comic1CircleActivity.class);
+                    startActivity(intent);
+                    return;
+                case BLOG:
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(COMIGUIDE_BLOG_PATH));
                     startActivity(intent);
                     return;
                 case SETTING:

@@ -21,7 +21,7 @@ public class SideMenuAdapter extends ArrayAdapter<SideMenuAdapter.MenuEnum> {
         COMIKET_CIRCLE,
         COMIKET_KIGYO,
         COMIC1,
-        COMIKET_INFO,
+        BLOG,
         SETTING
     }
 
@@ -29,7 +29,7 @@ public class SideMenuAdapter extends ArrayAdapter<SideMenuAdapter.MenuEnum> {
             MenuEnum.COMIKET_CIRCLE,
             MenuEnum.COMIKET_KIGYO,
             MenuEnum.COMIC1,
-            MenuEnum.COMIKET_INFO,
+            MenuEnum.BLOG,
             MenuEnum.SETTING
     };
 
@@ -80,8 +80,8 @@ public class SideMenuAdapter extends ArrayAdapter<SideMenuAdapter.MenuEnum> {
                 return getContext().getString(R.string.side_menu_text_comiket_kigyo);
             case COMIC1:
                 return getContext().getString(R.string.side_menu_text_comic1);
-            case COMIKET_INFO:
-                return getContext().getString(R.string.side_menu_text_comiket_info);
+            case BLOG:
+                return getContext().getString(R.string.side_menu_text_blog);
             case SETTING:
                 return getContext().getString(R.string.side_menu_text_setting);
             default:
@@ -95,8 +95,8 @@ public class SideMenuAdapter extends ArrayAdapter<SideMenuAdapter.MenuEnum> {
             case COMIKET_KIGYO:
             case COMIC1:
                 return R.drawable.ic_map_edithing;
-            case COMIKET_INFO:
-                return R.drawable.ic_question;
+            case BLOG:
+                return R.drawable.ic_link;
             case SETTING:
                 return R.drawable.ic_settings;
             default:
