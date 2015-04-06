@@ -20,12 +20,8 @@ import net.umatoma.comiguide.view.MapImageView;
 
 public class MapFragment extends Fragment {
 
-    private FloatingActionButton mCreateCircleButton;
-    private FloatingActionButton mCircleListButton;
-    private FloatingActionButton mChangeMapButton;
     private GestureDetector mGestureDetector;
     private MapImageView mMapImageView;
-    private FrameLayout mFooterContainer;
     private View mFooterView;
     private OnFunctionButtonClickListener mOnFunctionButtonClickListener;
 
@@ -47,8 +43,8 @@ public class MapFragment extends Fragment {
             }
         });
 
-        mFooterContainer = (FrameLayout) view.findViewById(R.id.footer_content);
-        mFooterContainer.addView(mFooterView);
+        FrameLayout footerContainer = (FrameLayout) view.findViewById(R.id.footer_content);
+        footerContainer.addView(mFooterView);
 
         mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener(){
             @Override
@@ -69,11 +65,11 @@ public class MapFragment extends Fragment {
             }
         });
 
-        mCreateCircleButton = (FloatingActionButton)view.findViewById(R.id.button_create_circle);
-        mCircleListButton   = (FloatingActionButton)view.findViewById(R.id.button_circle_list);
-        mChangeMapButton   = (FloatingActionButton)view.findViewById(R.id.button_change_map);
+        FloatingActionButton createCircleButton = (FloatingActionButton)view.findViewById(R.id.button_create_circle);
+        FloatingActionButton circleListButton = (FloatingActionButton)view.findViewById(R.id.button_circle_list);
+        FloatingActionButton changeMapButton = (FloatingActionButton)view.findViewById(R.id.button_change_map);
 
-        mCreateCircleButton.setOnClickListener(new View.OnClickListener() {
+        createCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnFunctionButtonClickListener != null) {
@@ -81,7 +77,7 @@ public class MapFragment extends Fragment {
                 }
             }
         });
-        mCircleListButton.setOnClickListener(new View.OnClickListener() {
+        circleListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnFunctionButtonClickListener != null) {
@@ -89,7 +85,7 @@ public class MapFragment extends Fragment {
                 }
             }
         });
-        mChangeMapButton.setOnClickListener(new View.OnClickListener() {
+        changeMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnFunctionButtonClickListener != null) {
@@ -124,7 +120,9 @@ public class MapFragment extends Fragment {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 View view = (View) ((ObjectAnimator) animation).getTarget();
-                view.setVisibility(View.GONE);
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                }
             }
         });
         animator.start();
