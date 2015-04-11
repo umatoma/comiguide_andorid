@@ -22,9 +22,15 @@ import android.widget.Toast;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.NotificationListAdapter;
+import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
+import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.model.Notification;
 import net.umatoma.comiguide.model.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class HomeActivity extends ActionBarActivity {
 
@@ -36,6 +42,7 @@ public class HomeActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private NotificationListAdapter mNotificationAdaper;
     private ActionBar mActionBar;
+    private ComiGuideApiClient.HttpClientTask mLoadNotificationsTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,8 @@ public class HomeActivity extends ActionBarActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.left_drawer, SideMenuFragment.newInstance());
         transaction.commit();
+
+        loadNotifications();
     }
 
     @Override
@@ -110,27 +119,14 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_home, menu);
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -148,6 +144,36 @@ public class HomeActivity extends ActionBarActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void loadNotifications() {
+        String path = "api/v1/notifications";
+        mLoadNotificationsTask = new ComiGuideApiClient(this).callGetTask(path);
+        mLoadNotificationsTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                mNotificationAdaper.clear();
+                try {
+                    JSONArray notifications = result.getJSONArray("notifications");
+                    int length = notifications.length();
+                    for (int i = 0; i < length; i++) {
+                        Notification notification = new Notification(notifications.getJSONObject(i));
+                        mNotificationAdaper.add(notification);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HomeActivity.this, "Fail to load...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFail() {
+                Toast.makeText(HomeActivity.this,
+                        getString(R.string.message_error_common), Toast.LENGTH_SHORT).show();
+            }
+        });
+        mLoadNotificationsTask.setProgressDialog(this);
+        mLoadNotificationsTask.execute();
     }
 
 }
