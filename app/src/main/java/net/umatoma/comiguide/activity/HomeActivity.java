@@ -23,6 +23,7 @@ import android.widget.Toast;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.NotificationListAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.fragment.NotificationDialogFragment;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.model.Notification;
@@ -83,7 +84,7 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Notification notification = (Notification) parent.getItemAtPosition(position);
                 if (notification != null) {
-                    Toast.makeText(HomeActivity.this, notification.getContent(), Toast.LENGTH_SHORT).show();
+                    showNotificationDialog(notification);
                 }
             }
         });
@@ -174,6 +175,11 @@ public class HomeActivity extends ActionBarActivity {
         });
         mLoadNotificationsTask.setProgressDialog(this);
         mLoadNotificationsTask.execute();
+    }
+
+    private void showNotificationDialog(Notification notification) {
+        NotificationDialogFragment fragment = new NotificationDialogFragment(notification);
+        fragment.show(getSupportFragmentManager(), NotificationDialogFragment.TAG);
     }
 
 }
