@@ -45,7 +45,7 @@ public class Comic1CircleMapFragment extends MapFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         mMapImageView = new Comic1CircleMapView(getActivity());
-        mMapImageView.setImageResource(R.drawable.c1circle_map_8);
+        mMapImageView.setImageResource(getMapImageResourceId(mComic1Id));
         mMapImageView.setComic1CircleAdapter(mCircleAdapter);
         setMapImageView(mMapImageView);
 
@@ -87,6 +87,16 @@ public class Comic1CircleMapFragment extends MapFragment {
         }
     }
 
+    private int getMapImageResourceId(int comic1_id) {
+        switch (comic1_id) {
+            case 9:
+                return R.drawable.c1circle_map_9;
+            case 8:
+                return R.drawable.c1circle_map_8;
+        }
+        return -1;
+    }
+
     public void setOnFooterViewClickListener(OnFooterViewClickListener listener) {
         mOnFooterViewClickListener = listener;
     }
@@ -111,6 +121,7 @@ public class Comic1CircleMapFragment extends MapFragment {
             hideFooterView();
         }
     }
+
 
     public interface OnFooterViewClickListener {
         public void onFooterViewClick(Comic1Circle circle);

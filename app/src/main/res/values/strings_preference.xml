@@ -20,11 +20,11 @@
     <string name="prefs_key_comic1_id">comic1_id</string>
     <string name="prefs_title_comic1_id">COMIC1 ID</string>
     <string-array name="prefs_entries_comic1_id">
+        <item>COMIC1☆9</item>
         <item>COMIC1☆8</item>
-        <item>COMIC1☆7</item>
     </string-array>
     <integer-array name="prefs_entry_values_comic1_id">
+        <item>9</item>
         <item>8</item>
-        <item>7</item>
     </integer-array>
 </resources>
