@@ -1,17 +1,23 @@
 package net.umatoma.comiguide.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Notification {
 
     private int mId;
     private String mTitle;
-    private String mSummary;
     private String mContent;
+    private String mSummary;
 
-    public Notification(int id, String title, String summary, String content) {
-        mId = id;
-        mTitle = title;
-        mSummary = summary;
-        mContent = content;
+    public Notification(JSONObject notification) throws JSONException {
+        mId = notification.getInt("id");
+        mTitle = notification.getString("title");
+        mContent = notification.getString("content");
+
+        if (mContent.length() > 50) {
+            mSummary = mContent.substring(0, 50) + "...";
+        }
     }
 
     public int getId() {
@@ -22,11 +28,11 @@ public class Notification {
         return mTitle;
     }
 
-    public String getSummary() {
-        return mSummary;
-    }
-
     public String getContent() {
         return mContent;
+    }
+
+    public String getSummary() {
+        return mSummary;
     }
 }

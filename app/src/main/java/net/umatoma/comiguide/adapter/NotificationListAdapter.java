@@ -14,14 +14,6 @@ public class NotificationListAdapter extends ArrayAdapter<Notification> {
 
     public NotificationListAdapter(Context context) {
         super(context, android.R.layout.simple_list_item_1);
-        add(new Notification(1, "Androidアプリを公開しました", "Androidアプリを公開しました。\nよろしくお願いします。", "content"));
-        add(new Notification(2, "バグ修正", "バグ修正を行いました。", "content"));
-        add(new Notification(4, "アップデート", "新しく機能が追加されました。", "content"));
-        add(new Notification(5, "バグ修正", "バグ修正を行いました。", "content"));
-        add(new Notification(6, "アップデート", "新しく機能が追加されました。", "content"));
-        add(new Notification(7, "バグ修正", "バグ修正を行いました。", "content"));
-        add(new Notification(8, "アップデート", "新しく機能が追加されました。", "content"));
-        add(new Notification(9, "バグ修正", "バグ修正を行いました。", "content"));
     }
 
     @Override
