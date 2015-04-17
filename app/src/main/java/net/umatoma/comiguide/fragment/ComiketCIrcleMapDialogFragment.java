@@ -104,7 +104,7 @@ public class ComiketCIrcleMapDialogFragment extends DialogFragment implements Vi
                 mOnSelectListener.onSelect(3, 1);
                 break;
             case R.id.button_comiket_circle_map_d3_e456:
-                mOnSelectListener.onSelect(3, 3);
+                mOnSelectListener.onSelect(3, 2);
                 break;
             case R.id.button_comiket_circle_map_d3_w12:
                 mOnSelectListener.onSelect(3, 3);

@@ -76,23 +76,19 @@ public class ComiketCircleMapFragment extends MapFragment {
         int id = day * 10 + cmap_id;
         switch (id) {
             case 11:
-                return R.drawable.ccircle_map_d1_e123;
-            case 12:
-                return R.drawable.ccircle_map_d1_e456;
-            case 13:
-                return R.drawable.ccircle_map_d1_w12;
             case 21:
-                return R.drawable.ccircle_map_d2_e123;
+                return R.drawable.ccircle_map_d12_e123;
+            case 12:
             case 22:
-                return R.drawable.ccircle_map_d2_e456;
+                return R.drawable.ccircle_map_d12_e456;
+            case 13:
             case 23:
-                return R.drawable.ccircle_map_d2_w12;
+            case 33:
+                return R.drawable.ccircle_map_d123_w12;
             case 31:
                 return R.drawable.ccircle_map_d3_e123;
             case 32:
                 return R.drawable.ccircle_map_d3_e456;
-            case 33:
-                return R.drawable.ccircle_map_d3_w12;
         }
         return -1;
     }
