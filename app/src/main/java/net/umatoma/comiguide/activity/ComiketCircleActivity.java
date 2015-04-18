@@ -1,9 +1,12 @@
 package net.umatoma.comiguide.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,6 +29,7 @@ import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
 import net.umatoma.comiguide.util.ComiketCircleMapSharedPref;
+import net.umatoma.comiguide.util.IntentUtil;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -176,6 +180,11 @@ public class ComiketCircleActivity extends MapActivity
                 switch (menuId) {
                     case ComiketCircleMenuDialogFragment.MENU_MAP:
                         showCircleInfo(circle);
+                        return;
+                    case ComiketCircleMenuDialogFragment.MENU_OPEN_URL:
+                        if (IntentUtil.checkImplicitIntent(ComiketCircleActivity.this, circle.getCircleUrl())) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(circle.getCircleUrl())));
+                        }
                         return;
                     case ComiketCircleMenuDialogFragment.MENU_EDIT:
                         showCircleEditFragment(circle);

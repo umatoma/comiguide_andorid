@@ -33,6 +33,7 @@
     <string name="dialog_comiket_circle_map_west12">西12</string>
 
     <string name="dialog_menu_show">表示</string>
+    <string name="dialog_menu_open_url">URLを開く</string>
     <string name="dialog_menu_edit">編集</string>
     <string name="dialog_menu_delete">削除</string>
 
