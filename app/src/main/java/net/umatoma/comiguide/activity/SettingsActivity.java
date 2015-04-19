@@ -3,6 +3,7 @@ package net.umatoma.comiguide.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class SettingsActivity extends ActionBarActivity {
 
     public static class ApplicationPreferenceFragment extends PreferenceFragment {
 
+        private static final String FILE_PATH_CONTACT = "file:///android_asset/activity_settings/contact.html";
         private AlertDialog mComiketIdDialog;
         private Preference mComiketIdPref;
         private AlertDialog mComic1IdDialog;
@@ -104,9 +106,22 @@ public class SettingsActivity extends ActionBarActivity {
                 }
             });
 
-
+            // App Version
             Preference versionPref = findPreference(getString(R.string.prefs_key_version));
             versionPref.setSummary(getAppVersionName());
+
+            // Contact
+            Preference contactPref = findPreference(getString(R.string.prefs_key_contact));
+            contactPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.IKEY_TITLE, getString(R.string.prefs_title_contact));
+                    intent.putExtra(WebViewActivity.IKEY_FILE_PATH, FILE_PATH_CONTACT);
+                    startActivity(intent);
+                    return false;
+                }
+            });
         }
 
         private void storeComiketId(int comiket_id) {
