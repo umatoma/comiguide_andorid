@@ -19,4 +19,24 @@
             android:key="@string/prefs_key_comic1_id"
             android:title="@string/prefs_title_comic1_id"/>
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/prefs_category_info">
+
+        <Preference
+            android:key="@string/prefs_key_version"
+            android:title="@string/prefs_title_version"/>
+
+        <Preference
+            android:key="@string/prefs_key_help"
+            android:title="@string/prefs_title_help"/>
+
+        <Preference
+            android:key="@string/prefs_key_contact"
+            android:title="@string/prefs_title_contact"/>
+
+        <Preference
+            android:key="@string/prefs_key_license"
+            android:title="@string/prefs_title_license"/>
+    </PreferenceCategory>
 </PreferenceScreen>
