@@ -1,7 +1,10 @@
 package net.umatoma.comiguide.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -100,6 +103,10 @@ public class SettingsActivity extends ActionBarActivity {
                     return false;
                 }
             });
+
+
+            Preference versionPref = findPreference(getString(R.string.prefs_key_version));
+            versionPref.setSummary(getAppVersionName());
         }
 
         private void storeComiketId(int comiket_id) {
@@ -120,6 +127,22 @@ public class SettingsActivity extends ActionBarActivity {
                     .apply();
             ComiGuide.COMIC1_ID = comic1_id;
             mComic1IdPref.setSummary(String.format("COMIC1☆%d", comic1_id));
+        }
+
+        private String getAppVersionName() {
+            Context context = getActivity();
+            PackageManager pm = context.getPackageManager();
+            String versionName = "unknown";
+
+            try {
+                PackageInfo packageInfo
+                        = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+                versionName = packageInfo.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return versionName;
         }
     }
 }
