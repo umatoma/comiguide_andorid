@@ -59,11 +59,6 @@ public class ComiGuideApiClient {
         return new HttpClientTask(mUser).deleteRequest(path);
     }
 
-    public interface OnHttpClientPostExecuteListener {
-        public void onSuccess(JSONObject result);
-        public void onFail();
-    }
-
     public class HttpClientTask extends AsyncTask<Request, Void, JSONObject> {
 
         private static final String TAG = "HttpClientTask";
@@ -71,7 +66,7 @@ public class ComiGuideApiClient {
         private static final String API_AUTHORITY = "comiguide.net";
         private static final String API_TOKEN_HEADER = "X-Comiguide-Api-Token";
 
-        private OnHttpClientPostExecuteListener mListener;
+        private OnApiClientPostExecuteListener mListener;
         private OkHttpClient mClient;
         private Request.Builder mRequesBuilder;
         private Call mCall;
@@ -177,7 +172,7 @@ public class ComiGuideApiClient {
             return this;
         }
 
-        public HttpClientTask setOnHttpClientPostExecuteListener(OnHttpClientPostExecuteListener listener) {
+        public HttpClientTask setOnApiClientPostExecuteListener(OnApiClientPostExecuteListener listener) {
             mListener = listener;
             return this;
         }

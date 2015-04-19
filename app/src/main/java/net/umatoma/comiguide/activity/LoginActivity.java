@@ -23,6 +23,7 @@ import com.squareup.okhttp.Response;
 
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.User;
 import net.umatoma.comiguide.validator.EmailValidator;
 import net.umatoma.comiguide.validator.EmptyValidator;
@@ -126,7 +127,7 @@ public class LoginActivity extends Activity {
                     .add("user[password]", password)
                     .build();
             mAuthTask = new ComiGuideApiClient(this).callPostTask("api/v1/users/sign_in", formBody);
-            mAuthTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+            mAuthTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
                 @Override
                 public void onSuccess(JSONObject result) {
                     mAuthTask = null;

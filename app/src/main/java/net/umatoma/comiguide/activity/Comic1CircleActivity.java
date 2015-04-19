@@ -13,6 +13,7 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.Comic1CircleAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.fragment.Comic1CircleFormFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleListFragment;
 import net.umatoma.comiguide.fragment.Comic1CircleMapFragment;
@@ -24,7 +25,6 @@ import net.umatoma.comiguide.fragment.OnComic1CircleUpdateListener;
 import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.Comic1Circle;
 import net.umatoma.comiguide.model.Comic1Layout;
-import net.umatoma.comiguide.model.ComiketCircle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,8 +74,8 @@ public class Comic1CircleActivity extends MapActivity
     private void loadCircles(int comic1_id) {
         String path = String.format("api/v1/comic1s/%d/c1circle_checklists", comic1_id);
         mLoadCirclesTask = new ComiGuideApiClient(this).callGetTask(path);
-        mLoadCirclesTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadCirclesTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -116,7 +116,7 @@ public class Comic1CircleActivity extends MapActivity
     private void deleteCircle(final Comic1Circle circle) {
         String path = String.format("api/v1/c1circle_checklists/%d", circle.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
-        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mDeleteCircleTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
                 mCircleAdapter.remove(circle);

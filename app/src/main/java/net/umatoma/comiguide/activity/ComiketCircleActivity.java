@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -17,6 +16,7 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.fragment.ComiketCIrcleMapDialogFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
@@ -217,8 +217,8 @@ public class ComiketCircleActivity extends MapActivity
         params.add(new BasicNameValuePair("day", String.valueOf(day)));
         params.add(new BasicNameValuePair("cmap_id", String.valueOf(cmap_id)));
         mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
-        mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketCirclesTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -304,7 +304,7 @@ public class ComiketCircleActivity extends MapActivity
     private void deleteCircle(final ComiketCircle circle) {
         String path = String.format("api/v1/ccircle_checklists/%d", circle.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
-        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mDeleteCircleTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
                 mCircleArrayAdapter.remove(circle);

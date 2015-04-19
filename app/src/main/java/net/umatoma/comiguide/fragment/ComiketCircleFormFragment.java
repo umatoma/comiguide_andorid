@@ -23,6 +23,7 @@ import com.squareup.okhttp.RequestBody;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.validator.EmptyValidator;
 
@@ -155,8 +156,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void loadComiketBlockOptions() {
         mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
                 .callGetTask("api/v1/careas.json");
-        mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketBlocksTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -176,8 +177,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void loadComiketLayoutOptions(int block_id) {
         mLoadComiketLayoutsTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/cblocks/%d/clayouts.json", block_id));
-        mLoadComiketLayoutsTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketLayoutsTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -357,8 +358,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void createComiketCircle(RequestBody formBody) {
         String path = "api/v1/ccircle_checklists";
         mCreateComiketCircleTask = new ComiGuideApiClient(getActivity()).callPostTask(path, formBody);
-        mCreateComiketCircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mCreateComiketCircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -404,8 +405,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void updateComiketCircle(RequestBody formBody) {
         String path = String.format("api/v1/ccircle_checklists/%d", mComiketCircle.getId());
         mUpdateComiketCircleTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
-        mUpdateComiketCircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mUpdateComiketCircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {

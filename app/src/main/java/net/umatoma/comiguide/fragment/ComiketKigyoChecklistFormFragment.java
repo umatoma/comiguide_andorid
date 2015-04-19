@@ -20,6 +20,7 @@ import com.squareup.okhttp.RequestBody;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 
 import org.json.JSONArray;
@@ -117,8 +118,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private void loadBlockOptions() {
         mLoadCkigyosTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/comikets/%d/ckigyos", mComiketId));
-        mLoadCkigyosTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadCkigyosTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -230,8 +231,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private void createComiketKigyoChecklist(RequestBody formBody) {
         String path = "api/v1/ckigyo_checklists";
         mCreateComiketKigyoChecklistTask = new ComiGuideApiClient(getActivity()).callPostTask(path, formBody);
-        mCreateComiketKigyoChecklistTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mCreateComiketKigyoChecklistTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -277,8 +278,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private void updateComiketKigyoChecklist(RequestBody formBody) {
         String path = String.format("api/v1/ckigyo_checklists/%d", mComiketKigyoChecklist.getId());
         mUpdateComiketKigyoChecklistTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
-        mUpdateComiketKigyoChecklistTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mUpdateComiketKigyoChecklistTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {

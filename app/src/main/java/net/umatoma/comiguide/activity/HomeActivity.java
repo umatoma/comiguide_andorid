@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,9 +22,9 @@ import android.widget.Toast;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.NotificationListAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.fragment.NotificationDialogFragment;
 import net.umatoma.comiguide.fragment.SideMenuFragment;
-import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.model.Notification;
 import net.umatoma.comiguide.model.User;
 
@@ -150,7 +149,7 @@ public class HomeActivity extends ActionBarActivity {
     private void loadNotifications() {
         String path = "api/v1/notifications";
         mLoadNotificationsTask = new ComiGuideApiClient(this).callGetTask(path);
-        mLoadNotificationsTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadNotificationsTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
                 mNotificationAdaper.clear();
