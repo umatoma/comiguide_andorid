@@ -35,6 +35,7 @@ public class SettingsActivity extends ActionBarActivity {
     public static class ApplicationPreferenceFragment extends PreferenceFragment {
 
         private static final String FILE_PATH_CONTACT = "file:///android_asset/activity_settings/contact.html";
+        private static final String FILE_PATH_LICENSE = "file:///android_asset/activity_settings/license.html";
         private AlertDialog mComiketIdDialog;
         private Preference mComiketIdPref;
         private AlertDialog mComic1IdDialog;
@@ -118,6 +119,19 @@ public class SettingsActivity extends ActionBarActivity {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
                     intent.putExtra(WebViewActivity.IKEY_TITLE, getString(R.string.prefs_title_contact));
                     intent.putExtra(WebViewActivity.IKEY_FILE_PATH, FILE_PATH_CONTACT);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+            //License
+            Preference licensePref = findPreference(getString(R.string.prefs_key_license));
+            licensePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.IKEY_TITLE, getString(R.string.prefs_title_license));
+                    intent.putExtra(WebViewActivity.IKEY_FILE_PATH, FILE_PATH_LICENSE);
                     startActivity(intent);
                     return false;
                 }
