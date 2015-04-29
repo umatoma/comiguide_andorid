@@ -111,6 +111,16 @@ public class SettingsActivity extends ActionBarActivity {
             Preference versionPref = findPreference(getString(R.string.prefs_key_version));
             versionPref.setSummary(getAppVersionName());
 
+            // Help
+            Preference helpPref = findPreference(getString(R.string.prefs_key_help));
+            helpPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(getActivity(), "作成中です。", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
             // Contact
             Preference contactPref = findPreference(getString(R.string.prefs_key_contact));
             contactPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
