@@ -25,6 +25,7 @@ import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.util.FormUtil;
 import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONArray;
@@ -130,10 +131,10 @@ public class ComiketCircleFormFragment extends Fragment {
                 mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
         mFormColor.check(getColorId(mComiketCircle.getColor()));
 
-        mFormCircleName.setText(mComiketCircle.getCircleName());
-        mFormCircleUrl.setText(mComiketCircle.getCircleUrl());
-        mFormComment.setText(mComiketCircle.getComment());
-        mFormCost.setText(mComiketCircle.getCost());
+        mFormCircleName.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCircleName()));
+        mFormCircleUrl.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCircleUrl()));
+        mFormComment.setText(FormUtil.encodeNullToBlank(mComiketCircle.getComment()));
+        mFormCost.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCost()));
 
         if (mComiketCircle.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_circle_update));

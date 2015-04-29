@@ -22,6 +22,7 @@ import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
+import net.umatoma.comiguide.util.FormUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,8 +96,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
 
         mFormColor.check(getColorId(mComiketKigyoChecklist.getColor()));
 
-        mFormComment.setText(mComiketKigyoChecklist.getComment());
-        mFormCost.setText(mComiketKigyoChecklist.getCost());
+        mFormComment.setText(FormUtil.encodeNullToBlank(mComiketKigyoChecklist.getComment()));
+        mFormCost.setText(FormUtil.encodeNullToBlank(mComiketKigyoChecklist.getCost()));
 
         if (mComiketKigyoChecklist.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_circle_update));
