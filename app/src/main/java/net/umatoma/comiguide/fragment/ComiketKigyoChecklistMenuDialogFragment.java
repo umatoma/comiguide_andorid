@@ -18,16 +18,12 @@ public class ComiketKigyoChecklistMenuDialogFragment extends MenuDialogFragment 
     public static final int MENU_DELETE = 3;
 
     public static ComiketKigyoChecklistMenuDialogFragment newInstance(ComiketKigyoChecklist checklist) {
-        return new ComiketKigyoChecklistMenuDialogFragment(checklist);
+        ComiketKigyoChecklistMenuDialogFragment instance = new ComiketKigyoChecklistMenuDialogFragment();
+        instance.setComiketKigyoChecklist(checklist);
+        return instance;
     }
 
-    public ComiketKigyoChecklistMenuDialogFragment() {
-        // Required empty public constructor
-    }
-
-    private ComiketKigyoChecklistMenuDialogFragment(ComiketKigyoChecklist checklist) {
-        setTitle(checklist.getComiketKigyo().getName());
-    }
+    public ComiketKigyoChecklistMenuDialogFragment() {}
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -41,5 +37,9 @@ public class ComiketKigyoChecklistMenuDialogFragment extends MenuDialogFragment 
         setMenuOptionList(list);
 
         return super.onCreateDialog(savedInstanceState);
+    }
+
+    private void setComiketKigyoChecklist(ComiketKigyoChecklist checklist) {
+        setTitle(checklist.getComiketKigyo().getName());
     }
 }

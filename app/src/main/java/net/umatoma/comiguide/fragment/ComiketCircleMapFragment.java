@@ -27,12 +27,14 @@ public class ComiketCircleMapFragment extends MapFragment {
     private ComiketCircleMapView mMapView;
 
     public static ComiketCircleMapFragment newInstance(int comiket_id, int cmap_id, int day) {
-        return new ComiketCircleMapFragment(comiket_id, cmap_id, day);
+        ComiketCircleMapFragment instance = new ComiketCircleMapFragment();
+        instance.setParams(comiket_id, cmap_id, day);
+        return instance;
     }
 
     public ComiketCircleMapFragment() {}
 
-    private ComiketCircleMapFragment(int comiket_id, int cmap_id, int day) {
+    private void setParams(int comiket_id, int cmap_id, int day) {
         mComiketId = comiket_id;
         mCmapId = cmap_id;
         mDay = day;

@@ -23,7 +23,9 @@ import com.squareup.okhttp.RequestBody;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.ComiketCircle;
+import net.umatoma.comiguide.util.FormUtil;
 import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONArray;
@@ -56,17 +58,21 @@ public class ComiketCircleFormFragment extends Fragment {
     private ComiGuideApiClient.HttpClientTask mUpdateComiketCircleTask;
     private ComiGuideApiClient.HttpClientTask mCreateComiketCircleTask;
 
+    public static ComiketCircleFormFragment newInstance(int comiket_id, int day, int cmap_id) {
+        ComiketCircleFormFragment instance = new ComiketCircleFormFragment();
+        instance.setComiketCircle(new ComiketCircle(comiket_id, day));
+        instance.setCmapId(cmap_id);
+        return instance;
+    }
+
+    public static ComiketCircleFormFragment newInstance(ComiketCircle circle) {
+        ComiketCircleFormFragment instance = new ComiketCircleFormFragment();
+        instance.setComiketCircle(circle);
+        instance.setCmapId(circle.getComiketLayout().getComiketBlock().getComiketArea().getCmapId());
+        return instance;
+    }
+
     public ComiketCircleFormFragment() {}
-
-    public ComiketCircleFormFragment(int comiket_id, int day, int cmap_id) {
-        mComiketCircle = new ComiketCircle(comiket_id, day);
-        mCmapId = cmap_id;
-    }
-
-    public ComiketCircleFormFragment(ComiketCircle circle) {
-        mComiketCircle = circle;
-        mCmapId = circle.getComiketLayout().getComiketBlock().getComiketArea().getCmapId();
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -129,10 +135,10 @@ public class ComiketCircleFormFragment extends Fragment {
                 mSpaceNoSubAdapter.getPosition(mComiketCircle.getSpaceNoSub()));
         mFormColor.check(getColorId(mComiketCircle.getColor()));
 
-        mFormCircleName.setText(mComiketCircle.getCircleName());
-        mFormCircleUrl.setText(mComiketCircle.getCircleUrl());
-        mFormComment.setText(mComiketCircle.getComment());
-        mFormCost.setText(mComiketCircle.getCost());
+        mFormCircleName.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCircleName()));
+        mFormCircleUrl.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCircleUrl()));
+        mFormComment.setText(FormUtil.encodeNullToBlank(mComiketCircle.getComment()));
+        mFormCost.setText(FormUtil.encodeNullToBlank(mComiketCircle.getCost()));
 
         if (mComiketCircle.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_circle_update));
@@ -152,11 +158,19 @@ public class ComiketCircleFormFragment extends Fragment {
         super.onDetach();
     }
 
+    private void setComiketCircle(ComiketCircle circle) {
+        mComiketCircle = circle;
+    }
+
+    private void setCmapId(int cmap_id) {
+        mCmapId = cmap_id;
+    }
+
     private void loadComiketBlockOptions() {
         mLoadComiketBlocksTask = new ComiGuideApiClient(getActivity())
                 .callGetTask("api/v1/careas.json");
-        mLoadComiketBlocksTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketBlocksTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -176,8 +190,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void loadComiketLayoutOptions(int block_id) {
         mLoadComiketLayoutsTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/cblocks/%d/clayouts.json", block_id));
-        mLoadComiketLayoutsTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketLayoutsTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -357,8 +371,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void createComiketCircle(RequestBody formBody) {
         String path = "api/v1/ccircle_checklists";
         mCreateComiketCircleTask = new ComiGuideApiClient(getActivity()).callPostTask(path, formBody);
-        mCreateComiketCircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mCreateComiketCircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -404,8 +418,8 @@ public class ComiketCircleFormFragment extends Fragment {
     private void updateComiketCircle(RequestBody formBody) {
         String path = String.format("api/v1/ccircle_checklists/%d", mComiketCircle.getId());
         mUpdateComiketCircleTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
-        mUpdateComiketCircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mUpdateComiketCircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {

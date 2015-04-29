@@ -2,6 +2,7 @@
 <resources>
     <string name="prefs_category_application">アプリ設定</string>
     <string name="prefs_category_account">アカウント設定</string>
+    <string name="prefs_category_info">情報</string>
 
     <string name="prefs_key_account_logout">account_logout</string>
     <string name="prefs_title_account_logout">ログアウト</string>
@@ -27,4 +28,16 @@
         <item>9</item>
         <item>8</item>
     </integer-array>
+
+    <string name="prefs_key_version">version</string>
+    <string name="prefs_title_version">バージョン</string>
+
+    <string name="prefs_key_help">help</string>
+    <string name="prefs_title_help">ヘルプ</string>
+
+    <string name="prefs_key_contact">contact</string>
+    <string name="prefs_title_contact">連絡先</string>
+
+    <string name="prefs_key_license">license</string>
+    <string name="prefs_title_license">ライセンス</string>
 </resources>

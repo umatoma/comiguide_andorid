@@ -20,7 +20,10 @@ import com.squareup.okhttp.RequestBody;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
+import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
+import net.umatoma.comiguide.util.FormUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,17 +47,21 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private ComiGuideApiClient.HttpClientTask mUpdateComiketKigyoChecklistTask;
     private ComiGuideApiClient.HttpClientTask mCreateComiketKigyoChecklistTask;
 
+    public static ComiketKigyoChecklistFormFragment newInstance(int comiket_id) {
+        ComiketKigyoChecklistFormFragment instance = new ComiketKigyoChecklistFormFragment();
+        instance.setComiketId(comiket_id);
+        instance.setComiketKigyoChecklist(new ComiketKigyoChecklist());
+        return instance;
+    }
+
+    public static ComiketKigyoChecklistFormFragment newInstance(ComiketKigyoChecklist checklist) {
+        ComiketKigyoChecklistFormFragment instance = new ComiketKigyoChecklistFormFragment();
+        instance.setComiketId(checklist.getComiketKigyo().getComiketId());
+        instance.setComiketKigyoChecklist(checklist);
+        return instance;
+    }
+
     public ComiketKigyoChecklistFormFragment() {}
-
-    public ComiketKigyoChecklistFormFragment(int comiket_id) {
-        mComiketId = comiket_id;
-        mComiketKigyoChecklist = new ComiketKigyoChecklist();
-    }
-
-    public ComiketKigyoChecklistFormFragment(ComiketKigyoChecklist checklist) {
-        mComiketId = checklist.getComiketKigyo().getComiketId();
-        mComiketKigyoChecklist = checklist;
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -94,8 +101,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
 
         mFormColor.check(getColorId(mComiketKigyoChecklist.getColor()));
 
-        mFormComment.setText(mComiketKigyoChecklist.getComment());
-        mFormCost.setText(mComiketKigyoChecklist.getCost());
+        mFormComment.setText(FormUtil.encodeNullToBlank(mComiketKigyoChecklist.getComment()));
+        mFormCost.setText(FormUtil.encodeNullToBlank(mComiketKigyoChecklist.getCost()));
 
         if (mComiketKigyoChecklist.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_circle_update));
@@ -114,11 +121,19 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
         super.onDetach();
     }
 
+    private void setComiketId(int comiket_id) {
+        mComiketId = comiket_id;
+    }
+
+    private void setComiketKigyoChecklist(ComiketKigyoChecklist checklist) {
+        mComiketKigyoChecklist = checklist;
+    }
+
     private void loadBlockOptions() {
         mLoadCkigyosTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/comikets/%d/ckigyos", mComiketId));
-        mLoadCkigyosTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadCkigyosTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -230,8 +245,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private void createComiketKigyoChecklist(RequestBody formBody) {
         String path = "api/v1/ckigyo_checklists";
         mCreateComiketKigyoChecklistTask = new ComiGuideApiClient(getActivity()).callPostTask(path, formBody);
-        mCreateComiketKigyoChecklistTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mCreateComiketKigyoChecklistTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -277,8 +292,8 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private void updateComiketKigyoChecklist(RequestBody formBody) {
         String path = String.format("api/v1/ckigyo_checklists/%d", mComiketKigyoChecklist.getId());
         mUpdateComiketKigyoChecklistTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
-        mUpdateComiketKigyoChecklistTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mUpdateComiketKigyoChecklistTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {

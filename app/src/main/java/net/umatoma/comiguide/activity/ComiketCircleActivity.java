@@ -1,5 +1,7 @@
 package net.umatoma.comiguide.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketCircleArrayAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.fragment.ComiketCIrcleMapDialogFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleFormFragment;
 import net.umatoma.comiguide.fragment.ComiketCircleListFragment;
@@ -26,6 +29,7 @@ import net.umatoma.comiguide.fragment.OnMenuDialogSelectListener;
 import net.umatoma.comiguide.model.ComiketCircle;
 import net.umatoma.comiguide.model.ComiketLayout;
 import net.umatoma.comiguide.util.ComiketCircleMapSharedPref;
+import net.umatoma.comiguide.util.IntentUtil;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -177,6 +181,11 @@ public class ComiketCircleActivity extends MapActivity
                     case ComiketCircleMenuDialogFragment.MENU_MAP:
                         showCircleInfo(circle);
                         return;
+                    case ComiketCircleMenuDialogFragment.MENU_OPEN_URL:
+                        if (IntentUtil.checkImplicitIntent(ComiketCircleActivity.this, circle.getCircleUrl())) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(circle.getCircleUrl())));
+                        }
+                        return;
                     case ComiketCircleMenuDialogFragment.MENU_EDIT:
                         showCircleEditFragment(circle);
                         return;
@@ -208,8 +217,8 @@ public class ComiketCircleActivity extends MapActivity
         params.add(new BasicNameValuePair("day", String.valueOf(day)));
         params.add(new BasicNameValuePair("cmap_id", String.valueOf(cmap_id)));
         mLoadComiketCirclesTask = new ComiGuideApiClient(this).callGetTask(path, params);
-        mLoadComiketCirclesTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadComiketCirclesTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -248,7 +257,7 @@ public class ComiketCircleActivity extends MapActivity
     }
 
     private void showComiketCircleCreateForm() {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(mComiketId, mDay, mCmapId);
+        ComiketCircleFormFragment fragment = ComiketCircleFormFragment.newInstance(mComiketId, mDay, mCmapId);
         fragment.setOnComiketCircleCreateListener(this);
 
         getSupportFragmentManager()
@@ -282,7 +291,7 @@ public class ComiketCircleActivity extends MapActivity
     }
 
     private void showCircleEditFragment(ComiketCircle circle) {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(circle);
+        ComiketCircleFormFragment fragment = ComiketCircleFormFragment.newInstance(circle);
         fragment.setOnComiketCircleUpdateListener(this);
 
         getSupportFragmentManager()
@@ -295,7 +304,7 @@ public class ComiketCircleActivity extends MapActivity
     private void deleteCircle(final ComiketCircle circle) {
         String path = String.format("api/v1/ccircle_checklists/%d", circle.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
-        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mDeleteCircleTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
                 mCircleArrayAdapter.remove(circle);

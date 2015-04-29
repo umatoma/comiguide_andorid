@@ -16,21 +16,19 @@ public class ComiketKigyoChecklistListFragment extends CircleListFragment {
     private ComiketKigyoChecklistAdapter mAdapter;
 
     public static ComiketKigyoChecklistListFragment newInstance(ComiketKigyoChecklistAdapter adapter) {
-        return new ComiketKigyoChecklistListFragment(adapter);
+        ComiketKigyoChecklistListFragment instance = new ComiketKigyoChecklistListFragment();
+        instance.setComiketKigyoChecklistAdapter(adapter);
+        return instance;
     }
 
     public ComiketKigyoChecklistListFragment() {}
-
-    private ComiketKigyoChecklistListFragment(ComiketKigyoChecklistAdapter adapter) {
-        mAdapter = adapter;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        setAdapter(mAdapter);
+        setAdapterToListView(mAdapter);
 
         return view;
     }
@@ -51,5 +49,9 @@ public class ComiketKigyoChecklistListFragment extends CircleListFragment {
 
     public void setOnComiketKigyoChecklistSelectListener(OnComiketKigyoChecklistSelectListener listener) {
         mOnSelectListener = listener;
+    }
+
+    private void setComiketKigyoChecklistAdapter(ComiketKigyoChecklistAdapter adapter) {
+        mAdapter = adapter;
     }
 }

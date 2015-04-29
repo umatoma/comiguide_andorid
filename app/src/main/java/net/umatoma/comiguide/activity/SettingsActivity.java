@@ -1,12 +1,18 @@
 package net.umatoma.comiguide.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import net.umatoma.comiguide.ComiGuide;
@@ -20,16 +26,31 @@ public class SettingsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_prefs_application, new ApplicationPreferenceFragment())
                 .commit();
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public static class ApplicationPreferenceFragment extends PreferenceFragment {
 
+        private static final String FILE_PATH_CONTACT = "file:///android_asset/activity_settings/contact.html";
+        private static final String FILE_PATH_LICENSE = "file:///android_asset/activity_settings/license.html";
         private AlertDialog mComiketIdDialog;
         private Preference mComiketIdPref;
         private AlertDialog mComic1IdDialog;
@@ -100,6 +121,46 @@ public class SettingsActivity extends ActionBarActivity {
                     return false;
                 }
             });
+
+            // App Version
+            Preference versionPref = findPreference(getString(R.string.prefs_key_version));
+            versionPref.setSummary(getAppVersionName());
+
+            // Help
+            Preference helpPref = findPreference(getString(R.string.prefs_key_help));
+            helpPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Toast.makeText(getActivity(), "作成中です。", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+            // Contact
+            Preference contactPref = findPreference(getString(R.string.prefs_key_contact));
+            contactPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.IKEY_TITLE, getString(R.string.prefs_title_contact));
+                    intent.putExtra(WebViewActivity.IKEY_FILE_PATH, FILE_PATH_CONTACT);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+            //License
+            Preference licensePref = findPreference(getString(R.string.prefs_key_license));
+            licensePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.IKEY_TITLE, getString(R.string.prefs_title_license));
+                    intent.putExtra(WebViewActivity.IKEY_FILE_PATH, FILE_PATH_LICENSE);
+                    startActivity(intent);
+                    return false;
+                }
+            });
         }
 
         private void storeComiketId(int comiket_id) {
@@ -120,6 +181,22 @@ public class SettingsActivity extends ActionBarActivity {
                     .apply();
             ComiGuide.COMIC1_ID = comic1_id;
             mComic1IdPref.setSummary(String.format("COMIC1☆%d", comic1_id));
+        }
+
+        private String getAppVersionName() {
+            Context context = getActivity();
+            PackageManager pm = context.getPackageManager();
+            String versionName = "unknown";
+
+            try {
+                PackageInfo packageInfo
+                        = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+                versionName = packageInfo.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return versionName;
         }
     }
 }

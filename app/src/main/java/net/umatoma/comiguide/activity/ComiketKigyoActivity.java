@@ -13,6 +13,7 @@ import net.umatoma.comiguide.ComiGuide;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.ComiketKigyoChecklistAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistFormFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistListFragment;
 import net.umatoma.comiguide.fragment.ComiketKigyoChecklistMenuDialogFragment;
@@ -73,8 +74,8 @@ public class ComiketKigyoActivity extends MapActivity
     private void loadCircles(int comic1_id) {
         String path = String.format("api/v1/comikets/%d/ckigyo_checklists", comic1_id);
         mLoadCirclesTask = new ComiGuideApiClient(this).callGetTask(path);
-        mLoadCirclesTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadCirclesTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -115,7 +116,7 @@ public class ComiketKigyoActivity extends MapActivity
     private void deleteChecklist(final ComiketKigyoChecklist checklist) {
         String path = String.format("api/v1/ckigyo_checklists/%d", checklist.getId());
         mDeleteCircleTask = new ComiGuideApiClient(this).callDeleteTask(path);
-        mDeleteCircleTask.setOnHttpClientPostExecuteListener(new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mDeleteCircleTask.setOnApiClientPostExecuteListener(new OnApiClientPostExecuteListener() {
             @Override
             public void onSuccess(JSONObject result) {
                 mCircleAdapter.remove(checklist);
@@ -151,7 +152,7 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     private void showChecklistEditFragment(ComiketKigyoChecklist circle) {
-        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(circle);
+        ComiketKigyoChecklistFormFragment fragment = ComiketKigyoChecklistFormFragment.newInstance(circle);
         fragment.setOnComiketKigyoChecklistUpdateListener(this);
 
         getSupportFragmentManager()
@@ -162,7 +163,7 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     private void showComiketKigyoChecklistCreateForm() {
-        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(mComiketId);
+        ComiketKigyoChecklistFormFragment fragment = ComiketKigyoChecklistFormFragment.newInstance(mComiketId);
         fragment.setOnComiketKigyoChecklistCreateListener(this);
 
         getSupportFragmentManager()

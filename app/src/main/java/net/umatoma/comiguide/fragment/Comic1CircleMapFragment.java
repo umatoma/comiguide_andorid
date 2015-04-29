@@ -26,15 +26,15 @@ public class Comic1CircleMapFragment extends MapFragment {
     private OnFooterViewClickListener mOnFooterViewClickListener;
     private Comic1CircleMapView mMapImageView;
 
-    public static Comic1CircleMapFragment getInstance(int comic1_id) {
-        return new Comic1CircleMapFragment(comic1_id);
+    public static Comic1CircleMapFragment newInstance(int comic1_id) {
+        Comic1CircleMapFragment instance = new Comic1CircleMapFragment();
+        instance.setComic1Id(comic1_id);
+        return instance;
     }
 
-    public Comic1CircleMapFragment() {
+    public Comic1CircleMapFragment() {}
 
-    }
-
-    private Comic1CircleMapFragment(int comic1_id) {
+    private void setComic1Id(int comic1_id) {
         mComic1Id = comic1_id;
     }
 

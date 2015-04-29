@@ -23,7 +23,9 @@ import com.squareup.okhttp.RequestBody;
 import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
+import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
 import net.umatoma.comiguide.model.Comic1Circle;
+import net.umatoma.comiguide.util.FormUtil;
 import net.umatoma.comiguide.validator.EmptyValidator;
 
 import org.json.JSONArray;
@@ -57,12 +59,16 @@ public class Comic1CircleFormFragment extends Fragment {
 
     public Comic1CircleFormFragment() {}
 
-    public Comic1CircleFormFragment(int comic1_id) {
-        mComic1Circle = new Comic1Circle(comic1_id);
+    public static Comic1CircleFormFragment newInstance(int comic1_id) {
+        Comic1CircleFormFragment instance = new Comic1CircleFormFragment();
+        instance.setComic1Id(comic1_id);
+        return instance;
     }
 
-    public Comic1CircleFormFragment(Comic1Circle circle) {
-        mComic1Circle = circle;
+    public static Comic1CircleFormFragment newInstance(Comic1Circle circle) {
+        Comic1CircleFormFragment instance = new Comic1CircleFormFragment();
+        instance.setComic1Circle(circle);
+        return instance;
     }
 
     @Override
@@ -126,10 +132,10 @@ public class Comic1CircleFormFragment extends Fragment {
                 mSpaceNoSubAdapter.getPosition(mComic1Circle.getSpaceNoSub()));
         mFormColor.check(getColorId(mComic1Circle.getColor()));
 
-        mFormCircleName.setText(mComic1Circle.getCircleName());
-        mFormCircleUrl.setText(mComic1Circle.getCircleUrl());
-        mFormComment.setText(mComic1Circle.getComment());
-        mFormCost.setText(mComic1Circle.getCost());
+        mFormCircleName.setText(FormUtil.encodeNullToBlank(mComic1Circle.getCircleName()));
+        mFormCircleUrl.setText(FormUtil.encodeNullToBlank(mComic1Circle.getCircleUrl()));
+        mFormComment.setText(FormUtil.encodeNullToBlank(mComic1Circle.getComment()));
+        mFormCost.setText(FormUtil.encodeNullToBlank(mComic1Circle.getCost()));
 
         if (mComic1Circle.isCreated()) {
             mButtonSubmit.setText(getString(R.string.form_circle_update));
@@ -149,11 +155,19 @@ public class Comic1CircleFormFragment extends Fragment {
         super.onDetach();
     }
 
+    private void setComic1Id(int comic1_id) {
+        mComic1Circle = new Comic1Circle(comic1_id);
+    }
+
+    private void setComic1Circle(Comic1Circle circle) {
+        mComic1Circle = circle;
+    }
+
     private void loadBlockOptions() {
         mLoadBlocksTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/comic1s/%d/c1blocks", mComic1Circle.getComic1Id()));
-        mLoadBlocksTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadBlocksTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -173,8 +187,8 @@ public class Comic1CircleFormFragment extends Fragment {
     private void loadLayoutOptions(int block_id) {
         mLoadLayoutsTask = new ComiGuideApiClient(getActivity())
                 .callGetTask(String.format("api/v1/c1blocks/%d/c1layouts", block_id));
-        mLoadLayoutsTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mLoadLayoutsTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -343,8 +357,8 @@ public class Comic1CircleFormFragment extends Fragment {
     private void createComic1Circle(RequestBody formBody) {
         String path = "api/v1/c1circle_checklists";
         mCreateComic1CircleTask = new ComiGuideApiClient(getActivity()).callPostTask(path, formBody);
-        mCreateComic1CircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mCreateComic1CircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {
@@ -390,8 +404,8 @@ public class Comic1CircleFormFragment extends Fragment {
     private void updateComic1Circle(RequestBody formBody) {
         String path = String.format("api/v1/c1circle_checklists/%d", mComic1Circle.getId());
         mUpdateComic1CircleTask = new ComiGuideApiClient(getActivity()).callPutTask(path, formBody);
-        mUpdateComic1CircleTask.setOnHttpClientPostExecuteListener(
-                new ComiGuideApiClient.OnHttpClientPostExecuteListener() {
+        mUpdateComic1CircleTask.setOnApiClientPostExecuteListener(
+                new OnApiClientPostExecuteListener() {
 
                     @Override
                     public void onSuccess(JSONObject result) {

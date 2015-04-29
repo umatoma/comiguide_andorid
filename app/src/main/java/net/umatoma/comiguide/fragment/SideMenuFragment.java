@@ -21,6 +21,7 @@ import net.umatoma.comiguide.adapter.SideMenuAdapter;
 
 public class SideMenuFragment extends Fragment {
 
+    private static final String COMIGUIDE_PATH = "https://comiguide.net/";
     private static final String COMIGUIDE_BLOG_PATH = "http://comiguide.hatenablog.com/";
     private ListView mMenuList;
     private SideMenuAdapter mMenuAdapter;
@@ -71,6 +72,10 @@ public class SideMenuFragment extends Fragment {
                     return;
                 case COMIC1:
                     intent = new Intent(getActivity(), Comic1CircleActivity.class);
+                    startActivity(intent);
+                    return;
+                case COMIGUIDE:
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(COMIGUIDE_PATH));
                     startActivity(intent);
                     return;
                 case BLOG:

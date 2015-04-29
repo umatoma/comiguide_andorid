@@ -25,14 +25,16 @@ public class ComiketKigyoMapFragment extends MapFragment {
     private ComiketKigyoMapView mMapImageView;
 
     public static ComiketKigyoMapFragment getInstance(int comiket_id) {
-        return new ComiketKigyoMapFragment(comiket_id);
+        ComiketKigyoMapFragment instance = new ComiketKigyoMapFragment();
+        instance.setComiketId(comiket_id);
+        return instance;
     }
 
     public ComiketKigyoMapFragment() {
 
     }
 
-    private ComiketKigyoMapFragment(int comiket_id) {
+    private void setComiketId(int comiket_id) {
         mComiketId = comiket_id;
     }
 
