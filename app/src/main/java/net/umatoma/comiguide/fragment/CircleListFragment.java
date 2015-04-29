@@ -55,7 +55,7 @@ public class CircleListFragment extends Fragment implements AdapterView.OnItemCl
         mSwipeRefreshLayout.setRefreshing(refreshing);
     }
 
-    protected void setAdapter(ListAdapter adapter) {
+    protected void setAdapterToListView(ListAdapter adapter) {
         mListView.setAdapter(adapter);
     }
 }

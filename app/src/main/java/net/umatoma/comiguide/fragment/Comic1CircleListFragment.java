@@ -17,7 +17,7 @@ public class Comic1CircleListFragment extends CircleListFragment {
 
     public static Comic1CircleListFragment newInstance(Comic1CircleAdapter adapter) {
         Comic1CircleListFragment instance = new Comic1CircleListFragment();
-        instance.setAdapter(adapter);
+        instance.setComic1CircleAdapter(adapter);
         return instance;
     }
 
@@ -28,7 +28,7 @@ public class Comic1CircleListFragment extends CircleListFragment {
                              Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        setAdapter(mAdapter);
+        setAdapterToListView(mAdapter);
 
         return view;
     }
@@ -51,7 +51,7 @@ public class Comic1CircleListFragment extends CircleListFragment {
         mOnSelectListener = listener;
     }
 
-    private void setAdapter(Comic1CircleAdapter adapter) {
+    private void setComic1CircleAdapter(Comic1CircleAdapter adapter) {
         mAdapter = adapter;
     }
     

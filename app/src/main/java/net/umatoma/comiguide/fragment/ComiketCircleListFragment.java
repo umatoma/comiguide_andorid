@@ -16,7 +16,7 @@ public class ComiketCircleListFragment extends CircleListFragment {
 
     public static ComiketCircleListFragment newInstance(ComiketCircleArrayAdapter adapter) {
         ComiketCircleListFragment instance = new ComiketCircleListFragment();
-        instance.setAdapter(adapter);
+        instance.setComiketCircleArrayAdapter(adapter);
         return instance;
     }
 
@@ -27,7 +27,7 @@ public class ComiketCircleListFragment extends CircleListFragment {
                              Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        setAdapter(mAdapter);
+        setAdapterToListView(mAdapter);
 
         return view;
     }
@@ -49,7 +49,7 @@ public class ComiketCircleListFragment extends CircleListFragment {
         mListener = listener;
     }
 
-    private void setAdapter(ComiketCircleArrayAdapter adapter) {
+    private void setComiketCircleArrayAdapter(ComiketCircleArrayAdapter adapter) {
         mAdapter = adapter;
     }
 
