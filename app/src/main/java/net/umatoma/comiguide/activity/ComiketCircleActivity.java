@@ -257,7 +257,7 @@ public class ComiketCircleActivity extends MapActivity
     }
 
     private void showComiketCircleCreateForm() {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(mComiketId, mDay, mCmapId);
+        ComiketCircleFormFragment fragment = ComiketCircleFormFragment.newInstance(mComiketId, mDay, mCmapId);
         fragment.setOnComiketCircleCreateListener(this);
 
         getSupportFragmentManager()
@@ -291,7 +291,7 @@ public class ComiketCircleActivity extends MapActivity
     }
 
     private void showCircleEditFragment(ComiketCircle circle) {
-        ComiketCircleFormFragment fragment = new ComiketCircleFormFragment(circle);
+        ComiketCircleFormFragment fragment = ComiketCircleFormFragment.newInstance(circle);
         fragment.setOnComiketCircleUpdateListener(this);
 
         getSupportFragmentManager()

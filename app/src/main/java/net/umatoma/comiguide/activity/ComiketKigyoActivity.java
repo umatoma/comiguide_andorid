@@ -152,7 +152,7 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     private void showChecklistEditFragment(ComiketKigyoChecklist circle) {
-        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(circle);
+        ComiketKigyoChecklistFormFragment fragment = ComiketKigyoChecklistFormFragment.newInstance(circle);
         fragment.setOnComiketKigyoChecklistUpdateListener(this);
 
         getSupportFragmentManager()
@@ -163,7 +163,7 @@ public class ComiketKigyoActivity extends MapActivity
     }
 
     private void showComiketKigyoChecklistCreateForm() {
-        ComiketKigyoChecklistFormFragment fragment = new ComiketKigyoChecklistFormFragment(mComiketId);
+        ComiketKigyoChecklistFormFragment fragment = ComiketKigyoChecklistFormFragment.newInstance(mComiketId);
         fragment.setOnComiketKigyoChecklistCreateListener(this);
 
         getSupportFragmentManager()

@@ -59,12 +59,16 @@ public class Comic1CircleFormFragment extends Fragment {
 
     public Comic1CircleFormFragment() {}
 
-    public Comic1CircleFormFragment(int comic1_id) {
-        mComic1Circle = new Comic1Circle(comic1_id);
+    public static Comic1CircleFormFragment newInstance(int comic1_id) {
+        Comic1CircleFormFragment instance = new Comic1CircleFormFragment();
+        instance.setComic1Id(comic1_id);
+        return instance;
     }
 
-    public Comic1CircleFormFragment(Comic1Circle circle) {
-        mComic1Circle = circle;
+    public static Comic1CircleFormFragment newInstance(Comic1Circle circle) {
+        Comic1CircleFormFragment instance = new Comic1CircleFormFragment();
+        instance.setComic1Circle(circle);
+        return instance;
     }
 
     @Override
@@ -149,6 +153,14 @@ public class Comic1CircleFormFragment extends Fragment {
         mLoadBlocksTask = null;
         mLoadLayoutsTask = null;
         super.onDetach();
+    }
+
+    private void setComic1Id(int comic1_id) {
+        mComic1Circle = new Comic1Circle(comic1_id);
+    }
+
+    private void setComic1Circle(Comic1Circle circle) {
+        mComic1Circle = circle;
     }
 
     private void loadBlockOptions() {

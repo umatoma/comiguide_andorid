@@ -177,7 +177,7 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void showNotificationDialog(Notification notification) {
-        NotificationDialogFragment fragment = new NotificationDialogFragment(notification);
+        NotificationDialogFragment fragment = NotificationDialogFragment.newInstance(notification);
         fragment.show(getSupportFragmentManager(), NotificationDialogFragment.TAG);
     }
 

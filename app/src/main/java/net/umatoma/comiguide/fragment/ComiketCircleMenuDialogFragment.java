@@ -20,14 +20,14 @@ public class ComiketCircleMenuDialogFragment extends MenuDialogFragment {
     public static final int MENU_DELETE = 4;
 
     public static ComiketCircleMenuDialogFragment newInstance(ComiketCircle circle) {
-        return new ComiketCircleMenuDialogFragment(circle);
+        ComiketCircleMenuDialogFragment instance =  new ComiketCircleMenuDialogFragment();
+        instance.setComiketCircle(circle);
+        return instance;
     }
 
-    public ComiketCircleMenuDialogFragment() {
-        // Required empty public constructor
-    }
+    public ComiketCircleMenuDialogFragment() {}
 
-    private ComiketCircleMenuDialogFragment(ComiketCircle circle) {
+    private void setComiketCircle(ComiketCircle circle) {
         setTitle(circle.getCircleName());
     }
 

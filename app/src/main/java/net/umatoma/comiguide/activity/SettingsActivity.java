@@ -35,6 +35,7 @@ public class SettingsActivity extends ActionBarActivity {
                 .commit();
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

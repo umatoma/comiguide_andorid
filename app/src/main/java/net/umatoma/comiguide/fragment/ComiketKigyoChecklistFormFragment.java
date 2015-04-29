@@ -21,6 +21,7 @@ import net.umatoma.comiguide.R;
 import net.umatoma.comiguide.adapter.KeyValuePairAdapter;
 import net.umatoma.comiguide.api.ComiGuideApiClient;
 import net.umatoma.comiguide.api.OnApiClientPostExecuteListener;
+import net.umatoma.comiguide.model.ComiketKigyo;
 import net.umatoma.comiguide.model.ComiketKigyoChecklist;
 import net.umatoma.comiguide.util.FormUtil;
 
@@ -46,17 +47,21 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
     private ComiGuideApiClient.HttpClientTask mUpdateComiketKigyoChecklistTask;
     private ComiGuideApiClient.HttpClientTask mCreateComiketKigyoChecklistTask;
 
+    public static ComiketKigyoChecklistFormFragment newInstance(int comiket_id) {
+        ComiketKigyoChecklistFormFragment instance = new ComiketKigyoChecklistFormFragment();
+        instance.setComiketId(comiket_id);
+        instance.setComiketKigyoChecklist(new ComiketKigyoChecklist());
+        return instance;
+    }
+
+    public static ComiketKigyoChecklistFormFragment newInstance(ComiketKigyoChecklist checklist) {
+        ComiketKigyoChecklistFormFragment instance = new ComiketKigyoChecklistFormFragment();
+        instance.setComiketId(checklist.getComiketKigyo().getComiketId());
+        instance.setComiketKigyoChecklist(checklist);
+        return instance;
+    }
+
     public ComiketKigyoChecklistFormFragment() {}
-
-    public ComiketKigyoChecklistFormFragment(int comiket_id) {
-        mComiketId = comiket_id;
-        mComiketKigyoChecklist = new ComiketKigyoChecklist();
-    }
-
-    public ComiketKigyoChecklistFormFragment(ComiketKigyoChecklist checklist) {
-        mComiketId = checklist.getComiketKigyo().getComiketId();
-        mComiketKigyoChecklist = checklist;
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -114,6 +119,14 @@ public class ComiketKigyoChecklistFormFragment extends Fragment {
         mOnCreateListener = null;
         mLoadCkigyosTask = null;
         super.onDetach();
+    }
+
+    private void setComiketId(int comiket_id) {
+        mComiketId = comiket_id;
+    }
+
+    private void setComiketKigyoChecklist(ComiketKigyoChecklist checklist) {
+        mComiketKigyoChecklist = checklist;
     }
 
     private void loadBlockOptions() {

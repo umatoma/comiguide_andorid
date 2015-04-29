@@ -15,14 +15,12 @@ public class ComiketCircleListFragment extends CircleListFragment {
     private ComiketCircleArrayAdapter mAdapter;
 
     public static ComiketCircleListFragment newInstance(ComiketCircleArrayAdapter adapter) {
-        return new ComiketCircleListFragment(adapter);
+        ComiketCircleListFragment instance = new ComiketCircleListFragment();
+        instance.setAdapter(adapter);
+        return instance;
     }
 
     public ComiketCircleListFragment() {}
-
-    private ComiketCircleListFragment(ComiketCircleArrayAdapter adapter) {
-        mAdapter = adapter;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +47,10 @@ public class ComiketCircleListFragment extends CircleListFragment {
 
     public void setOnComiketCircleSelectListener(OnComiketCircleSelectListener listener) {
         mListener = listener;
+    }
+
+    private void setAdapter(ComiketCircleArrayAdapter adapter) {
+        mAdapter = adapter;
     }
 
 }

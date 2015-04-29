@@ -57,7 +57,7 @@ public class Comic1CircleActivity extends MapActivity
         mCircleListFragment.setOnComic1CircleSelectListener(this);
         setCircleListFragment(mCircleListFragment);
 
-        mMapFragment = Comic1CircleMapFragment.getInstance(mComic1Id);
+        mMapFragment = Comic1CircleMapFragment.newInstance(mComic1Id);
         mMapFragment.setCircleAdapter(mCircleAdapter);
         mMapFragment.setOnFooterViewClickListener(this);
         setMapFragment(mMapFragment);
@@ -152,7 +152,7 @@ public class Comic1CircleActivity extends MapActivity
     }
 
     private void showCircleEditFragment(Comic1Circle circle) {
-        Comic1CircleFormFragment fragment = new Comic1CircleFormFragment(circle);
+        Comic1CircleFormFragment fragment = Comic1CircleFormFragment.newInstance(circle);
         fragment.setOnComic1CircleUpdateListener(this);
 
         getSupportFragmentManager()
@@ -163,7 +163,7 @@ public class Comic1CircleActivity extends MapActivity
     }
 
     private void showComic1CircleCreateForm() {
-        Comic1CircleFormFragment fragment = new Comic1CircleFormFragment(mComic1Id);
+        Comic1CircleFormFragment fragment = Comic1CircleFormFragment.newInstance(mComic1Id);
         fragment.setOnComic1CircleCreateListener(this);
 
         getSupportFragmentManager()

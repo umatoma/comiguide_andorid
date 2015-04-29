@@ -16,11 +16,15 @@ public class NotificationDialogFragment extends DialogFragment {
     public static final String TAG = "NotificationDialogFragment";
     private Notification mNotification;
 
-    public NotificationDialogFragment() {
-        // Required empty public constructor
+    public static NotificationDialogFragment newInstance(Notification notification) {
+        NotificationDialogFragment instance = new NotificationDialogFragment();
+        instance.setNotification(notification);
+        return instance;
     }
 
-    public NotificationDialogFragment(Notification notification) {
+    public NotificationDialogFragment() {}
+
+    private void setNotification(Notification notification) {
         mNotification = notification;
     }
 

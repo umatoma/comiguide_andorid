@@ -18,16 +18,12 @@ public class Comic1CircleMenuDialogFragment extends MenuDialogFragment {
     public static final int MENU_DELETE = 3;
 
     public static Comic1CircleMenuDialogFragment newInstance(Comic1Circle circle) {
-        return new Comic1CircleMenuDialogFragment(circle);
+        Comic1CircleMenuDialogFragment instance = new Comic1CircleMenuDialogFragment();
+        instance.setComic1Circle(circle);
+        return instance;
     }
 
-    public Comic1CircleMenuDialogFragment() {
-        // Required empty public constructor
-    }
-
-    private Comic1CircleMenuDialogFragment(Comic1Circle circle) {
-        setTitle(circle.getCircleName());
-    }
+    public Comic1CircleMenuDialogFragment() {}
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -41,5 +37,9 @@ public class Comic1CircleMenuDialogFragment extends MenuDialogFragment {
         setMenuOptionList(list);
 
         return super.onCreateDialog(savedInstanceState);
+    }
+
+    private void setComic1Circle(Comic1Circle circle) {
+        setTitle(circle.getCircleName());
     }
 }

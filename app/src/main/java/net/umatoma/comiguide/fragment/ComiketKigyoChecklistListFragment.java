@@ -16,12 +16,14 @@ public class ComiketKigyoChecklistListFragment extends CircleListFragment {
     private ComiketKigyoChecklistAdapter mAdapter;
 
     public static ComiketKigyoChecklistListFragment newInstance(ComiketKigyoChecklistAdapter adapter) {
-        return new ComiketKigyoChecklistListFragment(adapter);
+        ComiketKigyoChecklistListFragment instance = new ComiketKigyoChecklistListFragment();
+        instance.setAdapter(adapter);
+        return instance;
     }
 
     public ComiketKigyoChecklistListFragment() {}
 
-    private ComiketKigyoChecklistListFragment(ComiketKigyoChecklistAdapter adapter) {
+    private void setAdapter(ComiketKigyoChecklistAdapter adapter) {
         mAdapter = adapter;
     }
 

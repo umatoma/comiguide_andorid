@@ -58,17 +58,21 @@ public class ComiketCircleFormFragment extends Fragment {
     private ComiGuideApiClient.HttpClientTask mUpdateComiketCircleTask;
     private ComiGuideApiClient.HttpClientTask mCreateComiketCircleTask;
 
+    public static ComiketCircleFormFragment newInstance(int comiket_id, int day, int cmap_id) {
+        ComiketCircleFormFragment instance = new ComiketCircleFormFragment();
+        instance.setComiketCircle(new ComiketCircle(comiket_id, day));
+        instance.setCmapId(cmap_id);
+        return instance;
+    }
+
+    public static ComiketCircleFormFragment newInstance(ComiketCircle circle) {
+        ComiketCircleFormFragment instance = new ComiketCircleFormFragment();
+        instance.setComiketCircle(circle);
+        instance.setCmapId(circle.getComiketLayout().getComiketBlock().getComiketArea().getCmapId());
+        return instance;
+    }
+
     public ComiketCircleFormFragment() {}
-
-    public ComiketCircleFormFragment(int comiket_id, int day, int cmap_id) {
-        mComiketCircle = new ComiketCircle(comiket_id, day);
-        mCmapId = cmap_id;
-    }
-
-    public ComiketCircleFormFragment(ComiketCircle circle) {
-        mComiketCircle = circle;
-        mCmapId = circle.getComiketLayout().getComiketBlock().getComiketArea().getCmapId();
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -152,6 +156,14 @@ public class ComiketCircleFormFragment extends Fragment {
         mLoadComiketBlocksTask = null;
         mLoadComiketLayoutsTask = null;
         super.onDetach();
+    }
+
+    private void setComiketCircle(ComiketCircle circle) {
+        mComiketCircle = circle;
+    }
+
+    private void setCmapId(int cmap_id) {
+        mCmapId = cmap_id;
     }
 
     private void loadComiketBlockOptions() {
