@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 public class ComiGuide extends Application {
 
-    public static int COMIKET_ID = 87;
+    public static int COMIKET_ID = 88;
     public static int COMIC1_ID = 9;
 
     @Override
