@@ -45,7 +45,13 @@ public class ComiketKigyoMapFragment extends MapFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         mMapImageView = new ComiketKigyoMapView(getActivity());
-        mMapImageView.setImageResource(R.drawable.ckigyo_map_c87);
+        switch (mComiketId) {
+            case 87:
+                mMapImageView.setImageResource(R.drawable.ckigyo_map_c87);
+                break;
+            case 88:
+                mMapImageView.setImageResource(R.drawable.ckigyo_map_c88);
+        }
         mMapImageView.setComiketKigyoCheckistAdapter(mChecklistAdapter);
         setMapImageView(mMapImageView);
 
